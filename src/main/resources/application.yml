@@ -1,0 +1,94 @@
+# 开发环境配置
+server:
+  # 服务器的HTTP端口，默认为8080
+  port: 8089
+  servlet:
+    # 应用的访问路径
+    context-path: /eboot
+  tomcat:
+    # tomcat的URI编码
+    uri-encoding: UTF-8
+    # tomcat最大线程数，默认为200
+    # Tomcat启动初始化的线程数，默认值25
+    threads:
+      max: 800
+      min-spare: 30
+# Spring配置
+spring:
+  application:
+    name: eboot
+  profiles:
+    active: dev
+  # 文件上传
+  servlet:
+     multipart:
+       # 单个文件大小
+       max-file-size:  10MB
+       # 设置总上传的文件大小
+       max-request-size:  100MB
+  # 服务模块
+  devtools:
+    restart:
+      # 热部署开关
+      enabled: true
+  mvc:
+    static-path-pattern: /static/**
+    view:
+      # 给返回的页面添加后缀名
+      suffix: .html
+      # 定位模板的目录
+#      prefix: classpath:/templates/
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  boot:
+    admin:
+      client:
+        instance:
+          service-base-url: http://127.0.0.1:9090
+        url: http://127.0.0.1:9090
+  jmx:
+    enabled: true
+# Actuator Web 访问端口
+management:
+  endpoint:
+    health:
+      show-details: always
+      enabled: true
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        # 暴漏的接口 - 所有接口
+        include: "*"
+# 日志配置
+logging:
+  level:
+    org.springframework: warn
+# token配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌秘钥
+  secret: a1b2c3d4e5f6g7h8i9j0klmnopqrstuvwxyz
+  # 令牌有效期（默认30分钟）
+  expireTime: 30
+  # Token前缀字符
+  prefix: easybooy-
+  # 配置不需要认证的接口
+  antMatchers: /index,/login/**,/favicon.ico,/common/captcha,/druid/**
+#登录页验证码有效时间(单位分钟)/宽度/高度/位数
+captcha:
+  expiration: 2
+  width: 120
+  height: 50
+  digit: 4
