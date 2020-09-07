@@ -1,6 +1,8 @@
 <template>
   <div>
-    <img :src="options.img" title="点击上传头像" class="img-circle img-lg" @click="editCropper()">
+    <el-tooltip content="点击上传头像" effect="dark" placement="bottom">
+      <img :src="options.img" alt="用户头像" class="img-circle img-lg" @click="editCropper()">
+    </el-tooltip>
     <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-row>
         <el-col :xs="24" :md="12" :style="{height: '350px'}">
@@ -17,7 +19,7 @@
         </el-col>
         <el-col :xs="24" :md="12" :style="{height: '350px'}">
           <div class="avatar-upload-preview">
-            <img :src="previews.url" :style="previews.img">
+            <img :src="previews.url" :style="previews.img" alt="用户头像">
           </div>
         </el-col>
       </el-row>
@@ -27,7 +29,7 @@
           <el-upload action="#" :http-request="requestUpload" :show-file-list="false" :before-upload="beforeUpload">
             <el-button size="small">
               上传
-              <i class="el-icon-upload el-icon--right" />
+              <em class="el-icon-upload el-icon--right" />
             </el-button>
           </el-upload>
         </el-col>
@@ -43,8 +45,11 @@
         <el-col :lg="{span: 1, offset: 1}" :md="2">
           <el-button icon="el-icon-refresh-right" size="small" @click="rotateRight()" />
         </el-col>
-        <el-col :lg="{span: 2, offset: 6}" :md="2">
+        <el-col :lg="{span: 2, offset: 5}" :md="2">
           <el-button type="primary" size="small" @click="uploadImg()">提 交</el-button>
+        </el-col>
+        <el-col :lg="{span: 2, offset: 1}" :md="2">
+          <el-button type="danger" size="small" @click="cancel">取 消</el-button>
         </el-col>
       </el-row>
     </el-dialog>
@@ -84,6 +89,10 @@ export default {
     editCropper() {
       this.open = true
     },
+    // 取消按钮
+    cancel() {
+      this.open = false
+    },
     // 覆盖默认的上传行为
     requestUpload() {
     },
@@ -102,7 +111,7 @@ export default {
     },
     // 上传预处理
     beforeUpload(file) {
-      if (file.type.indexOf('image/') == -1) {
+      if (file.type.indexOf('image/') === -1) {
         this.msgError('文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。')
       } else {
         const reader = new FileReader()
@@ -116,14 +125,14 @@ export default {
     uploadImg() {
       this.$refs.cropper.getCropBlob(data => {
         const formData = new FormData()
-        formData.append('avatarfile', data)
+        formData.append('avatar', data)
         uploadAvatar(formData).then(response => {
-          if (response.code === 200) {
+          if (response) {
             this.open = false
-            this.options.img = process.env.VUE_APP_BASE_API + response.imgUrl
+            this.$store.dispatch('user/setAvatar', response.avatar).then(() => {
+              this.options.img = store.getters.avatar
+            })
             this.msgSuccess('修改成功')
-          } else {
-            this.msgError(response.msg)
           }
           this.$refs.cropper.clearCrop()
         })

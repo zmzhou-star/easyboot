@@ -1,8 +1,16 @@
 # easyboot
 
 #### Description
-spring boot+vue简单入门框架
+spring boot、spring security、jwt token、redis、jpa + vue-admin-template实现前后端分离简单入门框架
 
+#据库文档生成工具
+src\test\java\com\zmzhou\easyboot\DBGenerationTool.java
+参考：https://gitee.com/leshalv/screw/tree/master/
+
+#sonar扫描命令
+```bash
+mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true install sonar:sonar -X
+```
 #### Software Architecture
 Software architecture description
 

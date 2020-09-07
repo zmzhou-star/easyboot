@@ -31,18 +31,16 @@ public class BaseException extends RuntimeException {
 	 * 错误参数
 	 */
 	private final transient Object[] params;
-	
+
 	/**
 	 * Instantiates a new Base exception.
 	 *
-	 * @param code   the code
-	 * @param errMsg the err msg
-	 * @param params the params
+	 * @param errMsg     the err msg
 	 */
-	public BaseException(int code, String errMsg, Object... params) {
-		this.code = code;
+	public BaseException(String errMsg) {
+		this.code = HttpStatus.BAD_REQUEST.value();
 		this.errMsg = errMsg;
-		this.params = params;
+		this.params = new Object[] {};
 	}
 	
 	/**
@@ -67,7 +65,7 @@ public class BaseException extends RuntimeException {
 		this.errMsg = errorCode.getMsg();
 		this.params = params;
 	}
-	
+
 	/**
 	 * Instantiates a new Base exception.
 	 *
@@ -79,7 +77,33 @@ public class BaseException extends RuntimeException {
 		this.errMsg = errMsg;
 		this.params = new Object[] {};
 	}
-	
+
+	/**
+	 * Instantiates a new Base exception.
+	 *
+	 * @param errorCode the error code
+	 * @param errMsg    the err msg
+	 * @param params    the params
+	 */
+	public BaseException(ErrorCode errorCode, String errMsg, Object... params) {
+		this.code = errorCode.getCode();
+		this.errMsg = errMsg;
+		this.params = params;
+	}
+
+	/**
+	 * Instantiates a new Base exception.
+	 *
+	 * @param code   the code
+	 * @param errMsg the err msg
+	 * @param params the params
+	 */
+	public BaseException(int code, String errMsg, Object... params) {
+		this.code = code;
+		this.errMsg = errMsg;
+		this.params = params;
+	}
+
 	/**
 	 * Gets code.
 	 *

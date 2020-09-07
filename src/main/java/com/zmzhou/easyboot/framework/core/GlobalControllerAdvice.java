@@ -1,12 +1,10 @@
-/**
- * @Title GlobalControllerAdvice.java
- * @Package com.security.dpsapi.web.controller
- * @Description
- * @author White
- * @time 2019年9月12日 下午3:23:08
- * @version V1.0
- */
 package com.zmzhou.easyboot.framework.core;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import com.zmzhou.easyboot.common.exception.BaseException;
+import com.zmzhou.easyboot.common.utils.ServletUtils;
 import com.zmzhou.easyboot.framework.page.ApiResult;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestControllerAdvice
 public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
+	private static final Pattern PATTERN = Pattern.compile("\\[(\\d)]");
 	/**
 	 * 方法描述
 	 * @author zmzhou
@@ -48,7 +48,7 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 		return true;
 	}
 	/**
-	 * 方法描述
+	 * 返回值过滤器
 	 * @author zmzhou
 	 * @date 2020/08/29 14:42
 	 */
@@ -56,6 +56,16 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 	public T beforeBodyWrite(T body, MethodParameter returnType, MediaType selectedContentType,
 							 Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request,
 							 ServerHttpResponse response) {
+		HttpServletResponse res = ServletUtils.getRequestAttributes().getResponse();
+		if (null != res){
+			HttpSession session = ServletUtils.getSession();
+			// 设置Cookie;Secure;HttpOnly
+			res.setHeader( "Set-Cookie", "JSESSIONID=" + session.getId() + "; Secure; HttpOnly");
+			// 设置X-Frame-Options 只要包含在框架中的站点与为页面提供服务的站点相同，仍然可以在框架中使用该页面
+			res.setHeader("X-Frame-Options", "SAMEORIGIN");
+			// 当检测到反射的XSS攻击时阻止加载页面：
+			res.setHeader("X-XSS-Protection", "1; mode=block");
+		}
 		return body;
 	}
 	
@@ -64,8 +74,18 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 	 */
 	@ExceptionHandler(BaseException.class)
 	public ApiResult<Object> baseException(BaseException e) {
-		log.error(e.getErrMsg(), e);
-		return new ApiResult<>().error(e.getCode(), e.getErrMsg());
+		String msg = e.getErrMsg();
+		// 替换返回信息中的[0]占位符
+		if (e.getParams()!=null){
+			for (int i = 0; i < e.getParams().length; i++) {
+				Matcher m = PATTERN.matcher(msg);
+				while (m.find()){
+					msg = msg.replace(m.group(1), String.valueOf(e.getParams()[i]));
+				}
+			}
+		}
+		log.error(msg, e);
+		return new ApiResult<>().error(e.getCode(), msg);
 	}
 	/**
 	 * Exception handler response.
@@ -76,7 +96,8 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
 	ApiResult<Object> exceptionHandler(Exception e) {
-		log.error("[exceptionHandler] Catch an exception:", e);
+		String uri = ServletUtils.getRequest().getRequestURI();
+		log.error("[exceptionHandler] {} Catch an exception:", uri, e);
 		return ApiResult.badRequest();
 	}
 	
@@ -85,7 +106,8 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 	 */
 	@ExceptionHandler(BindException.class)
 	public ApiResult<Object> validatedBindException(BindException e) {
-		log.error(e.getMessage(), e);
+		String uri = ServletUtils.getRequest().getRequestURI();
+		log.error(e.getMessage() + " {}", uri, e);
 		String message = e.getAllErrors().get(0).getDefaultMessage();
 		return new ApiResult<>().error(message);
 	}
@@ -95,7 +117,8 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ApiResult<Object> validExceptionHandler(MethodArgumentNotValidException e) {
-		log.error(e.getMessage(), e);
+		String uri = ServletUtils.getRequest().getRequestURI();
+		log.error(e.getMessage() + " {}", uri, e);
 		String message = "";
 		FieldError fieldError = e.getBindingResult().getFieldError();
 		if (null != fieldError){

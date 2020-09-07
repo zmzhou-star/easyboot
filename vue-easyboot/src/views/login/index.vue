@@ -67,8 +67,6 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-import { hashSync } from '@/utils/bcryptjs'
 import { getCaptcha } from '@/api/login'
 import Cookies from 'js-cookie'
 
@@ -77,11 +75,10 @@ export default {
   data() {
     return {
       codeUrl: '',
-      cookiePassword: '',
       loginForm: {
         username: 'admin',
-        password: 'admin123',
-        rememberMe: false,
+        password: 'Zmzhou.1324',
+        rememberMe: true,
         code: '',
         uuid: ''
       },
@@ -148,7 +145,9 @@ export default {
             Cookies.remove('password')
             Cookies.remove('rememberMe')
           }
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
+          let params = this.deepClone(this.loginForm);
+          params.password = this.sha256(this.loginForm.password);
+          this.$store.dispatch('user/login', params).then(() => {
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false
           }).catch(() => {

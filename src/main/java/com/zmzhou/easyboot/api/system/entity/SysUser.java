@@ -27,11 +27,6 @@ import lombok.Data;
 public class SysUser extends BaseEntity {
 	private static final long serialVersionUID = -3304319213957837923L;
 	/**
-	 * The Dept id.
-	 */
-	@Column(name = "DEPT_ID")
-	private Long deptId;
-	/**
 	 * The Username.
 	 */
 	@NotBlank(message = "用户账号不能为空")
@@ -54,21 +49,16 @@ public class SysUser extends BaseEntity {
 	@Column(name = "NICK_NAME")
 	private String nickName;
 	/**
-	 * The User type.
-	 */
-	@Column(name = "USER_TYPE")
-	private String userType;
-	/**
 	 * The Email.
 	 */
 	@Email(message = "邮箱格式不正确")
-	@Size(max = 50, message = "邮箱长度不能超过50个字符")
+	@Size(min = 6, max = 50, message = "邮箱长度不能超过50个字符")
 	@Column(name = "EMAIL")
 	private String email;
 	/**
 	 * The Tel.
 	 */
-	@Size(min = 11, max = 11, message = "手机号码长度不能超过11个字符")
+	@Size(min = 11, max = 11, message = "手机号码格式不正确")
 	@Column(name = "TEL")
 	private String tel;
 	/**
@@ -81,6 +71,11 @@ public class SysUser extends BaseEntity {
 	 */
 	@Column(name = "STATUS")
 	private String status;
+	/**
+	 * The Status.
+	 */
+	@Column(name = "ONLINE")
+	private String online;
 	/**
 	 * The Login ip.
 	 */

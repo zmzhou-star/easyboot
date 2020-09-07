@@ -35,7 +35,7 @@ spring:
             # 属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有：监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall
             filters: config,stat,wall
             # 对于建立时间超过removeAbandonedTimeout的连接强制关闭
-            remove-abandoned: true
+            remove-abandoned: false
             # 180秒，也就是3分钟
             remove-abandoned-timeout: 1800
             # 关闭abanded连接时输出错误日志

@@ -66,10 +66,10 @@ export function delRole(id) {
 }
 
 // 导出角色
-export function exportRole(query) {
+export function exportRole(params) {
   return request({
     url: '/system/role/export',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: params
   })
 }

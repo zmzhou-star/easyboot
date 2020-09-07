@@ -1,6 +1,7 @@
 import Vue from 'vue'
 
 import Cookies from 'js-cookie'
+import { sha256 } from "js-sha256"
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
@@ -9,7 +10,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
-import '@/styles/easyboot.scss' // ruoyi css
+import '@/styles/easyboot.scss' // easyboot css
 
 import App from './App'
 import store from './store'
@@ -21,6 +22,7 @@ import '@/permission' // permission control
 
 import { getDicts } from '@/api/system/dict/data'
 import Pagination from '@/components/Pagination'
+import { deepClone } from '@/utils'
 // 全局组件挂载
 Vue.component('Pagination', Pagination)
 Vue.use(permission)
@@ -34,9 +36,11 @@ Vue.prototype.addDateRange = addDateRange
 Vue.prototype.selectDictLabel = selectDictLabel
 Vue.prototype.download = download
 Vue.prototype.handleTree = handleTree
+Vue.prototype.deepClone = deepClone
+Vue.prototype.sha256 = sha256
 
 Vue.prototype.msgSuccess = function(msg) {
-  this.$message({ showClose: true, message: msg + '成功', type: 'success' })
+  this.$message({ showClose: true, message: msg, type: 'success' })
 }
 
 Vue.prototype.msgError = function(msg) {

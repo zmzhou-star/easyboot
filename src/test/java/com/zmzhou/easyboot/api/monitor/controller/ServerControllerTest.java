@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.zmzhou.ServerInfo;
 import com.zmzhou.easyboot.EasybootApplicationTests;
-import com.zmzhou.easyboot.framework.entity.Server;
 import com.zmzhou.easyboot.framework.page.ApiResult;
 
 /**
@@ -30,7 +30,7 @@ class ServerControllerTest extends EasybootApplicationTests {
      */
     @Test
     void getInfo() {
-        ApiResult<Server> res = controller.getInfo();
+        ApiResult<ServerInfo> res = controller.getInfo();
         Assertions.assertNotNull(res);
     }
 }

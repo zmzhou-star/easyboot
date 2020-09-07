@@ -57,11 +57,11 @@ export function del(userId) {
 }
 
 // 导出用户
-export function exportUser(query) {
+export function exportUser(params) {
   return request({
     url: '/system/user/export',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: params
   })
 }
 
@@ -118,9 +118,9 @@ export function uploadAvatar(data) {
 }
 
 // 下载用户导入模板
-export function importTemplate() {
+export function excelTemplate() {
   return request({
-    url: '/system/user/importTemplate',
+    url: '/system/user/excelTemplate',
     method: 'get'
   })
 }

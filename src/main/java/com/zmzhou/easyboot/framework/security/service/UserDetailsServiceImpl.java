@@ -32,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	private MenuService menuService;
 	/**
-	 * 方法描述
+	 * 用户登录验证
 	 * @param username 用户名
 	 * @return UserDetails
 	 * @author zmzhou
@@ -52,7 +52,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			log.info("登录用户：{} 已被停用.", username);
 			throw new BaseException(ErrorCode.USER_DISABLE, username);
 		}
-		// 更新用户登录时间
+		// 更新用户登录时间和登录在线状态
 		userService.updateLoginTime(user.getId());
 		return new LoginUser(user, menuService.getMenuPermission(user));
 	}

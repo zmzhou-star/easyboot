@@ -1,7 +1,5 @@
 package com.zmzhou.easyboot.framework.entity;
 
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,6 +12,8 @@ import javax.persistence.MappedSuperclass;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.alibaba.fastjson.annotation.JSONField;
+
+import lombok.Data;
 
 /**
  * The type Base entity.
@@ -29,7 +29,6 @@ public class BaseEntity implements Serializable {
      * serialVersionUID
      */
     private static final long serialVersionUID = 1L;
-    
     /**
      * id
      */

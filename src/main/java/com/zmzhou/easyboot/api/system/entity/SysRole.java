@@ -1,8 +1,5 @@
 package com.zmzhou.easyboot.api.system.entity;
 
-import lombok.Data;
-import lombok.ToString;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -10,6 +7,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.zmzhou.easyboot.framework.entity.BaseEntity;
+
+import lombok.Data;
 
 /**
  * The type Sys role.
@@ -20,7 +19,6 @@ import com.zmzhou.easyboot.framework.entity.BaseEntity;
  * @Date 2020 /07/09 18:13
  */
 @Data
-@ToString
 @Entity
 @Table(name = "SYS_ROLE")
 public class SysRole extends BaseEntity {

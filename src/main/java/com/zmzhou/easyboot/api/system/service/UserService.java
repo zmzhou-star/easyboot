@@ -1,11 +1,15 @@
 package com.zmzhou.easyboot.api.system.service;
 
-import lombok.extern.slf4j.Slf4j;
-
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
@@ -14,13 +18,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import com.zmzhou.easyboot.api.system.dao.UserDao;
 import com.zmzhou.easyboot.api.system.entity.SysUser;
+import com.zmzhou.easyboot.api.system.excel.SysUserExcel;
 import com.zmzhou.easyboot.common.Constants;
+import com.zmzhou.easyboot.common.excel.BaseExcel;
 import com.zmzhou.easyboot.common.exception.BaseException;
 import com.zmzhou.easyboot.common.utils.IpUtils;
 import com.zmzhou.easyboot.common.utils.SecurityUtils;
@@ -28,6 +34,8 @@ import com.zmzhou.easyboot.common.utils.ServletUtils;
 import com.zmzhou.easyboot.framework.entity.Params;
 import com.zmzhou.easyboot.framework.specification.Operator;
 import com.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *  @title UserService
@@ -37,12 +45,11 @@ import com.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
  */
 @Slf4j
 @Service
+@CacheConfig(cacheNames = {"system:user"})
 @Transactional(rollbackFor = Exception.class)
-public class UserService {
+public class UserService extends BaseService {
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
 	/**
 	 * 查询所有数据
 	 * @param params 查询参数
@@ -55,13 +62,13 @@ public class UserService {
 		// 构造分页排序条件
 		Pageable page = pageable;
 		if (pageable.getSort().equals(Sort.unsorted())) {
-			Sort sort = Sort.by(Sort.Order.desc("status"), Sort.Order.asc(Constants.USERNAME));
+			Sort sort = Sort.by(Sort.Order.desc(Constants.STATUS), Sort.Order.asc(Constants.USERNAME));
 			page = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 		}
 		// 构造查询条件
 		Specification<SysUser> spec = new SimpleSpecificationBuilder<SysUser>()
 				.and(Constants.USERNAME, Operator.LIKE, params.getUsername())
-				.and("status", Operator.EQUAL, params.getStatus())
+				.and( Constants.STATUS, Operator.EQUAL, params.getStatus())
 				.and("tel", Operator.R_LIKE, params.getTel())
 				.between("and", "createTime", params.getBeginTime(), params.getEndTime())
 				.build();
@@ -75,9 +82,22 @@ public class UserService {
 	 * @author zmzhou
 	 * @date 2020/07/07 14:52
 	 */
+	@CacheEvict(key="#id")
 	public int updateUserStatus(Long id, String status) {
 		return userDao.updateUserStatus(id, status);
 	}
+	/**
+	 * 更新用户在线状态
+	 * @param id 用户id
+	 * @param online 在线状态
+	 * @return 更新结果
+	 * @author zmzhou
+	 * @date 2020/9/6 23:09
+	 */
+	public int updateOnline(Long id, String online){
+		return userDao.updateOnline(id, online);
+	}
+
 	/**
 	 * 根据id获取用户信息
 	 * @param id 用户id
@@ -106,19 +126,21 @@ public class UserService {
 				Constants.USERNAME, Operator.EQUAL, username).build();
 		return userDao.findOne(spec).orElse(new SysUser());
 	}
-	
 	/**
-	 * 保存用户信息
-	 * @param user 用户信息
-	 * @return SysUser
+	 * 根据用户名、电话号码查询用户信息
+	 * @param user 用户参数
+	 * @return 用户信息
 	 * @author zmzhou
-	 * @date 2020/07/08 11:52
+	 * @date 2020/9/6 19:21
 	 */
-	public SysUser save(SysUser user) {
-		user.setCreateTime(new Date());
-		user.setCreateBy(SecurityUtils.getUsername());
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		return userDao.saveAndFlush(user);
+	public SysUser getUser(SysUser user) {
+		ExampleMatcher matcher = ExampleMatcher.matching()
+				.withMatcher(Constants.USERNAME, ExampleMatcher.GenericPropertyMatchers.ignoreCase())
+				.withMatcher("tel", ExampleMatcher.GenericPropertyMatchers.storeDefaultMatching())
+				.withMatcher("email", ExampleMatcher.GenericPropertyMatchers.storeDefaultMatching())
+				.withIgnorePaths("remark",  Constants.STATUS, "sex", "nickName", "password");
+		Example<SysUser> example = Example.of(user ,matcher);
+		return userDao.findOne(example).orElse(new SysUser());
 	}
 	/**
 	 * 验证用户是否存在
@@ -128,12 +150,21 @@ public class UserService {
 	 * @date 2020/07/08 14:09
 	 */
 	public boolean exists(SysUser user) {
-		ExampleMatcher matcher = ExampleMatcher.matching()
-				.withMatcher(Constants.USERNAME, ExampleMatcher.GenericPropertyMatchers.ignoreCase())
-				.withMatcher("tel", ExampleMatcher.GenericPropertyMatchers.storeDefaultMatching())
-				.withIgnorePaths("remark", "status", "email", "sex", "nickName", "password");
-		Example<SysUser> example = Example.of(user ,matcher);
-		return userDao.exists(example);
+		return null != getUser(user).getId();
+	}
+	/**
+	 * 保存用户信息
+	 * @param user 用户信息
+	 * @return SysUser
+	 * @author zmzhou
+	 * @date 2020/07/08 11:52
+	 */
+	@CachePut(key="#user.id")
+	public SysUser save(@Validated SysUser user) {
+		user.setCreateTime(new Date());
+		user.setCreateBy(SecurityUtils.getUsername());
+		user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
+		return userDao.saveAndFlush(user);
 	}
 	/**
 	 * 修改用户
@@ -142,8 +173,8 @@ public class UserService {
 	 * @author zmzhou
 	 * @date 2020/07/08 16:15
 	 */
-	public SysUser update(SysUser user) {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+	@CachePut(key="#user.id")
+	public SysUser update(@Validated SysUser user) {
 		user.setUpdateTime(new Date());
 		user.setUpdateBy(SecurityUtils.getUsername());
 		return userDao.saveAndFlush(user);
@@ -154,6 +185,7 @@ public class UserService {
 	 * @author zmzhou
 	 * @date 2020/07/08 16:15
 	 */
+	@CacheEvict
 	public void delete(Long[] ids) {
 		for (Long id: ids) {
 			userDao.deleteById(id);
@@ -167,6 +199,7 @@ public class UserService {
 	 * @author zmzhou
 	 * @date 2020/07/08 16:59
 	 */
+	@CachePut
 	public SysUser resetPwd(Long id, String password) {
 		// 非admin用户不能修改admin密码
 		if (1 == id && !SecurityUtils.getLoginUser().getUser().isAdmin()) {
@@ -178,7 +211,8 @@ public class UserService {
 			throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "用户不存在");
 		}
 		// 密码加密，设置更新人，更新时间
-		user.setPassword(passwordEncoder.encode(password));
+//		 user.setPassword(passwordEncoder.encode(password))
+		user.setPassword(SecurityUtils.encryptPassword(password));
 		user.setUpdateBy(SecurityUtils.getUsername());
 		user.setUpdateTime(new Date());
 		return userDao.saveAndFlush(user);
@@ -190,9 +224,80 @@ public class UserService {
 	 * @author zmzhou
 	 * @date 2020/08/27 14:05
 	 */
+	@CachePut
 	public void updateLoginTime(Long userId) {
 		String realIp = IpUtils.getRealAddressByIP(IpUtils.getIpAddr(ServletUtils.getRequest()));
 		log.info("用户登录IP：{}", realIp);
 		userDao.updateLoginTime(userId, realIp);
 	}
+
+	/**
+	 * @param params 查询参数
+	 * @return excel文件路径名
+	 * @description 导出excel
+	 * @author zmzhou
+	 * @date 2020/9/3 22:59
+	 */
+	@Override
+	public String export(Params params) {
+		Page<SysUser> list = findAll(params, getExcelPageable(params));
+		List<BaseExcel> excelList = new ArrayList<>();
+		while (list.hasNext()) {
+			dataConversion(list, excelList, SysUserExcel.class);
+			list = findAll(params, list.nextPageable());
+		}
+		// 把最后一页数据加入
+		dataConversion(list, excelList, SysUserExcel.class);
+		return excelUtils.download(excelList, SysUserExcel.class, params.getExcelName());
+	}
+	/**
+	 * 导入分析excel数据
+	 * @param excelList excel数据
+	 * @param isUpdate 是否要更新数据库中重复的数据
+	 * @return 导入提示
+	 * @author zmzhou
+	 * @date 2020/9/6 18:19
+	 */
+	public String importExcel(List<SysUserExcel> excelList, boolean isUpdate) {
+		if (null == excelList || excelList.isEmpty()) {
+			throw new BaseException("导入的excel不能为空");
+		}
+		StringBuilder successMsg = new StringBuilder();
+		StringBuilder failureMsg = new StringBuilder();
+		int success = 0;
+		int failure = 0;
+		String br = "<br/>";
+		for (SysUserExcel excel : excelList) {
+			SysUser sysUser = this.getUser(excel.getUsername());
+			// 数据库中没有重复数据
+			if (null == sysUser.getId()) {
+				sysUser = this.save(excel.toEntity());
+				log.debug("新增数据成功：{}", sysUser);
+				success++;
+				successMsg.append(br).append(success).append("、账号[")
+						.append(excel.getUsername()).append("]导入成功");
+			} else if (isUpdate) {
+				// 数据库中有但是需要更新
+				BeanUtils.copyProperties(excel, sysUser);
+				sysUser = this.update(sysUser);
+				log.debug("更新数据成功：{}", sysUser);
+				success++;
+				successMsg.append(br).append(success).append("、账号[")
+						.append(excel.getUsername()).append("]更新成功");
+			} else {
+				log.debug("数据重复：{}", excel);
+				failure++;
+				failureMsg.append(br).append(failure).append("、账号[")
+						.append(excel.getUsername()).append("]已存在");
+			}
+		}
+		if (failure > 0) {
+			failureMsg.insert(0, "很抱歉，导入失败！共 " + failure + " 条数据格式不正确，错误如下：");
+			throw new BaseException(failureMsg.toString());
+		} else {
+			successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + success + " 条，数据如下：");
+		}
+		return successMsg.toString();
+	}
+
 }

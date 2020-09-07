@@ -46,7 +46,18 @@ public class RoleController extends BaseController {
 		Page<SysRole> list = roleService.findAll(params, pageable);
 		return ok(list);
 	}
-	
+	/**
+	 * @description 导出excel
+	 * @param params 查询参数
+	 * @return ApiResult<String> excel文件名
+	 * @author zmzhou
+	 * @date 2020/8/30 21:50
+	 */
+	@PostMapping("/export")
+	public ApiResult<String> export(@RequestBody(required = false) Params params) {
+		return ok(roleService.export(params));
+	}
+
 	/**
 	 * 根据id获取角色信息
 	 * @param id 角色id
@@ -87,7 +98,7 @@ public class RoleController extends BaseController {
 		} else if (roleService.checkRoleCodeUnique(role)) {
 			return result.error("新增角色'" + role.getRoleName() + "'失败，角色编码已存在");
 		}
-		result.setData(roleService.insertRole(role));
+		result.setData(roleService.insertRole(role.toEntity()));
 		return result;
 	}
 
@@ -108,7 +119,7 @@ public class RoleController extends BaseController {
 		} else if (roleService.checkRoleCodeUnique(role)) {
 			return result.error("修改角色'" + role.getRoleName() + "'失败，角色权限已存在");
 		}
-		result.setData(roleService.updateRole(role));
+		result.setData(roleService.updateRole(role.toEntity()));
 		return result;
 	}
 

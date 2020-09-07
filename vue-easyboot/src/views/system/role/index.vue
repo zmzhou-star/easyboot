@@ -88,18 +88,18 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:post:export']"
+          v-hasPermi="['system:role:export']"
         >导出</el-button>
       </el-col>
     </el-row>
 
     <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="角色编号" prop="id" width="120" />
-      <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" width="200" />
-      <el-table-column label="角色编码" prop="roleCode" :show-overflow-tooltip="true" width="200" />
+      <el-table-column label="角色编号" prop="id" width="100" />
+      <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" width="150" />
+      <el-table-column label="角色编码" prop="roleCode" :show-overflow-tooltip="true" width="150" />
       <el-table-column label="显示顺序" prop="sortBy" width="100" />
-      <el-table-column label="状态" align="center" width="100">
+      <el-table-column label="状态" align="center">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.status"
@@ -109,12 +109,12 @@
           ></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="200">
+      <el-table-column label="创建时间" align="center" prop="createTime" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="200">
+      <el-table-column label="更新时间" align="center" prop="updateTime" width="150">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateTime) }}</span>
         </template>
@@ -363,7 +363,7 @@ export default {
     },
     // 角色状态修改
     handleStatusChange(row) {
-      let text = row.status === "1" ? "启用" : "停用";
+      let text = row.status === '1' ? "启用" : "停用";
       this.$confirm('确认要"' + text + '""' + row.roleName + '"角色吗?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -373,7 +373,7 @@ export default {
         }).then(() => {
           this.msgSuccess(text + "成功");
         }).catch(function() {
-          row.status = row.status === "0" ? "1" : "0";
+          row.status = row.status === '0' ? '1' : '0';
         });
     },
     // 取消按钮
@@ -396,7 +396,7 @@ export default {
         roleName: undefined,
         roleCode: undefined,
         sortBy: this.total + 1,
-        status: "1",
+        status: '1',
         menuIds: [],
         deptIds: [],
         remark: undefined
@@ -447,8 +447,8 @@ export default {
           if (this.form.id !== undefined) {
             this.form.menuIds = this.getMenuAllCheckedKeys();
             updateRole(this.form).then(response => {
-              if (response > 0) {
-                this.msgSuccess("修改角色");
+              if (response >= 0) {
+                this.msgSuccess("修改角色成功");
                 this.open = false;
                 this.getList();
               } else {
@@ -459,7 +459,7 @@ export default {
             this.form.menuIds = this.getMenuAllCheckedKeys();
             addRole(this.form).then(response => {
               if (response && response.id > 0) {
-                this.msgSuccess("新增角色");
+                this.msgSuccess("新增角色成功");
                 this.open = false;
                 this.getList();
               } else {
@@ -496,21 +496,24 @@ export default {
           return delRole(ids);
         }).then(() => {
           this.getList();
-          this.msgSuccess("删除");
+          this.msgSuccess("删除成功");
         }).catch(function() {});
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有角色数据项?', "警告", {
+      let queryParams = this.queryParams;
+      queryParams.excelName = "角色管理"
+      this.$confirm('是否确认导出所有角色数据项?', "操作提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
           return exportRole(queryParams);
         }).then(response => {
-          this.download(response.msg);
-        }).catch(function() {});
+          this.download(response);
+        }).catch(function(e) {
+          console.log(e)
+      });
     }
   }
 };

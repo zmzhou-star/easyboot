@@ -38,9 +38,11 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint, S
 	 */
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) {
-		log.error("认证失败", e);
+		// 访问uri
+		String uri = request.getRequestURI();
+		log.error("访问：{} 认证失败", uri, e);
 		int code = HttpStatus.UNAUTHORIZED.value();
-		String msg = String.format("请求访问：{%s}，认证失败，无权访问资源", request.getRequestURI());
+		String msg = String.format("请求访问：{%s}，认证失败，无权访问资源", uri);
 		// token已失效
 		if (e instanceof InsufficientAuthenticationException) {
 			// 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired

@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import com.zmzhou.easyboot.api.system.entity.SysUser;
+import com.zmzhou.easyboot.api.system.service.UserService;
 import com.zmzhou.easyboot.common.utils.ServletUtils;
 import com.zmzhou.easyboot.framework.page.ApiResult;
 import com.zmzhou.easyboot.framework.security.LoginUser;
@@ -26,6 +28,8 @@ import lombok.extern.slf4j.Slf4j;
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 	@Autowired
 	private TokenService tokenService;
+	@Autowired
+	private UserService userService;
 	
 	/**
 	 * 退出处理
@@ -40,6 +44,9 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 		// // 获取用户身份信息
 		LoginUser loginUser = tokenService.getLoginUser(request);
 		if (null != loginUser) {
+			SysUser user = loginUser.getUser();
+			int res = userService.updateOnline(user.getId(), "0");
+			log.debug("更新用户：{}登录状态：{}成功", user.getUsername(), res);
 			log.info("用户：{} 退出登录，删除token：{}", loginUser.getUsername(), loginUser.getToken());
 			// 删除用户缓存记录
 			tokenService.delLoginUser(loginUser.getToken());

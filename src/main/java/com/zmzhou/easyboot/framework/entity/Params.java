@@ -51,7 +51,9 @@ public class Params implements Serializable {
 	 * The Visible.
 	 */
 	private String visible;
-	
+	/** 导出excel的文件名 */
+	private String excelName;
+
 	/**
 	 * Instantiates a new Params.
 	 */

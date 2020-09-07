@@ -4,12 +4,14 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -33,8 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 public class WebLogAspect {
 
     /**
-     * controller包的切入点.
-     * 签名，可以理解成这个切入点的一个名称
+     * api controller包的切入点的名称
      * @author zmzhou
      * @date 2020/08/29 16:18
      */
@@ -43,10 +44,12 @@ public class WebLogAspect {
     }
 
     /**
-     * 切入点描述 这个是controller包的切入点.
+     * framework controller包的切入点.
+     * @author zmzhou
+     * @date 2020/08/29 16:18
      */
     @Pointcut("execution(public * com.zmzhou.easyboot.framework.*.controller..*.*(..))")
-    public void uiControllerLog() {
+    public void frameworkControllerLog() {
     }
 
     /**
@@ -57,7 +60,7 @@ public class WebLogAspect {
      * @author zmzhou
      * @date 2020/08/29 14:55
      */
-    @Around("controllerLog() || uiControllerLog()")
+    @Around("controllerLog() || frameworkControllerLog()")
     public Object around(ProceedingJoinPoint joinPoint) {
         //这个RequestContextHolder是Springmvc提供来获得请求的东西
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
@@ -87,6 +90,10 @@ public class WebLogAspect {
             return result;
         } catch (BaseException e) {
             throw e;
+        } catch (ConstraintViolationException e) {
+            log.error("参数校验异常：{}", e.getConstraintViolations(), e);
+            ConstraintViolationImpl impl = (ConstraintViolationImpl) e.getConstraintViolations().toArray()[0];
+            return ApiResult.badRequest().error(impl.getMessageTemplate());
         } catch (Throwable throwable) {
             log.error("记录日志异常", throwable);
         }

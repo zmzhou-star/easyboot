@@ -20,6 +20,8 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -68,6 +70,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
         template.setConnectionFactory(redisConnectionFactory);
+        template.afterPropertiesSet();
         return template;
     }
     /**
@@ -109,6 +112,11 @@ public class RedisConfig extends CachingConfigurerSupport {
      */
     static class FastJsonRedisSerializer<T> implements RedisSerializer<T> {
         private final Class<T> clazz;
+
+        static {
+            // com.alibaba.fastjson.JSONException: autoType is not support
+            ParserConfig.getGlobalInstance().setAutoTypeSupport(true);
+        }
         FastJsonRedisSerializer(Class<T> clazz) {
             super();
             this.clazz = clazz;
@@ -130,7 +138,9 @@ public class RedisConfig extends CachingConfigurerSupport {
             String str = new String(bytes, StandardCharsets.UTF_8);
             return JSON.parseObject(str, clazz);
         }
-
+        protected JavaType getJavaType(Class<?> clazz) {
+            return TypeFactory.defaultInstance().constructType(clazz);
+        }
     }
 
     /**
@@ -160,7 +170,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         public byte[] serialize(Object object) {
             String string = JSON.toJSONString(object);
             if (StringUtils.isBlank(string)) {
-                return null;
+                return new byte[]{};
             }
             string = string.replace("\"", "");
             return string.getBytes(charset);

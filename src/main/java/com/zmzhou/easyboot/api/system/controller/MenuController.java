@@ -66,7 +66,7 @@ public class MenuController extends BaseController {
 		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
 		// 当前登录用户id
 		Long userId = loginUser.getUser().getId();
-		List<SysMenu> menus = menuService.selectMenuList(menu, userId);
+		List<SysMenu> menus = menuService.selectMenuList(menu.toEntity(), userId);
 		return ok(menuService.buildMenuTreeSelect(menus));
 	}
 	

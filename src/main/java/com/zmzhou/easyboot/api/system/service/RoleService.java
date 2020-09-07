@@ -1,7 +1,5 @@
 package com.zmzhou.easyboot.api.system.service;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -11,6 +9,9 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,13 +28,17 @@ import com.zmzhou.easyboot.api.system.entity.SysRole;
 import com.zmzhou.easyboot.api.system.entity.SysRoleMenu;
 import com.zmzhou.easyboot.api.system.entity.SysUser;
 import com.zmzhou.easyboot.api.system.entity.SysUserRole;
+import com.zmzhou.easyboot.api.system.excel.SysRoleExcel;
 import com.zmzhou.easyboot.common.Constants;
+import com.zmzhou.easyboot.common.excel.BaseExcel;
 import com.zmzhou.easyboot.common.exception.BaseException;
 import com.zmzhou.easyboot.common.utils.SecurityUtils;
 import com.zmzhou.easyboot.framework.entity.Params;
 import com.zmzhou.easyboot.framework.specification.Operator;
 import com.zmzhou.easyboot.framework.specification.SimpleSpecification;
 import com.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *  @title RoleService
@@ -43,8 +48,9 @@ import com.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
  */
 @Slf4j
 @Service
+@CacheConfig(cacheNames = {"system:role"})
 @Transactional(rollbackFor = Exception.class)
-public class RoleService {
+public class RoleService extends BaseService {
 	@Autowired
 	private RoleDao roleDao;
 	@Autowired
@@ -86,14 +92,14 @@ public class RoleService {
 		// 构造分页和排序条件
 		Pageable page = pageable;
 		if (pageable.getSort().equals(Sort.unsorted())) {
-			Sort sort = Sort.by(Sort.Order.desc("status"), Sort.Order.asc(Constants.SORT_BY));
+			Sort sort = Sort.by(Sort.Order.desc( Constants.STATUS), Sort.Order.asc(Constants.SORT_BY));
 			page = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 		}
 		// 构造查询条件
 		Specification<SysRole> spec = new SimpleSpecificationBuilder<SysRole>()
 				.and("roleName", Operator.LIKE, params.getRoleName())
 				.and("roleCode", Operator.LIKE, params.getRoleCode())
-				.and("status", Operator.EQUAL, params.getStatus())
+				.and( Constants.STATUS, Operator.EQUAL, params.getStatus())
 				.between("and", "createTime", params.getBeginTime(), params.getEndTime())
 				.build();
 		return roleDao.findAll(spec, page);
@@ -106,6 +112,7 @@ public class RoleService {
 	 * @author zmzhou
 	 * @date 2020/08/28 18:58
 	 */
+	@Cacheable
 	public SysRole getOne(Long id) {
 		if (null == id) {
 			return new SysRole();
@@ -137,6 +144,7 @@ public class RoleService {
 	 * @author zmzhou
 	 * @date 2020/08/28 18:56
 	 */
+	@CachePut(key="#id")
 	public int updateUserStatus(Long id, String status) {
 		return roleDao.updateUserStatus(id, status);
 	}
@@ -175,6 +183,7 @@ public class RoleService {
 	 * @author zmzhou
 	 * @date 2020/08/28 18:56
 	 */
+	@CachePut(key="#role.id")
 	public SysRole insertRole(SysRole role) {
 		// 新增角色信息
 		role.setCreateTime(new Date());
@@ -231,6 +240,7 @@ public class RoleService {
 	 * @author zmzhou
 	 * @date 2020/08/28 18:56
 	 */
+	@CachePut(key="#role.id")
 	public int updateRole(SysRole role) {
 		// 修改角色信息
 		role.setUpdateBy(SecurityUtils.getUsername());
@@ -248,6 +258,7 @@ public class RoleService {
 	 * @author zmzhou
 	 * @date 2020/08/28 18:56
 	 */
+	@Cacheable(key="#roleId")
 	public List<SysRoleMenu> findAll(long roleId){
 		SimpleSpecification<SysRoleMenu> spec = new SimpleSpecificationBuilder<SysRoleMenu>()
 				.and("roleId", Operator.EQUAL, roleId)
@@ -301,5 +312,42 @@ public class RoleService {
 	 */
 	private SysRole selectRoleById(Long roleId) {
 		return roleDao.selectRoleById(roleId);
+	}
+	/**
+	 * @description 导出excel
+	 * @param params 查询参数
+	 * @return excel文件路径名
+	 * @author zmzhou
+	 * @date 2020/9/3 22:18
+	 */
+    @Override
+	public String export(Params params) {
+		Page<SysRole> list = findAll(params, getExcelPageable(params));
+		List<BaseExcel> excelList = new ArrayList<>();
+		while (list.hasNext()) {
+			dataConversion(list, excelList, SysRoleExcel.class);
+			list = findAll(params, list.nextPageable());
+		}
+		// 把最后一页数据加入
+		dataConversion(list, excelList, SysRoleExcel.class);
+		return excelUtils.download(excelList, SysRoleExcel.class, params.getExcelName());
+    }
+	/**
+	 * @description 获取用户角色
+	 * @param userId 用户id
+	 * @return 用户角色名（多个角色以,隔开）
+	 * @author zmzhou
+	 * @date 2020/9/5 22:12
+	 */
+	public String selectUserRole(Long userId) {
+		List<SysRole> roles = roleDao.findRolePermission(userId);
+		StringBuilder roleNames = new StringBuilder();
+		for (SysRole role : roles) {
+			roleNames.append(role.getRoleName()).append(Constants.COMMA);
+		}
+		if (StringUtils.isNotEmpty(roleNames.toString())) {
+			return roleNames.substring(0, roleNames.length() - 1);
+		}
+		return roleNames.toString();
 	}
 }

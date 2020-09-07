@@ -165,6 +165,8 @@ public class TokenService {
         loginUser.setExpireTime(loginUser.getLoginTime() + expireTime * MILLIS_MINUTE);
         // 根据uuid将loginUser缓存
         String userKey = getTokenKey(loginUser.getToken());
+        // 修改在线状态
+        loginUser.getUser().setOnline("1");
         redisUtils.set(userKey, loginUser, expireTime, TimeUnit.MINUTES);
     }
 

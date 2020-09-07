@@ -14,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class EasyWebMvcConfigurer implements WebMvcConfigurer {
     /**
      * 方法描述
-     * @param registry
+     * @param registry ResourceHandlerRegistry
      * @author zmzhou
      * @date 2020/07/02 19:35
      */
@@ -35,7 +35,7 @@ public class EasyWebMvcConfigurer implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedHeaders("*")
-                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
+                .allowedMethods("POST", "GET", "PUT", "DELETE")
                 .maxAge(1800)
                 .allowedOrigins("*");
     }

@@ -1,7 +1,5 @@
 package com.zmzhou.easyboot.api.system.service;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,10 @@ import org.springframework.data.domain.Pageable;
 
 import com.zmzhou.easyboot.api.system.entity.SysUser;
 import com.zmzhou.easyboot.common.exception.BaseException;
+import com.zmzhou.easyboot.common.utils.SecurityUtils;
 import com.zmzhou.easyboot.framework.entity.Params;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * The type User service test.
@@ -93,7 +94,7 @@ public class UserServiceTest {
 	 */
 	@Test
 	public void resetPwd() {
-		SysUser res = service.resetPwd(2L, "Zmzhou.1324");
+		SysUser res = service.resetPwd(2L, SecurityUtils.sha256Encrypt("Zmzhou.1324"));
 		Assertions.assertNotNull(res);
 	}
 }

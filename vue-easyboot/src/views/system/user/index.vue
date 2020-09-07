@@ -113,7 +113,7 @@
       <el-table-column label="最后登录IP" align="center" prop="loginIp" :show-overflow-tooltip="true" width="110" />
       <el-table-column align="center" prop="loginDate" label="最后登录时间" width="165">
         <template slot-scope="scope">
-          <i class="el-icon-time" />
+          <em class="el-icon-time" />
           <span>{{ scope.row.loginDate }}</span>
         </template>
       </el-table-column>
@@ -139,7 +139,7 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="12">
-            <el-form-item v-if="form.id == undefined" label="用户名称" prop="username">
+            <el-form-item v-if="form.id === undefined" label="用户名称" prop="username">
               <el-input v-model="form.username" placeholder="请输入用户名称" />
             </el-form-item>
           </el-col>
@@ -154,7 +154,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item v-if="form.userId == undefined" label="用户密码" prop="password">
+            <el-form-item v-if="form.id === undefined" label="用户密码" prop="password">
               <el-input v-model="form.password" placeholder="请输入用户密码" type="password" />
             </el-form-item>
           </el-col>
@@ -201,27 +201,27 @@
     </el-dialog>
 
     <!-- 用户导入对话框 -->
-    <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px" append-to-body>
+    <el-dialog :title="upload.title" :visible.sync="upload.open" width="500px" append-to-body>
       <el-upload
         ref="upload"
         :limit="1"
         accept=".xlsx, .xls"
         :headers="upload.headers"
-        :action="upload.url + '?updateSupport=' + upload.updateSupport"
+        :action="upload.url + '?isUpdate=' + upload.isUpdate"
         :disabled="upload.isUploading"
         :on-progress="handleFileUploadProgress"
         :on-success="handleFileSuccess"
         :auto-upload="false"
         drag
       >
-        <i class="el-icon-upload" />
+        <em class="el-icon-upload" />
         <div class="el-upload__text">
           将文件拖到此处，或
           <em>点击上传</em>
         </div>
         <div slot="tip" class="el-upload__tip">
-          <el-checkbox v-model="upload.updateSupport" />是否更新已经存在的用户数据
-          <el-link type="info" style="font-size:12px" @click="importTemplate">下载模板</el-link>
+          <el-checkbox v-model="upload.isUpdate" />是否更新已经存在的用户数据
+          <el-link type="info" style="font-size:12px;font-weight: bold" @click="excelTemplate">下载模板</el-link>
         </div>
         <div slot="tip" class="el-upload__tip" style="color:red">提示：仅允许导入“xls”或“xlsx”格式文件！</div>
       </el-upload>
@@ -234,7 +234,7 @@
 </template>
 
 <script>
-import { getList, getOne, del, add, update, exportUser, resetPwd, changeUserStatus, importTemplate } from '@/api/system/user'
+import { getList, getOne, del, add, update, exportUser, resetPwd, changeUserStatus, excelTemplate } from '@/api/system/user'
 import { getToken } from '@/utils/auth'
 
 export default {
@@ -293,16 +293,18 @@ export default {
         // 是否禁用上传
         isUploading: false,
         // 是否更新已经存在的用户数据
-        updateSupport: 0,
+        isUpdate: 0,
         // 设置上传的请求头部
-        headers: { Authorization: 'Bearer ' + getToken() },
+        headers: { Authorization: getToken() },
         // 上传的地址
-        url: process.env.VUE_APP_BASE_URL + '/system/user/importData'
+        url: process.env.VUE_APP_BASE_API + 'system/user/importExcel'
       },
       // 表单校验
       rules: {
         username: [
-          { required: true, message: '用户名称不能为空', trigger: 'blur' }
+          { required: true, message: '用户名称不能为空', trigger: 'blur' },
+          { pattern: /^[a-zA-Z\d]{4,20}$/,
+            min: 4, max: 20, message: '必需由字母和数字组成，长度在4~20个字符', trigger: 'blur' }
         ],
         nickName: [
           { required: true, message: '用户昵称不能为空', trigger: 'blur' }
@@ -311,7 +313,9 @@ export default {
           { required: true, message: '归属部门不能为空', trigger: 'blur' }
         ],
         password: [
-          { required: true, message: '用户密码不能为空', trigger: 'blur' }
+          { required: true, message: '用户密码不能为空', trigger: 'blur' },
+          { pattern: /^.*(?=.{6,16})(?=.*[A-Za-z]{2,})(?=.*\d)(?=.*[!@#$%^&*?\.\(\)]).*$/,
+            min: 6, max: 20, message: '密码必需由字母、数字和特殊字符组成，长度在6~20个字符', trigger: 'blur' }
         ],
         email: [
           { required: true, message: '邮箱地址不能为空', trigger: 'blur' },
@@ -354,7 +358,7 @@ export default {
       }).then(function() {
         return changeUserStatus(row.id, row.status)
       }).then(() => {
-        this.msgSuccess(text)
+        this.msgSuccess(text + "成功")
         this.fetchData()
       }).catch(function() {
         row.status = row.status === '0' ? '1' : '0'
@@ -391,7 +395,7 @@ export default {
         email: undefined,
         password: undefined,
         sex: undefined,
-        status: '0',
+        status: '1',
         remark: undefined
       }
       this.resetForm('form')
@@ -430,7 +434,7 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
       }).then(({ value }) => {
-        resetPwd(row.id, value).then(response => {
+        resetPwd(row.id, this.sha256(value)).then(response => {
           if (response) {
             this.msgSuccess('修改成功，新密码是：' + value)
           } else {
@@ -444,16 +448,20 @@ export default {
       this.$refs['form'].validate(valid => {
         if (valid) {
           if (this.form.id !== undefined) {
-            update(this.form).then(response => {
-              this.msgSuccess('修改')
+            let params = this.deepClone(this.form);
+            params.password = this.sha256(this.form.password);
+            update(params).then(response => {
+              this.msgSuccess('修改成功')
               this.open = false
               this.fetchData()
             }).catch(err => {
               console.error(err)
             })
           } else {
-            add(this.form).then(response => {
-              this.msgSuccess('新增')
+            let params = this.deepClone(this.form);
+            params.password = this.sha256(this.form.password);
+            add(params).then(response => {
+              this.msgSuccess('新增成功')
               this.open = false
               this.fetchData()
             }).catch(err => {
@@ -474,21 +482,24 @@ export default {
         return del(ids)
       }).then(() => {
         this.fetchData()
-        this.msgSuccess('删除')
+        this.msgSuccess('删除成功')
       }).catch(function() {})
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams
-      this.$confirm('是否确认导出所有用户数据项?', '警告', {
+      let queryParams = this.queryParams;
+      queryParams.excelName = "用户管理"
+      this.$confirm('是否确认导出所有用户数据项?', '操作提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function() {
         return exportUser(queryParams)
       }).then(response => {
-        this.download(response.msg)
-      }).catch(function() {})
+        this.download(response)
+      }).catch(function(e) {
+        console.log(e)
+      })
     },
     /** 导入按钮操作 */
     handleImport() {
@@ -497,9 +508,9 @@ export default {
     },
 
     /** 下载模板操作 */
-    importTemplate() {
-      importTemplate().then(response => {
-        this.download(response.msg)
+    excelTemplate() {
+      excelTemplate().then(response => {
+        this.download(response)
       })
     },
     // 文件上传中处理
@@ -511,7 +522,7 @@ export default {
       this.upload.open = false
       this.upload.isUploading = false
       this.$refs.upload.clearFiles()
-      this.$alert(response.msg, '导入结果', { dangerouslyUseHTMLString: true })
+      this.$alert(response.data || response.msg, '导入结果', { dangerouslyUseHTMLString: true })
       this.fetchData()
     },
     // 提交上传文件

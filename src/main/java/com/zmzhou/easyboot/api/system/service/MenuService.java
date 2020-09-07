@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +39,7 @@ import com.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
  * @Date 2020/07/21 10:26
  */
 @Service
+@CacheConfig(cacheNames = {"system:menu"})
 @Transactional(rollbackFor = Exception.class)
 public class MenuService {
 	
@@ -51,6 +54,7 @@ public class MenuService {
 	 * @author zmzhou
 	 * @date 2020/07/21 10:33
 	 */
+	@Cacheable
 	public Set<String> getMenuPermission(SysUser user) {
 		Set<String> permsSet = new HashSet<>();
 		// 管理员拥有所有权限
@@ -76,6 +80,7 @@ public class MenuService {
 	 * @author zmzhou
 	 * @date 2020/08/27 11:45
 	 */
+	@Cacheable(key="#params")
 	public Page<SysMenu> findAll(Params params, Pageable pageable) {
 		// 构造分页排序条件
 		Pageable page = pageable;
@@ -100,7 +105,7 @@ public class MenuService {
 		return new SimpleSpecificationBuilder<SysMenu>()
 				.and("menuName", Operator.LIKE, params.getMenuName())
 				.and("visible", Operator.EQUAL, params.getVisible())
-				.and("status", Operator.EQUAL, params.getStatus())
+				.and(Constants.STATUS, Operator.EQUAL, params.getStatus())
 				.build();
 	}
 	/**
@@ -238,7 +243,7 @@ public class MenuService {
 		String routerPath = menu.getPath();
 		// 非外链并且是一级目录
 		if (0L == menu.getParentId() && 0L == menu.getIsFrame()) {
-			routerPath = "/" + menu.getPath();
+			routerPath = Constants.SEPARATOR + menu.getPath();
 		}
 		return routerPath;
 	}
@@ -251,6 +256,7 @@ public class MenuService {
 	 * @author zmzhou
 	 * @date 2020/08/29 17:15
 	 */
+	@Cacheable
 	public List<SysMenu> selectMenuList(Long userId) {
 		// 查询有效可见的菜单
 		SysMenu menu = new SysMenu();
@@ -288,6 +294,7 @@ public class MenuService {
 	 * @author zmzhou
 	 * @date 2020/08/29 17:15
 	 */
+	@Cacheable
 	public List<Integer> selectMenuListByRoleId(Long roleId) {
 		return menuDao.selectMenuListByRoleId(roleId);
 	}

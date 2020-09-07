@@ -37,6 +37,17 @@ public interface UserDao extends JpaRepository<SysUser, Long>, JpaSpecificationE
 	 * @date 2020/08/27 14:23
 	 */
 	@Modifying
-	@Query("update SysUser u set u.loginIp=?2,u.loginDate=now() where u.id=?1")
+	@Query("update SysUser u set u.loginIp=?2,u.online=1,u.loginDate=now() where u.id=?1")
 	void updateLoginTime(Long userId, String realIp);
+
+	/**
+	 * 更新用户在线状态
+	 * @param id 用户id
+	 * @param online 在线状态
+	 * @author zmzhou
+	 * @date 2020/9/6 23:13
+	 */
+	@Modifying
+	@Query("update SysUser u set u.online=?2,u.loginDate=now() where u.id=?1")
+	int updateOnline(Long id, String online);
 }

@@ -1,15 +1,16 @@
 # easyboot
 
 #### 介绍
-spring boot + vue-admin-template简单入门框架
+spring boot、spring security、jwt token、redis、jpa + vue-admin-template实现前后端分离简单入门框架
 
 #据库文档生成工具
 src\test\java\com\zmzhou\easyboot\DBGenerationTool.java
 参考：https://gitee.com/leshalv/screw/tree/master/
 
 #sonar扫描命令
+```bash
 mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true install sonar:sonar -X
-
+```
 #### 软件架构
 软件架构说明
 
@@ -22,9 +23,12 @@ mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.igno
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1. @EnableCaching常用注解说明
+@Cacheable     触发缓存填充（查询）
+@CachePut      更新缓存而不会干扰方法执行（更新）
+@CacheEvict    触发缓存驱逐（删除）
+@Caching       重新组合要在方法上应用的多个缓存操作
+@CacheConfig   在类级别共享一些常见的缓存相关设置
 
 #### 参与贡献
 

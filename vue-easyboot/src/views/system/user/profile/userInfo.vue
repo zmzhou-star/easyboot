@@ -3,16 +3,16 @@
     <el-form-item label="用户昵称" prop="nickName">
       <el-input v-model="user.nickName" />
     </el-form-item>
-    <el-form-item label="手机号码" prop="phonenumber">
-      <el-input v-model="user.phonenumber" maxlength="11" />
+    <el-form-item label="手机号码" prop="tel">
+      <el-input v-model="user.tel" maxlength="11" />
     </el-form-item>
-    <el-form-item label="邮箱" prop="email">
+    <el-form-item label="用户邮箱" prop="email">
       <el-input v-model="user.email" maxlength="50" />
     </el-form-item>
     <el-form-item label="性别">
       <el-radio-group v-model="user.sex">
-        <el-radio label="0">男</el-radio>
-        <el-radio label="1">女</el-radio>
+        <el-radio label="1">男</el-radio>
+        <el-radio label="0">女</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item>
@@ -46,7 +46,7 @@ export default {
             trigger: ['blur', 'change']
           }
         ],
-        phonenumber: [
+        tel: [
           { required: true, message: '手机号码不能为空', trigger: 'blur' },
           {
             pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
@@ -62,10 +62,8 @@ export default {
       this.$refs['form'].validate(valid => {
         if (valid) {
           updateUserProfile(this.user).then(response => {
-            if (response.code === 200) {
+            if (response) {
               this.msgSuccess('修改成功')
-            } else {
-              this.msgError(response.msg)
             }
           })
         }
@@ -73,7 +71,7 @@ export default {
     },
     close() {
       this.$store.dispatch('tagsView/delView', this.$route)
-      this.$router.push({ path: '/index' })
+      this.$router.push({ path: '/' })
     }
   }
 }

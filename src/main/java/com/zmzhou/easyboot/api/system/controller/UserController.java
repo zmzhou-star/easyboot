@@ -1,5 +1,10 @@
 package com.zmzhou.easyboot.api.system.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,24 +19,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zmzhou.easyboot.api.system.entity.SysUser;
+import com.zmzhou.easyboot.api.system.excel.SysUserExcel;
 import com.zmzhou.easyboot.api.system.service.UserService;
 import com.zmzhou.easyboot.api.system.vo.SysUserVo;
 import com.zmzhou.easyboot.common.ErrorCode;
+import com.zmzhou.easyboot.common.excel.ExcelUtils;
+import com.zmzhou.easyboot.common.utils.FileUploadUtils;
+import com.zmzhou.easyboot.common.utils.ServletUtils;
 import com.zmzhou.easyboot.framework.entity.Params;
 import com.zmzhou.easyboot.framework.page.ApiResult;
 import com.zmzhou.easyboot.framework.page.TableDataInfo;
 import com.zmzhou.easyboot.framework.web.BaseController;
 
 /**
+ * @title UserController
+ * @description  用户管理
  * @author zmzhou
- * @description 用户管理
- * @date 2020/07/02 17:02
+ * @version 1.0
+ * @date 2020/9/5 21:56
  */
 @RestController
 @RequestMapping("/system/user")
 public class UserController extends BaseController {
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private FileUploadUtils fileUploadUtils;
+	@Autowired
+	private ExcelUtils excelUtils;
 	
 	/**
 	 * 根据id获取用户信息
@@ -59,7 +74,44 @@ public class UserController extends BaseController {
 		Page<SysUser> list = userService.findAll(params, pageable);
 		return ok(list);
 	}
-	
+	/**
+	 * @description 导出excel
+	 * @param params 查询参数
+	 * @return ApiResult<String> excel文件名
+	 * @author zmzhou
+	 * @date 2020/8/30 21:50
+	 */
+	@PostMapping("/export")
+	public ApiResult<String> export(@RequestBody(required = false) Params params) {
+		return ok(userService.export(params));
+	}
+	/**
+	 * @description 下载excel导入模板
+	 * @return ApiResult<String> excel文件名
+	 * @author zmzhou
+	 * @date 2020/9/5 21:17
+	 */
+	@GetMapping("/excelTemplate")
+	public ApiResult<String> excelTemplate() {
+		return ok(userService.excelTemplate(SysUserExcel.class, "用户管理导入模板"));
+	}
+
+	/**
+	 * 导入excel
+	 * @param isUpdate 是否更新数据库的数据
+	 * @return ApiResult
+	 * @author zmzhou
+	 * @date 2020/9/6 13:54
+	 */
+	@PostMapping("/importExcel")
+	public ApiResult<String> importExcel(boolean isUpdate) throws IOException {
+		FileItem file = fileUploadUtils.singleUpload(ServletUtils.getRequest());
+		// excel数据
+		List<SysUserExcel> list = new ArrayList<>();
+		// 读取excel数据
+		excelUtils.simpleRead(file.getInputStream(), SysUserExcel.class, list);
+		return ok(userService.importExcel(list, isUpdate));
+	}
 	/**
 	 * 保存用户
 	 * @param user 用户信息
@@ -73,10 +125,10 @@ public class UserController extends BaseController {
 		if (null == user) {
 			return result.error(ErrorCode.PARAM_ISNULL);
 		}
-		if (userService.exists(user)) {
+		if (userService.exists(user.toEntity())) {
 			return result.error(ErrorCode.USER_EXISTS);
 		}
-		result.setData(userService.save(user));
+		result.setData(userService.save(user.toEntity()));
 		return result;
 	}
 	/**
@@ -92,7 +144,7 @@ public class UserController extends BaseController {
 		if (null == user || null == user.getId()) {
 			return result.error(ErrorCode.PARAM_ISNULL);
 		}
-		result.setData(userService.update(user));
+		result.setData(userService.update(user.toEntity()));
 		return result;
 	}
 	

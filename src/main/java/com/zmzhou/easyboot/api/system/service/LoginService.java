@@ -64,10 +64,12 @@ public class LoginService {
 			// 该方法会去调用UserDetailsServiceImpl.loadUserByUsername
 			authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					loginBody.getUsername(), loginBody.getPassword()));
+		} catch (BadCredentialsException e) {
+			// 密码错误
+			throw new BaseException(ErrorCode.PASSWD_ERROR);
 		} catch (AuthenticationException e) {
-			if (e instanceof BadCredentialsException) {
-				// 密码错误
-				throw new BaseException(ErrorCode.PASSWD_ERROR);
+			if (e.getCause() instanceof BaseException){
+				throw (BaseException) e.getCause();
 			} else {
 				throw new BaseException(HttpStatus.BAD_REQUEST, e.getMessage());
 			}

@@ -34,7 +34,8 @@ const mutations = {
     state.avatar = avatar || 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
   }
 }
-
+// 用户头像访问路径前缀
+const avatarPrefix = process.env.VUE_APP_BASE_API + 'common/avatar?url='
 const actions = {
   // user login
   login({ commit }, userInfo) {
@@ -57,9 +58,9 @@ const actions = {
         if (!res) {
           return reject('Verification failed, please Login again.')
         }
-
         const user = res.user
-        const avatar = user.avatar === '' ? '' : process.env.VUE_APP_BASE_API + user.avatar
+        // 设置用户头像访问路径
+        const avatar = user.avatar === '' ? '' : avatarPrefix + user.avatar
         if (res.roles && res.roles.length > 0) { // 验证返回的roles是否是一个非空数组
           commit('SET_ROLES', res.roles)
           commit('SET_PERMISSIONS', res.permissions)
@@ -107,6 +108,14 @@ const actions = {
       removeToken()
       resolve()
     })
+  },
+  /**
+   * 更新用户头像
+   * @param commit
+   * @param avatar
+   */
+  setAvatar({ commit }, avatar){
+    commit('SET_AVATAR', avatarPrefix + avatar)
   }
 }
 

@@ -1,22 +1,22 @@
 package com.zmzhou.easyboot;
 
-import lombok.extern.slf4j.Slf4j;
-
-import java.time.LocalDateTime;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.cache.annotation.EnableCaching;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * @description 程序入口
+ * 程序入口
+ * EasybootApplication
  * @author zmzhou
- * @date 2020/07/02 20:12
+ * @version 1.0
+ * @date 2020/9/7 21:15
  */
 @Slf4j
-@EnableScheduling
+@EnableCaching
 @SpringBootApplication
+//@EnableDiscoveryClient
 public class EasybootApplication {
     /**
      * @description 程序入口
@@ -28,13 +28,4 @@ public class EasybootApplication {
         SpringApplication.run(EasybootApplication.class, args);
     }
 
-    /**
-     * @description 定时任务
-     * @author zmzhou
-     * @date 2020/8/30 12:52
-     */
-    @Scheduled(cron = "0/20 * * * * ?")
-    public void run20s() {
-        log.info("定时任务:{}", LocalDateTime.now());
-    }
 }

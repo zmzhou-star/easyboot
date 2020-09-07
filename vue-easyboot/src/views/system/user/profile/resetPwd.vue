@@ -29,7 +29,6 @@ export default {
       }
     }
     return {
-      test: '1test',
       user: {
         oldPassword: undefined,
         newPassword: undefined,
@@ -42,7 +41,8 @@ export default {
         ],
         newPassword: [
           { required: true, message: '新密码不能为空', trigger: 'blur' },
-          { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' }
+          { pattern: /^.*(?=.{6,16})(?=.*[A-Za-z]{2,})(?=.*\d)(?=.*[!@#$%^&*?\.\(\)]).*$/,
+            min: 6, max: 20, message: '密码必需由字母、数字和特殊字符组成，长度在6~20个字符', trigger: 'blur' }
         ],
         confirmPassword: [
           { required: true, message: '确认密码不能为空', trigger: 'blur' },
@@ -55,12 +55,10 @@ export default {
     submit() {
       this.$refs['form'].validate(valid => {
         if (valid) {
-          updateUserPwd(this.user.oldPassword, this.user.newPassword).then(
+          updateUserPwd(this.sha256(this.user.oldPassword), this.sha256(this.user.newPassword)).then(
             response => {
-              if (response.code === 200) {
+              if (response) {
                 this.msgSuccess('修改成功')
-              } else {
-                this.msgError(response.msg)
               }
             }
           )
@@ -69,7 +67,7 @@ export default {
     },
     close() {
       this.$store.dispatch('tagsView/delView', this.$route)
-      this.$router.push({ path: '/index' })
+      this.$router.push({ path: '/' })
     }
   }
 }

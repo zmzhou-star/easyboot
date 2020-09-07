@@ -1,6 +1,5 @@
 /**
  * 通用js方法封装处理
- * Copyright (c) 2019 ruoyi
  */
 
 const baseURL = process.env.VUE_APP_BASE_URL
@@ -78,8 +77,8 @@ export function selectDictLabel(datas, value) {
 }
 
 // 通用下载方法
-export function download(fileName) {
-  window.location.href = baseURL + '/common/download?fileName=' + encodeURI(fileName) + '&delete=' + true
+export function download(fileName, notDelete) {
+  window.location.href = baseURL + '/common/download?fileName=' + encodeURI(fileName) + '&del=' + !notDelete
 }
 
 // 字符串格式化(%s )

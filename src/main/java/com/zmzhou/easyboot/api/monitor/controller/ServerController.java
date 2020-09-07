@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.zmzhou.easyboot.framework.entity.Server;
+import com.github.zmzhou.ServerInfo;
 import com.zmzhou.easyboot.framework.page.ApiResult;
 import com.zmzhou.easyboot.framework.web.BaseController;
 
@@ -22,11 +22,9 @@ public class ServerController extends BaseController {
      * @date 2020/07/03 14:28
      */
     @GetMapping("/getInfo")
-    public ApiResult<Server> getInfo() {
-        ApiResult<Server> result = new ApiResult<>();
-        Server server = new Server();
-        server.copyTo();
-        result.setData(server);
-        return result;
+    public ApiResult<ServerInfo> getInfo() {
+        // 获取服务器信息
+        ServerInfo info = new ServerInfo();
+        return ok(info);
     }
 }
