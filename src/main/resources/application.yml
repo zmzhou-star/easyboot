@@ -110,7 +110,7 @@ logging:
   config: classpath:log4j2.xml
   level:
     web: INFO
-    com.zmzhou: debug
+    com.github.zmzhou: debug
     org.springframework: INFO
 #eureka:
 #  instance:

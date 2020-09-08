@@ -39,7 +39,7 @@ public class WebLogAspect {
      * @author zmzhou
      * @date 2020/08/29 16:18
      */
-    @Pointcut("execution(public * com.zmzhou.easyboot.api.*.controller..*.*(..))")
+    @Pointcut("execution(public * com.github.zmzhou.easyboot.api.*.controller..*.*(..))")
     public void controllerLog() {
     }
 
@@ -48,7 +48,7 @@ public class WebLogAspect {
      * @author zmzhou
      * @date 2020/08/29 16:18
      */
-    @Pointcut("execution(public * com.zmzhou.easyboot.framework.*.controller..*.*(..))")
+    @Pointcut("execution(public * com.github.zmzhou.easyboot.framework.*.controller..*.*(..))")
     public void frameworkControllerLog() {
     }
 

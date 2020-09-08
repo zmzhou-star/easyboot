@@ -67,7 +67,7 @@ spring:
                 allow: 127.0.0.1
                 deny:
                 # Spring监控，对内部各接口调用的监控，检查spring健康
-            aop-patterns: com.zmzhou.easyboot.api.*.controller.*,com.zmzhou.easyboot.framework.web.*
+            aop-patterns: com.github.zmzhou.easyboot.api.*.controller.*,com.github.zmzhou.easyboot.framework.web.*
     redis:
         host: 127.0.0.1
         password: Redis.127
