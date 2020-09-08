@@ -176,6 +176,19 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
+            <el-form-item v-if="form.id !== 1" label="角色">
+              <el-select v-model="form.roles" multiple placeholder="请选择">
+                <el-option
+                  v-for="r in roleOptions"
+                  :key="r.value"
+                  :value="r.value"
+                  :label="r.label"
+                  :disabled="r.value === '1'"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="状态">
               <el-radio-group v-model="form.status">
                 <el-radio
@@ -261,6 +274,7 @@ export default {
       listLoading: true,
       // 日期范围
       dateRange: [],
+      roleOptions: [],
       // 用户状态字典
       statusOptions: [{ label: '正常', value: '1' }, { label: '停用', value: '0' }],
       // 性别状态字典
@@ -271,8 +285,7 @@ export default {
         pageSize: 10,
         username: undefined,
         tel: undefined,
-        status: undefined,
-        deptId: undefined
+        status: undefined
       },
       // 弹出层标题
       title: '',
@@ -308,9 +321,6 @@ export default {
         ],
         nickName: [
           { required: true, message: '用户昵称不能为空', trigger: 'blur' }
-        ],
-        deptId: [
-          { required: true, message: '归属部门不能为空', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '用户密码不能为空', trigger: 'blur' },
@@ -358,7 +368,7 @@ export default {
       }).then(function() {
         return changeUserStatus(row.id, row.status)
       }).then(() => {
-        this.msgSuccess(text + "成功")
+        this.msgSuccess(text + '成功')
         this.fetchData()
       }).catch(function() {
         row.status = row.status === '0' ? '1' : '0'
@@ -395,6 +405,7 @@ export default {
         email: undefined,
         password: undefined,
         sex: undefined,
+        roles: undefined,
         status: '1',
         remark: undefined
       }
@@ -403,7 +414,6 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      console.log(this.ids)
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
@@ -414,6 +424,7 @@ export default {
         this.open = true
         this.title = '添加用户'
         this.form.password = ''
+        this.roleOptions = response.roleList
       })
     },
     /** 修改按钮操作 */
@@ -422,10 +433,10 @@ export default {
       const rowId = row.id || this.ids
       getOne(rowId).then(response => {
         this.form = response
-        this.form.password = ''
         this.open = true
         this.title = '修改用户'
         this.form.password = ''
+        this.roleOptions = response.roleList
       })
     },
     /** 重置密码按钮操作 */
@@ -438,7 +449,7 @@ export default {
           if (response) {
             this.msgSuccess('修改成功，新密码是：' + value)
           } else {
-            this.msgError("修改")
+            this.msgError('修改')
           }
         })
       }).catch(() => {})
@@ -448,9 +459,7 @@ export default {
       this.$refs['form'].validate(valid => {
         if (valid) {
           if (this.form.id !== undefined) {
-            let params = this.deepClone(this.form);
-            params.password = this.sha256(this.form.password);
-            update(params).then(response => {
+            update(this.form).then(response => {
               this.msgSuccess('修改成功')
               this.open = false
               this.fetchData()
@@ -458,8 +467,8 @@ export default {
               console.error(err)
             })
           } else {
-            let params = this.deepClone(this.form);
-            params.password = this.sha256(this.form.password);
+            const params = this.deepClone(this.form)
+            params.password = this.sha256(this.form.password)
             add(params).then(response => {
               this.msgSuccess('新增成功')
               this.open = false
@@ -487,8 +496,8 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      let queryParams = this.queryParams;
-      queryParams.excelName = "用户管理"
+      const queryParams = this.queryParams
+      queryParams.excelName = '用户管理'
       this.$confirm('是否确认导出所有用户数据项?', '操作提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

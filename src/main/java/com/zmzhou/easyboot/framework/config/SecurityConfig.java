@@ -81,7 +81,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						"/*.html",
 						"/**/*.html",
 						"/**/*.css",
-						"/**/*.js"
+						"/**/*.js",
+						"/**/*.jpg",
+						"/**/*.png",
+						"/**/*.gif"
 				).permitAll()
 				// 允许匿名访问
 				.antMatchers(antMatchers.split(Constants.COMMA)).anonymous()

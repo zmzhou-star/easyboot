@@ -6,9 +6,9 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.3.3.RELEASE</version>
-        <relativePath/>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.zmzhou</groupId>
+    <groupId>com.github.zmzhou</groupId>
     <artifactId>easyboot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>easyboot</name>
@@ -275,7 +275,7 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>*</include>
+                    <include>**</include>
                 </includes>
                 <filtering>true</filtering>
             </resource>

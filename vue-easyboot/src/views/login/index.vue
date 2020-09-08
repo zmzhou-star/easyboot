@@ -107,7 +107,7 @@ export default {
   methods: {
     getCode() {
       getCaptcha().then(res => {
-        //验证码和uuid
+        // 验证码和uuid
         this.codeUrl = res.code
         this.loginForm.uuid = res.uuid
       })
@@ -145,8 +145,8 @@ export default {
             Cookies.remove('password')
             Cookies.remove('rememberMe')
           }
-          let params = this.deepClone(this.loginForm);
-          params.password = this.sha256(this.loginForm.password);
+          const params = this.deepClone(this.loginForm)
+          params.password = this.sha256(this.loginForm.password)
           this.$store.dispatch('user/login', params).then(() => {
             this.$router.push({ path: this.redirect || '/' })
             this.loading = false

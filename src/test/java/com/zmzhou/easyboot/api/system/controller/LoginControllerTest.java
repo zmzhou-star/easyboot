@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zmzhou.easyboot.EasybootApplicationTests;
 import com.zmzhou.easyboot.api.common.CommonController;
 import com.zmzhou.easyboot.api.system.vo.RouterVo;
+import com.zmzhou.easyboot.api.system.vo.UserInfo;
 import com.zmzhou.easyboot.common.Constants;
 import com.zmzhou.easyboot.common.ErrorCode;
 import com.zmzhou.easyboot.common.exception.BaseException;
@@ -95,7 +96,7 @@ class LoginControllerTest extends EasybootApplicationTests {
 	 */
 	@Test
 	void getUserInfo() {
-		ApiResult<JSONObject> res = controller.getUserInfo();
+		ApiResult<UserInfo> res = controller.getUserInfo();
 		Assertions.assertNotNull(res);
 	}
 	

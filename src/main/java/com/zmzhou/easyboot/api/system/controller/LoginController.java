@@ -1,5 +1,6 @@
 package com.zmzhou.easyboot.api.system.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.zmzhou.easyboot.api.system.service.LoginService;
 import com.zmzhou.easyboot.api.system.service.MenuService;
 import com.zmzhou.easyboot.api.system.service.RoleService;
 import com.zmzhou.easyboot.api.system.vo.RouterVo;
+import com.zmzhou.easyboot.api.system.vo.UserInfo;
 import com.zmzhou.easyboot.common.Constants;
 import com.zmzhou.easyboot.common.utils.ServletUtils;
 import com.zmzhou.easyboot.framework.page.ApiResult;
@@ -43,41 +45,35 @@ public class LoginController extends BaseController {
 	
 	/**
 	 * 用户登录
-	 *
 	 * @param loginBody 用户名密码
+	 * @return {token:token}
 	 * @author zmzhou
 	 * @date 2020/07/03 14:54
 	 */
 	@PostMapping("login")
 	public ApiResult<JSONObject> login(@RequestBody LoginBody loginBody) {
-		ApiResult<JSONObject> result = new ApiResult<>();
-		// 生成令牌
+		// 登录验证并生成令牌返回
 		String token = loginService.login(loginBody);
-		JSONObject json = new JSONObject();
-		json.put(Constants.TOKEN, token);
-		result.setData(json);
-		return result;
+		return ok(Collections.singletonMap(Constants.TOKEN, token));
 	}
 	
 	/**
-	 * 方法描述
+	 * 获取用户信息
 	 *
 	 * @author zmzhou
 	 * @date 2020/07/03 17:29
 	 */
 	@GetMapping("getUserInfo")
-	public ApiResult<JSONObject> getUserInfo() {
-		ApiResult<JSONObject> result = new ApiResult<>();
-		JSONObject json = new JSONObject();
+	public ApiResult<UserInfo> getUserInfo() {
 		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
 		SysUser user = loginUser.getUser();
-		json.put("user", user);
-		// 角色集合
-		json.put("roles", roleService.getRolePermission(user));
-		// 菜单权限集合
-		json.put("permissions", menuService.getMenuPermission(user));
-		result.setData(json);
-		return result;
+		// 用户信息、角色、菜单权限信息
+		UserInfo userInfo = UserInfo.builder()
+				.user(user)
+				.roles(roleService.getRolePermission(user))
+				.permissions(menuService.getMenuPermission(user))
+				.build();
+		return ok(userInfo);
 	}
 	
 	/**

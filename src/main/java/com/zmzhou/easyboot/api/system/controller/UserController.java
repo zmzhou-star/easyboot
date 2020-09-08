@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zmzhou.easyboot.api.system.entity.SysUser;
 import com.zmzhou.easyboot.api.system.excel.SysUserExcel;
+import com.zmzhou.easyboot.api.system.service.RoleService;
 import com.zmzhou.easyboot.api.system.service.UserService;
 import com.zmzhou.easyboot.api.system.vo.SysUserVo;
 import com.zmzhou.easyboot.common.ErrorCode;
@@ -44,6 +46,8 @@ public class UserController extends BaseController {
 	@Autowired
 	private UserService userService;
 	@Autowired
+	private RoleService roleService;
+	@Autowired
 	private FileUploadUtils fileUploadUtils;
 	@Autowired
 	private ExcelUtils excelUtils;
@@ -56,8 +60,14 @@ public class UserController extends BaseController {
 	 * @date 2020/07/08 11:50
 	 */
 	@GetMapping(value = {"getOne", "getOne/{id}"})
-	public ApiResult<SysUser> getUser(@PathVariable(value = "id", required = false) Long id) {
-		return ok(userService.getUser(id));
+	public ApiResult<SysUserVo> getUser(@PathVariable(value = "id", required = false) Long id) {
+		SysUser sysUser = userService.getUser(id);
+		SysUserVo user = new SysUserVo();
+		BeanUtils.copyProperties(sysUser, user);
+		// 根据用户id查询用户角色
+		user.setRoles(roleService.getRoleIds(id));
+		user.setRoleList(roleService.getRoleOptions());
+		return ok(user);
 	}
 	
 	/**
@@ -128,7 +138,8 @@ public class UserController extends BaseController {
 		if (userService.exists(user.toEntity())) {
 			return result.error(ErrorCode.USER_EXISTS);
 		}
-		result.setData(userService.save(user.toEntity()));
+		// 保存用户和用户的角色
+		result.setData(userService.saveUserRole(user));
 		return result;
 	}
 	/**
@@ -144,7 +155,8 @@ public class UserController extends BaseController {
 		if (null == user || null == user.getId()) {
 			return result.error(ErrorCode.PARAM_ISNULL);
 		}
-		result.setData(userService.update(user.toEntity()));
+		// 更新用户和用户的角色
+		result.setData(userService.saveUserRole(user));
 		return result;
 	}
 	

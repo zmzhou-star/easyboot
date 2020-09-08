@@ -8,31 +8,31 @@
           </div>
           <div>
             <div class="text-center">
-              <userAvatar :user="user"/>
+              <userAvatar :user="user" />
             </div>
             <ul class="list-group list-group-striped">
               <li class="list-group-item">
-                <svg-icon icon-class="user"/>
+                <svg-icon icon-class="user" />
                 用户名称
                 <div class="pull-right">{{ user.username }}</div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="phone"/>
+                <svg-icon icon-class="phone" />
                 手机号码
                 <div class="pull-right">{{ user.tel }}</div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="email"/>
+                <svg-icon icon-class="email" />
                 用户邮箱
                 <div class="pull-right">{{ user.email }}</div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="peoples"/>
+                <svg-icon icon-class="peoples" />
                 所属角色
                 <div class="pull-right">{{ roleName }}</div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="date"/>
+                <svg-icon icon-class="date" />
                 创建日期
                 <div class="pull-right">{{ user.createTime }}</div>
               </li>
@@ -47,10 +47,10 @@
           </div>
           <el-tabs v-model="activeTab">
             <el-tab-pane label="基本资料" name="userInfo">
-              <userInfo :user="user"/>
+              <userInfo :user="user" />
             </el-tab-pane>
             <el-tab-pane label="修改密码" name="resetPwd">
-              <resetPwd :user="user"/>
+              <resetPwd :user="user" />
             </el-tab-pane>
           </el-tabs>
         </el-card>
@@ -67,7 +67,7 @@ import { getUserProfile } from '@/api/system/user'
 
 export default {
   name: 'Profile',
-  components: {userAvatar, userInfo, resetPwd},
+  components: { userAvatar, userInfo, resetPwd },
   data() {
     return {
       user: {},

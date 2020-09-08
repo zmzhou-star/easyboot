@@ -32,7 +32,7 @@
 
         <!-- 打印出所有的error信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->
         <RollingFile name="errorRollingFile" fileName="${LOG_HOME}/error.log"
-                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/error-%d{MM-dd-yyyy}-%i.log.gz">
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/%d{yyyy-MM-dd}-error-%i.log.gz">
             <PatternLayout pattern="${pattern}"/>
             <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
             <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -44,7 +44,7 @@
         </RollingFile>
         <!-- 打印出所有的warn信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->
         <RollingFile name="warnRollingFile" fileName="${LOG_HOME}/warn.log"
-                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/warn-%d{MM-dd-yyyy}-%i.log.gz">
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/%d{yyyy-MM-dd}-warn-%i.log.gz">
             <PatternLayout pattern="${pattern}"/>
             <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
             <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -56,7 +56,7 @@
         </RollingFile>
         <!-- 打印出所有的info信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->
         <RollingFile name="infoRollingFile" fileName="${LOG_HOME}/info.log"
-                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/info-%d{MM-dd-yyyy}-%i.log.gz">
+                     filePattern="${LOG_HOME}/$${date:yyyy-MM}/%d{yyyy-MM-dd}-info-%i.log.gz">
             <PatternLayout pattern="${pattern}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>

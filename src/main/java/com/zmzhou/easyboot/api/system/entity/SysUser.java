@@ -86,7 +86,7 @@ public class SysUser extends BaseEntity {
 	 */
 	@Column(name = "LOGIN_DATE")
 	private Date loginDate;
-	
+
 //	@JsonIgnore
 	public String getPassword() {
 		return this.password;

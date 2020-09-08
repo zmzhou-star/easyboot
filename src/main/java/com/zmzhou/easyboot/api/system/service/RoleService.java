@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ import com.zmzhou.easyboot.common.Constants;
 import com.zmzhou.easyboot.common.excel.BaseExcel;
 import com.zmzhou.easyboot.common.exception.BaseException;
 import com.zmzhou.easyboot.common.utils.SecurityUtils;
+import com.zmzhou.easyboot.framework.entity.OptionsVo;
 import com.zmzhou.easyboot.framework.entity.Params;
 import com.zmzhou.easyboot.framework.specification.Operator;
 import com.zmzhou.easyboot.framework.specification.SimpleSpecification;
@@ -79,7 +81,48 @@ public class RoleService extends BaseService {
 		}
 		return roles;
 	}
-	
+	/**
+	 * 根据用户id查询用户角色
+	 * @param userId 用户id
+	 * @return  用户角色id列表
+	 * @author zmzhou
+	 * @date 2020/9/8 21:29
+	 */
+	public Set<String> getRoleIds(Long userId) {
+		Set<String> roles = new HashSet<>();
+		// 管理员拥有所有权限
+		List<SysRole> perms = roleDao.findRolePermission(userId);
+		for (SysRole role : perms) {
+			if (null != role && null!=role.getId()) {
+				roles.add(String.valueOf(role.getId()));
+			}
+		}
+		return roles;
+	}
+	/**
+	 * 查询所有的角色列表信息
+	 * @return 角色列表
+	 * @author zmzhou
+	 * @date 2020/9/7 23:07
+	 */
+	public List<SysRole> findAll(){
+		return roleDao.findAll();
+	}
+	/**
+	 * 获取角色下拉框数据
+	 * @return 角色下拉框数据
+	 * @author zmzhou
+	 * @date 2020/9/7 23:13
+	 */
+	public Set<OptionsVo> getRoleOptions(){
+		List<SysRole> roles = findAll();
+		Set<OptionsVo> optionsVos = new TreeSet<>();
+		roles.forEach(r -> optionsVos.add(OptionsVo.builder()
+				.label(r.getRoleName()).value(String.valueOf(r.getId()))
+				.sortBy(r.getSortBy()).build()));
+		return optionsVos;
+	}
+
 	/**
 	 * 查询所有角色数据
 	 * @param params 查询参数
@@ -112,7 +155,6 @@ public class RoleService extends BaseService {
 	 * @author zmzhou
 	 * @date 2020/08/28 18:58
 	 */
-	@Cacheable
 	public SysRole getOne(Long id) {
 		if (null == id) {
 			return new SysRole();
@@ -252,9 +294,9 @@ public class RoleService extends BaseService {
 	}
 
 	/**
-	 *根据部门id查询角色与部门关联的数据
-	 * @param roleId 部门id
-	 * @return 角色与部门关联的数据
+	 *根据角色id查询角色与菜单关联的数据
+	 * @param roleId 角色id
+	 * @return 角色与菜单关联的数据
 	 * @author zmzhou
 	 * @date 2020/08/28 18:56
 	 */

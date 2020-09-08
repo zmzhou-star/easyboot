@@ -1,8 +1,8 @@
 import { constantRoutes } from '@/router'
 import { getRouters } from '@/api/menu'
 import Layout from '@/layout/index'
-import {MessageBox} from "element-ui";
-import store from "@/store";
+import { MessageBox } from 'element-ui'
+import store from '@/store'
 
 const permission = {
   state: {
@@ -22,7 +22,7 @@ const permission = {
         // 向后端请求路由数据
         getRouters().then(res => {
           const accessedRoutes = filterAsyncRouter(res)
-          if (accessedRoutes.length === 0){
+          if (accessedRoutes.length === 0) {
             // to re-login
             MessageBox.confirm('您还没有访问权限，请联系管理员授权', '系统提示', {
               confirmButtonText: '重新登录',
@@ -33,7 +33,7 @@ const permission = {
                 location.reload()
               })
             })
-            return ;
+            return
           }
           // accessedRoutes.push({ path: '*', redirect: '/404', hidden: true })
           commit('SET_ROUTES', accessedRoutes)

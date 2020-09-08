@@ -23,8 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import com.zmzhou.easyboot.api.system.dao.UserDao;
+import com.zmzhou.easyboot.api.system.dao.UserRoleDao;
 import com.zmzhou.easyboot.api.system.entity.SysUser;
+import com.zmzhou.easyboot.api.system.entity.SysUserRole;
 import com.zmzhou.easyboot.api.system.excel.SysUserExcel;
+import com.zmzhou.easyboot.api.system.vo.SysUserVo;
 import com.zmzhou.easyboot.common.Constants;
 import com.zmzhou.easyboot.common.excel.BaseExcel;
 import com.zmzhou.easyboot.common.exception.BaseException;
@@ -50,6 +53,8 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService extends BaseService {
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private UserRoleDao userRoleDao;
 	/**
 	 * 查询所有数据
 	 * @param params 查询参数
@@ -153,6 +158,35 @@ public class UserService extends BaseService {
 		return null != getUser(user).getId();
 	}
 	/**
+	 * 保存用户角色信息
+	 * @param userVo 用户信息
+	 * @author zmzhou
+	 * @date 2020/9/8 21:17
+	 */
+	public SysUser saveUserRole(SysUserVo userVo) {
+		SysUser user;
+		// 删除用户现有的角色关联数据
+		SysUserRole userRole = new SysUserRole();
+		userRole.setUserId(userVo.getId());
+		// 新增用户不需要删除旧数据
+		if (null == userVo.getId()){
+			user = save(userVo.toEntity());
+			userRole.setUserId(user.getId());
+		} else {
+			// 更新用户信息，先删除角色关联数据，再保存
+			user = update(userVo.toEntity());
+		    userRoleDao.deleteByUserId(userVo.getId());
+		}
+		if (!userVo.getRoles().isEmpty()) {
+			// 保存新添加的角色关联数据
+			userVo.getRoles().forEach(roleId -> {
+			    userRole.setRoleId(Long.parseLong(roleId));
+		        userRoleDao.save(userRole);
+			});
+		}
+		return user;
+	}
+	/**
 	 * 保存用户信息
 	 * @param user 用户信息
 	 * @return SysUser
@@ -175,6 +209,9 @@ public class UserService extends BaseService {
 	 */
 	@CachePut(key="#user.id")
 	public SysUser update(@Validated SysUser user) {
+		// 从数据库查询密码
+		SysUser sysUser = getUser(user.getId());
+		user.setPassword(sysUser.getPassword());
 		user.setUpdateTime(new Date());
 		user.setUpdateBy(SecurityUtils.getUsername());
 		return userDao.saveAndFlush(user);
@@ -188,6 +225,8 @@ public class UserService extends BaseService {
 	@CacheEvict
 	public void delete(Long[] ids) {
 		for (Long id: ids) {
+			// 根据用户id删除用户角色关联数据
+			userRoleDao.deleteByUserId(id);
 			userDao.deleteById(id);
 		}
 	}

@@ -1,32 +1,52 @@
 package com.zmzhou.easyboot.common.enums;
 
 /**
- *  @title UserStatus
- *  @Description 用户状态
- *  @author zmzhou
- *  @Date 2020/07/21 10:54
+ * The enum User status.
+ *
+ * @author zmzhou
+ * @title UserStatus
+ * @Description 用户状态
+ * @Date 2020 /07/21 10:54
  */
 public enum UserStatus {
-	/** 停用的用户 */
+	/**
+	 * 停用的用户
+	 */
 	DISABLE("0", "停用"),
-	/** 正常的用户 */
+	/**
+	 * 正常的用户
+	 */
 	NORMAL("1", "正常"),
-	/** 删除的用户 */
+	/**
+	 * 删除的用户
+	 */
 	DELETED("2", "删除");
-	
+
+	/** 状态码 */
 	private final String code;
-	private final String info;
+	/** 描述 */
+	private final String desc;
 	
-	UserStatus(String code, String info) {
+	UserStatus(String code, String desc) {
 		this.code = code;
-		this.info = info;
+		this.desc = desc;
 	}
-	
+
+	/**
+	 * Gets code.
+	 *
+	 * @return the code
+	 */
 	public String getCode() {
 		return code;
 	}
-	
-	public String getInfo() {
-		return info;
+
+	/**
+	 * Gets desc.
+	 *
+	 * @return the desc
+	 */
+	public String getDesc() {
+		return desc;
 	}
 }

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 import Cookies from 'js-cookie'
-import { sha256 } from "js-sha256"
+import { sha256 } from 'js-sha256'
 
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 

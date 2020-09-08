@@ -31,7 +31,8 @@ const mutations = {
     state.permissions = permissions
   },
   SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar || 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
+    // state.avatar = avatar || 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
+    state.avatar = avatar || '/avatar.gif'
   }
 }
 // 用户头像访问路径前缀
@@ -114,7 +115,7 @@ const actions = {
    * @param commit
    * @param avatar
    */
-  setAvatar({ commit }, avatar){
+  setAvatar({ commit }, avatar) {
     commit('SET_AVATAR', avatarPrefix + avatar)
   }
 }

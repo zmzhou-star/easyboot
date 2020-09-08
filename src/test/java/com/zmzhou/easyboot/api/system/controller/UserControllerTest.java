@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 
 import com.zmzhou.easyboot.EasybootApplicationTests;
 import com.zmzhou.easyboot.api.system.entity.SysUser;
@@ -43,8 +44,9 @@ class UserControllerTest extends EasybootApplicationTests {
      * Save.
      */
     @Test
+    @Rollback
     void save() {
-        ApiResult<SysUser> res = controller.getUser(2L);
+        ApiResult<SysUserVo> res = controller.getUser(2L);
         Assertions.assertNotNull(res);
         params.setId(2L);
         // 根据id修改用户状态

@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.zmzhou.easyboot.api.system.entity.SysUser;
 import com.zmzhou.easyboot.common.excel.BaseExcel;
 import com.zmzhou.easyboot.common.excel.ExcelUtils;
 import com.zmzhou.easyboot.common.exception.BaseException;
