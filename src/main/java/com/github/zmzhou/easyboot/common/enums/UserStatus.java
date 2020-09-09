@@ -1,5 +1,9 @@
 package com.github.zmzhou.easyboot.common.enums;
 
+import org.apache.commons.lang3.StringUtils;
+
+import lombok.Getter;
+
 /**
  * The enum User status.
  *
@@ -8,6 +12,7 @@ package com.github.zmzhou.easyboot.common.enums;
  * @Description 用户状态
  * @Date 2020 /07/21 10:54
  */
+@Getter
 public enum UserStatus {
 	/**
 	 * 停用的用户
@@ -37,8 +42,17 @@ public enum UserStatus {
 	 *
 	 * @return the code
 	 */
-	public String getCode() {
-		return code;
+	public static String getCode(String desc) {
+		// 为空，没有找到都返回删除
+		if (StringUtils.isBlank(desc)){
+			return DELETED.code;
+		}
+		for (UserStatus userStatus: UserStatus.values()){
+			if (desc.equals(userStatus.getDesc())) {
+				return userStatus.getCode();
+			}
+		}
+		return DELETED.code;
 	}
 
 	/**
@@ -46,7 +60,16 @@ public enum UserStatus {
 	 *
 	 * @return the desc
 	 */
-	public String getDesc() {
-		return desc;
+	public static String getDesc(String code) {
+		// 为空，没有找到都返回删除
+		if (StringUtils.isBlank(code)){
+			return DELETED.desc;
+		}
+		for (UserStatus userStatus: UserStatus.values()){
+			if (code.equals(userStatus.getCode())) {
+				return userStatus.getDesc();
+			}
+		}
+		return DELETED.desc;
 	}
 }

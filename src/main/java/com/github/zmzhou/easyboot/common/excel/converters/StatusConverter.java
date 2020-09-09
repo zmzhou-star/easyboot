@@ -1,12 +1,11 @@
 package com.github.zmzhou.easyboot.common.excel.converters;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.enums.CellDataTypeEnum;
 import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.GlobalConfiguration;
 import com.alibaba.excel.metadata.property.ExcelContentProperty;
+import com.github.zmzhou.easyboot.common.enums.UserStatus;
 
 /**
  * The type Status converter.
@@ -54,11 +53,9 @@ public class StatusConverter implements Converter<String> {
      * @return the string
      */
     @Override
-    public String convertToJavaData(CellData cellData, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
-        if ("禁用".equals(cellData.getStringValue())){
-            return "0";
-        }
-        return "1";
+    public String convertToJavaData(CellData cellData, ExcelContentProperty contentProperty,
+                GlobalConfiguration globalConfiguration) {
+        return UserStatus.getCode(cellData.getStringValue());
     }
 
     /**
@@ -70,11 +67,8 @@ public class StatusConverter implements Converter<String> {
      * @return the cell data
      */
     @Override
-    public CellData<String> convertToExcelData(String value,
-    ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
-        if (String.valueOf(NumberUtils.INTEGER_ONE).equals(value)) {
-            return new CellData<>("启用");
-        }
-        return new CellData<>("禁用");
+    public CellData<String> convertToExcelData(String value, ExcelContentProperty contentProperty,
+               GlobalConfiguration globalConfiguration) {
+        return new CellData<>(UserStatus.getDesc(value));
     }
 }

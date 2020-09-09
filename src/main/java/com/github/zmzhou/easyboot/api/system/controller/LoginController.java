@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.github.zmzhou.easyboot.api.system.vo.UserInfo;
-import com.github.zmzhou.easyboot.common.Constants;
-import com.github.zmzhou.easyboot.common.utils.ServletUtils;
-import com.github.zmzhou.easyboot.framework.page.ApiResult;
-import com.github.zmzhou.easyboot.framework.security.service.TokenService;
 import com.github.zmzhou.easyboot.api.system.entity.SysMenu;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.api.system.service.LoginService;
 import com.github.zmzhou.easyboot.api.system.service.MenuService;
 import com.github.zmzhou.easyboot.api.system.service.RoleService;
 import com.github.zmzhou.easyboot.api.system.vo.RouterVo;
+import com.github.zmzhou.easyboot.api.system.vo.UserInfo;
+import com.github.zmzhou.easyboot.common.Constants;
+import com.github.zmzhou.easyboot.common.utils.ServletUtils;
+import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.security.LoginBody;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
+import com.github.zmzhou.easyboot.framework.security.service.TokenService;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
 /**

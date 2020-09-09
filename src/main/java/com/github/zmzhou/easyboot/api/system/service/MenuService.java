@@ -2,6 +2,7 @@ package com.github.zmzhou.easyboot.api.system.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,17 +21,20 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.zmzhou.easyboot.api.system.dao.MenuDao;
+import com.github.zmzhou.easyboot.api.system.dao.RoleMenuDao;
 import com.github.zmzhou.easyboot.api.system.entity.SysMenu;
+import com.github.zmzhou.easyboot.api.system.entity.SysRoleMenu;
+import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.api.system.vo.MetaVo;
 import com.github.zmzhou.easyboot.api.system.vo.RouterVo;
+import com.github.zmzhou.easyboot.api.system.vo.SysMenuVo;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
 import com.github.zmzhou.easyboot.framework.entity.Params;
 import com.github.zmzhou.easyboot.framework.entity.TreeSelect;
 import com.github.zmzhou.easyboot.framework.specification.Operator;
 import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
-import com.github.zmzhou.easyboot.api.system.dao.MenuDao;
-import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 
 /**
  * @author zmzhou
@@ -45,6 +49,8 @@ public class MenuService {
 	
 	@Autowired
 	private MenuDao menuDao;
+	@Autowired
+	private RoleMenuDao roleMenuDao;
 	
 	/**
 	 * 获取用户菜单权限
@@ -80,7 +86,6 @@ public class MenuService {
 	 * @author zmzhou
 	 * @date 2020/08/27 11:45
 	 */
-	@Cacheable(key="#params")
 	public Page<SysMenu> findAll(Params params, Pageable pageable) {
 		// 构造分页排序条件
 		Pageable page = pageable;
@@ -179,9 +184,9 @@ public class MenuService {
 	 */
 	private List<SysMenu> getChildList(List<SysMenu> list, SysMenu menu) {
 		List<SysMenu> childList = new ArrayList<>();
-		for (SysMenu n : list) {
-			if (n.getParentId().longValue() == menu.getId().longValue()) {
-				childList.add(n);
+		for (SysMenu sysMenu : list) {
+			if (sysMenu.getParentId().longValue() == menu.getId().longValue()) {
+				childList.add(sysMenu);
 			}
 		}
 		// 保存该节点的子节点菜单
@@ -215,7 +220,7 @@ public class MenuService {
 		for (SysMenu menu : menus) {
 			RouterVo router = new RouterVo();
 			// 菜单是否可见
-			router.setHidden("0".equals(menu.getVisible()));
+			router.setHidden(Constants.ZERO.equals(menu.getVisible()));
 			router.setName(StringUtils.capitalize(menu.getPath()));
 			router.setPath(getRouterPath(menu));
 			router.setComponent(StringUtils.isEmpty(menu.getComponent()) ? "Layout" : menu.getComponent());
@@ -242,7 +247,7 @@ public class MenuService {
 	private String getRouterPath(SysMenu menu) {
 		String routerPath = menu.getPath();
 		// 非外链并且是一级目录
-		if (0L == menu.getParentId() && 0L == menu.getIsFrame()) {
+		if (0L == menu.getParentId() && Constants.ZERO.equals(menu.getIsFrame())) {
 			routerPath = Constants.SEPARATOR + menu.getPath();
 		}
 		return routerPath;
@@ -260,11 +265,11 @@ public class MenuService {
 	public List<SysMenu> selectMenuList(Long userId) {
 		// 查询有效可见的菜单
 		SysMenu menu = new SysMenu();
-		menu.setStatus("1");
-		menu.setVisible("1");
+		menu.setStatus(Constants.ONE);
+		menu.setVisible(Constants.ONE);
 		return selectMenuList(menu, userId);
 	}
-	
+
 	/**
 	 * 查询系统菜单列表
 	 *
@@ -331,5 +336,117 @@ public class MenuService {
 			returnList = menus;
 		}
 		return returnList;
+	}
+
+	/**
+	 * 根据菜单id获取详细信息
+	 * @param menuId 菜单id
+	 * @return 菜单信息
+	 * @author zmzhou
+	 * @date 2020/9/8 23:04
+	 */
+	public SysMenu getOne(Long menuId) {
+		if (null == menuId) {
+			return new SysMenu();
+		}
+		return menuDao.findById(menuId).orElse(new SysMenu());
+	}
+
+	/**
+	 * 校验菜单名称是否唯一
+	 * @param menuVo 菜单信息
+	 * @return 是否唯一
+	 * @author zmzhou
+	 * @date 2020/9/8 23:29
+	 */
+	public boolean checkMenuNameUnique(SysMenuVo menuVo) {
+		long menuId = null == menuVo.getId() ? -1L : menuVo.getId();
+		// 根据菜单名称获取菜单信息
+		SysMenu sysMenu = findOne(menuVo.getMenuName());
+		return null != sysMenu && sysMenu.getId() != menuId;
+	}
+
+	/**
+	 * 根据菜单名称获取菜单信息
+	 * @param menuName 菜单名称
+	 * @return 菜单信息
+	 * @author zmzhou
+	 * @date 2020/9/8 23:41
+	 */
+	public SysMenu findOne(String menuName) {
+		// 构造查询条件
+		Specification<SysMenu> spec = new SimpleSpecificationBuilder<SysMenu>()
+				.and("menuName", Operator.EQUAL, menuName).build();
+		return menuDao.findOne(spec).orElse(null);
+	}
+
+	/**
+	 * 保存菜单信息
+	 *
+	 * @param menu 菜单信息
+	 * @return 菜单信息
+	 * @author zmzhou
+	 * @date 2020/9/8 23:41
+	 */
+	public SysMenu save(SysMenu menu) {
+		// 创建时间
+		menu.setCreateTime(new Date());
+		menu.setCreateBy(SecurityUtils.getUsername());
+		return menuDao.saveAndFlush(menu);
+	}
+
+	/**
+	 * 修改菜单信息
+	 *
+	 * @param menu 菜单信息
+	 * @return 菜单信息
+	 * @author zmzhou
+	 * @date 2020/9/9 22:10
+	 */
+	public SysMenu update(SysMenu menu) {
+		// 更新时间
+		menu.setUpdateTime(new Date());
+		menu.setUpdateBy(SecurityUtils.getUsername());
+		return menuDao.saveAndFlush(menu);
+	}
+
+	/**
+	 * 是否存在菜单子节点
+	 *
+	 * @param menuId 菜单id
+	 * @return 结果
+	 * @author zmzhou
+	 * @date 2020/9/9 22:19
+	 */
+	public boolean hasChildByMenuId(Long menuId) {
+		Specification<SysMenu> spec = new SimpleSpecificationBuilder<SysMenu>()
+				.and("parentId", Operator.EQUAL, menuId).build();
+		return menuDao.count(spec) > 0;
+	}
+
+	/**
+	 * 查询菜单是否有角色在使用
+	 *
+	 * @param menuId 菜单id
+	 * @return 结果
+	 * @author zmzhou
+	 * @date 2020/9/9 22:24
+	 */
+	public boolean checkMenuExistRole(Long menuId) {
+		Specification<SysRoleMenu> spec = new SimpleSpecificationBuilder<SysRoleMenu>()
+				.and("menuId", Operator.EQUAL, menuId).build();
+		return roleMenuDao.count(spec) > 0;
+	}
+
+	/**
+	 * 根据菜单id删除菜单
+	 *
+	 * @param menuId 菜单id
+	 * @return 删除结果
+	 * @author zmzhou
+	 * @date 2020/9/9 22:29
+	 */
+	public void deleteMenuById(Long menuId) {
+		menuDao.deleteById(menuId);
 	}
 }

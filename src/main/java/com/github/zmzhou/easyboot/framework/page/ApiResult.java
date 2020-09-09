@@ -45,7 +45,7 @@ public class ApiResult<T> implements Serializable {
     /**
      * 请求失败设置失败信息
      * @param errorCode 错误码
-     * @return
+     * @return ApiResult<T>
      * @author zmzhou
      * @date 2020/07/08 14:05
      */
@@ -57,7 +57,7 @@ public class ApiResult<T> implements Serializable {
     /**
      * 请求参数错误设置失败信息
      * @param errorMsg 错误信息
-     * @return
+     * @return ApiResult<T>
      * @author zmzhou
      * @date 2020/07/08 14:05
      */
@@ -72,7 +72,7 @@ public class ApiResult<T> implements Serializable {
      * 请求错误设置失败信息
      * @param code 消息状态码
      * @param errorMsg 错误信息
-     * @return
+     * @return ApiResult<T>
      * @author zmzhou
      * @date 2020/07/08 14:05
      */
@@ -86,13 +86,26 @@ public class ApiResult<T> implements Serializable {
     /**
      * 请求成功设置返回信息
      * @param msg 返回信息
-     * @return
+     * @return ApiResult<T>
      * @author zmzhou
      * @date 2020/07/08 14:05
      */
     public ApiResult<T> info(String msg) {
         if (StringUtils.isNotBlank(msg)) {
             setMsg(msg);
+        }
+		return this;
+	}
+	/**
+	 * 设置返回数据
+	 * @param data 返回数据
+	 * @return ApiResult<T>
+	 * @author zmzhou
+	 * @date 2020/9/9 22:17
+	 */
+    public ApiResult<T> data(T data) {
+        if (null != data) {
+            setData(data);
         }
 		return this;
 	}

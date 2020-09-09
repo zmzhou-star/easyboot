@@ -5,6 +5,7 @@ import com.alibaba.excel.enums.CellDataTypeEnum;
 import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.GlobalConfiguration;
 import com.alibaba.excel.metadata.property.ExcelContentProperty;
+import com.github.zmzhou.easyboot.common.enums.Gender;
 
 /**
  * The type Gender converter.
@@ -53,12 +54,7 @@ public class GenderConverter implements Converter<String> {
      */
     @Override
     public String convertToJavaData(CellData cellData, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
-        if ("女".equals(cellData.getStringValue())) {
-            return "0";
-        } else if ("男".equals(cellData.getStringValue())) {
-            return "1";
-        }
-        return "2";
+        return Gender.getCode(cellData.getStringValue());
     }
 
     /**
@@ -72,11 +68,6 @@ public class GenderConverter implements Converter<String> {
     @Override
     public CellData<String> convertToExcelData(String value, ExcelContentProperty contentProperty,
                                         GlobalConfiguration globalConfiguration) {
-        if ("1".equals(value)) {
-            return new CellData<>("男");
-        } else if ("2".equals(value)) {
-            return new CellData<>("未知");
-        }
-        return new CellData<>("女");
+        return new CellData<>(Gender.getZh(value));
     }
 }

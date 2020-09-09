@@ -60,7 +60,7 @@ spring:
                 enabled: true
                 #      监控界面登录用户名密码
 #                login-username: admin
-#                login-password: Zmzhou.1324
+#                login-password: Zmzhou.123
                 url-pattern: /druid/*
                 reset-enable: false
                 # IP白名单 (和deny同时存在时，deny优先于allow) 如果满足deny的话提示:Sorry, you are not permitted to view this page

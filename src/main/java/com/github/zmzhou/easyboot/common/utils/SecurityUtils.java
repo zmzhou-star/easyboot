@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
 
@@ -72,11 +73,11 @@ public final class SecurityUtils {
 	 * @return 加密字符串
 	 */
 	public static String encryptPassword(String password) {
+		BCryptPasswordEncoder passwordEncoder = ServletUtils.getBean(BCryptPasswordEncoder.class);
 		// 默认密码
 		if (StringUtils.isBlank(password)){
-			password = "Zmzhou.1324";
+			return passwordEncoder.encode(Constants.DEFAULT_PASSWORD);
 		}
-		BCryptPasswordEncoder passwordEncoder = ServletUtils.getBean(BCryptPasswordEncoder.class);
 		return passwordEncoder.encode(password);
 	}
 	
@@ -136,7 +137,7 @@ public final class SecurityUtils {
 			temp = Integer.toHexString(aByte & 0xFF);
 			if (temp.length() == 1) {
 				//1得到一位的进行补0操作
-				builder.append("0");
+				builder.append(Constants.ZERO);
 			}
 			builder.append(temp);
 		}

@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.framework.entity.Params;
 
 /**
@@ -26,7 +27,7 @@ public class EasybootApplicationTests {
     /** junit */
     protected static final String JUNIT = "junit";
     /** pd */
-    protected static final String PD = "Zmzhou.1324";
+    protected static final String PD = Constants.DEFAULT_PASSWORD;
     /** 默认分页参数 */
     protected static Params params;
     static {

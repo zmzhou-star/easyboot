@@ -12,7 +12,7 @@ export function listMenu(params) {
 // 查询菜单详细
 export function getMenu(menuId) {
   return request({
-    url: '/system/menu/' + menuId,
+    url: '/system/menu/getOne/' + menuId,
     method: 'get'
   })
 }

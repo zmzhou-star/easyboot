@@ -77,7 +77,7 @@ export default {
       codeUrl: '',
       loginForm: {
         username: 'admin',
-        password: 'Zmzhou.1324',
+        password: 'Zmzhou.123',
         rememberMe: true,
         code: '',
         uuid: ''

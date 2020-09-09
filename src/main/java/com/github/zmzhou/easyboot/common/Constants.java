@@ -7,6 +7,8 @@ package com.github.zmzhou.easyboot.common;
  *  @Date 2020/07/03 15:24
  */
 public final class Constants {
+    /** 系统默认密码 */
+    public static final String DEFAULT_PASSWORD = "Zmzhou.123";
     /**
      * 验证码 redis key
      */
@@ -17,6 +19,14 @@ public final class Constants {
      */
     public static final String LOGIN_TOKEN_KEY = "login_tokens:";
 
+    /** 字符 0 */
+    public static final String ZERO = "0";
+    /** 字符 1 */
+    public static final String ONE = "1";
+    /** http请求  */
+    public static final String HTTP = "http://";
+    /** https请求 */
+    public static final String HTTPS = "https://";
     /**
      * 令牌
      */
