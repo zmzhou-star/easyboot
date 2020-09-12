@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 
 import com.github.zmzhou.easyboot.common.ErrorCode;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -15,15 +17,24 @@ import lombok.Data;
  * @date 2020/07/02 17:11
  */
 @Data
+@ApiModel(description = "返回值对象")
 public class ApiResult<T> implements Serializable {
+	/** serialVersionUID */
     private static final long serialVersionUID = 1L;
     /** 消息状态码 */
+    @ApiModelProperty(value = "请求状态码")
     private int code = HttpStatus.OK.value();
     /** 消息内容 */
+    @ApiModelProperty(value = "请求消息")
     private String msg = HttpStatus.OK.getReasonPhrase();
     /** 列表数据 */
+    @ApiModelProperty(value = "请求返回的数据")
     private T data;
-    
+    /**
+     * 构造器
+     * @author zmzhou
+     * @date 2020/9/12 11:33
+     */
     public ApiResult() {
     }
     

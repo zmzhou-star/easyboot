@@ -33,7 +33,23 @@ spring:
             max-pool-prepared-statement-per-connection-size: 100
             # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
             # 属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有：监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall
-            filters: config,stat,wall
+            filters: config,stat,wall,log4j2
+            filter:
+                log4j2:
+                    enabled: true
+                stat:
+                  enabled: true
+                  db-type: mysql
+                  slow-sql-millis: 2000
+                  log-slow-sql: true
+                  merge-sql: true
+                wall:
+                  enabled: true
+                  config:
+                      # 不允许删除表
+                      drop-table-allow: false
+                      # 是否允许删除数据
+                      delete-allow: true
             # 对于建立时间超过removeAbandonedTimeout的连接强制关闭
             remove-abandoned: false
             # 180秒，也就是3分钟

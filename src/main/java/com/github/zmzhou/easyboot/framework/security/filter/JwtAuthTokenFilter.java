@@ -46,7 +46,7 @@ public class JwtAuthTokenFilter extends OncePerRequestFilter {
 		LoginUser loginUser = tokenService.getLoginUser(request);
 		// 有身份信息和认证信息，认证通过
 		if (null != loginUser && null == SecurityUtils.getAuthentication()) {
-			log.info("用户：{} ，token：[{}] 认证通过", loginUser.getUsername(), loginUser.getToken());
+			log.info("用户：{} ，tokenId：[{}] 认证通过", loginUser.getUsername(), loginUser.getToken());
 			// 验证令牌有效期，相差不足20分钟，自动刷新缓存
 			tokenService.verifyToken(loginUser);
 			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

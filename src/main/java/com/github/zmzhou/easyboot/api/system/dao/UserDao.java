@@ -33,12 +33,13 @@ public interface UserDao extends JpaRepository<SysUser, Long>, JpaSpecificationE
 	 * 更新用户登录时间
 	 * @param userId 用户id
 	 * @param realIp 登录IP
+	 * @param realAddr 登录地址
 	 * @author zmzhou
 	 * @date 2020/08/27 14:23
 	 */
 	@Modifying
-	@Query("update SysUser u set u.loginIp=?2,u.online=1,u.loginDate=now() where u.id=?1")
-	void updateLoginTime(Long userId, String realIp);
+	@Query("update SysUser u set u.loginIp=?2,u.loginAddr=?3,u.online=1,u.loginDate=now() where u.id=?1")
+	void updateLoginTime(Long userId, String realIp, String realAddr);
 
 	/**
 	 * 更新用户在线状态

@@ -249,6 +249,7 @@ CREATE TABLE SYS_USER  (
   status char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '1' COMMENT '帐号状态（1正常 0停用）',
   online char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '是否在线（1在线0不在线）',
   login_ip varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '最后登陆IP',
+  login_addr varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '最后登陆地址',
   login_date datetime(0) NULL DEFAULT NULL COMMENT '最后登陆时间',
   create_by varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '创建者',
   create_time datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
@@ -262,10 +263,14 @@ CREATE TABLE SYS_USER  (
 -- ----------------------------
 -- Records of SYS_USER
 -- ----------------------------
-INSERT INTO SYS_USER VALUES (1, 'admin', '$2a$10$cfb2PDDnGo0AzAvc7wj2f.7ixN7bMGgvEEyE5608KXFi0T7J6MRsm', '', '系统管理员', 'zmzhou8@gmail.com', '19866165191', '1', '1', '0', '内网IP', '2020-09-06 23:17:46', 'admin', '2020-07-06 11:08:00', 'admin', '2020-09-05 23:59:14', '管理员');
+INSERT INTO SYS_USER VALUES (1, 'admin', '$2a$10$cfb2PDDnGo0AzAvc7wj2f.7ixN7bMGgvEEyE5608KXFi0T7J6MRsm', '', '系统管理员',
+                             'zmzhou8@gmail.com', '19866165191', '1', '1', '0', '内网IP','', '2020-09-06 23:17:46',
+                             'admin', '2020-07-06 11:08:00', 'admin', '2020-09-05 23:59:14', '管理员');
 INSERT INTO SYS_USER VALUES (2, 'super', '$2a$10$e7FELY2lYp57zN3k3TydSO195eNzyBShYBuPpMTBkNm/D060Z9k6K', NULL, 
-                             '超级管理员', 'zmzhou8@gmail.com', '19866165191', '0', '1', '1', '内网IP', '2020-09-06 23:31:20', 'admin', '2020-08-29 22:02:00', 'super', '2020-09-06 23:38:50', '超级管理员');
-INSERT INTO SYS_USER VALUES (3, 'zmzhou', '$2a$10$sGYhQN6z8t4MrO8NUoJQYuU09YDWDEvuTZytgWMK2WU09aox1ZJRe', 'zmzhou/avatar.jpeg', '小周', 'zmzhou8@qq.com', '17363939598', '1', '1', '0', '内网IP', '2020-09-06 23:16:42', 'admin', '2020-07-07 10:28:00', 'zmzhou', '2020-09-06 22:57:24', '测试');
+                             '超级管理员', 'zmzhou8@gmail.com', '19866165191', '0', '1', '1', '内网IP','', '2020-09-06
+23:31:20', 'admin', '2020-08-29 22:02:00', 'super', '2020-09-06 23:38:50', '超级管理员');
+INSERT INTO SYS_USER VALUES (3, 'zmzhou', '$2a$10$sGYhQN6z8t4MrO8NUoJQYuU09YDWDEvuTZytgWMK2WU09aox1ZJRe',
+                             'zmzhou/avatar.jpeg', '小周', 'zmzhou8@qq.com', '17363939598', '1', '1', '0', '内网IP','', '2020-09-06 23:16:42', 'admin', '2020-07-07 10:28:00', 'zmzhou', '2020-09-06 22:57:24', '测试');
 
 -- ----------------------------
 -- Table structure for SYS_USER_ROLE

@@ -3,7 +3,6 @@ package com.github.zmzhou.easyboot.framework.security.service;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,12 +13,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
+import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.utils.IpUtils;
 import com.github.zmzhou.easyboot.common.utils.ServletUtils;
-import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.framework.redis.RedisUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
 
+import cn.hutool.core.util.IdUtil;
 import eu.bitwalker.useragentutils.UserAgent;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -116,7 +116,7 @@ public class TokenService {
      * @date 2020/08/26 16:36
      */
     public String createToken(LoginUser loginUser) {
-        String token = UUID.randomUUID().toString().replaceAll("-", "");
+        String token = IdUtil.simpleUUID();
         loginUser.setToken(token);
         setUserAgent(loginUser);
         refreshToken(loginUser);
@@ -145,9 +145,9 @@ public class TokenService {
      * @date 2020/08/26 16:35
      */
     public void verifyToken(LoginUser loginUser) {
-        long expireTime = loginUser.getExpireTime();
+        long expire = loginUser.getExpireTime();
         long currentTime = System.currentTimeMillis();
-        if (expireTime - currentTime <= MILLIS_MINUTE_TEN) {
+        if (expire - currentTime <= MILLIS_MINUTE_TEN) {
             // 刷新令牌有效期
             refreshToken(loginUser);
         }
@@ -180,8 +180,8 @@ public class TokenService {
     public void setUserAgent(LoginUser loginUser) {
         UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
         String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
-        loginUser.setIpaddr(ip);
-        loginUser.setLoginLocation(IpUtils.getRealAddressByIP(ip));
+        loginUser.setIpAddr(ip);
+        loginUser.setLoginLocation(IpUtils.getRealAddress());
         loginUser.setBrowser(userAgent.getBrowser().getName());
         loginUser.setOs(userAgent.getOperatingSystem().getName());
     }
@@ -230,6 +230,13 @@ public class TokenService {
         return token;
     }
 
+    /**
+     * tokenId
+     * @param uuid uuid
+     * @return  tokenId
+     * @author zmzhou
+     * @date 2020/9/10 20:13
+     */
     private String getTokenKey(String uuid) {
         return Constants.LOGIN_TOKEN_KEY + uuid;
     }

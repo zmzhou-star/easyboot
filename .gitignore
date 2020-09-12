@@ -27,7 +27,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**
-
+**/rebel.xml
 ### STS ###
 .apt_generated
 .classpath
@@ -49,7 +49,6 @@ target/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
 
 ### VS Code ###
 .vscode/

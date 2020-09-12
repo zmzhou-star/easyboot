@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.zmzhou.easyboot.api.system.entity.SysMenu;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -14,10 +16,11 @@ import lombok.Data;
  *
  * @author zmzhou
  * @title TreeSelect
- * @Description Treeselect树结构实体类
+ * @Description TreeSelect树结构实体类
  * @Date 2020 /08/29 17:16
  */
 @Data
+@ApiModel(description = "TreeSelect树结构实体类")
 public class TreeSelect implements Serializable {
 	/**
 	 * The constant serialVersionUID.
@@ -26,17 +29,20 @@ public class TreeSelect implements Serializable {
 	/**
 	 * 节点ID
 	 */
+	@ApiModelProperty(value = "节点ID")
 	private Long id;
-	
+
 	/**
 	 * 节点名称
 	 */
+	@ApiModelProperty(value = "节点名称")
 	private String label;
-	
+
 	/**
 	 * 子节点
 	 */
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@ApiModelProperty(value = "子节点节点集合")
 	private List<TreeSelect> children;
 	
 	/**

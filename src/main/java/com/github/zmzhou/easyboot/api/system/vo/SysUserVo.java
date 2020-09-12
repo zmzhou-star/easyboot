@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import com.github.zmzhou.easyboot.framework.entity.OptionsVo;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
@@ -19,6 +20,7 @@ import lombok.Data;
  * @date 2020 /8/30 17:18
  */
 @Data
+@ApiModel(description = "用户vo类")
 public class SysUserVo extends SysUser implements BaseVo {
     /** serialVersionUID */
     private static final long serialVersionUID = 5874469802059198167L;

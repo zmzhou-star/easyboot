@@ -78,14 +78,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				// 用户可以任意访问
 				.antMatchers(
 						HttpMethod.GET,
-						"/*.html",
-						"/**/*.html",
-						"/**/*.css",
-						"/**/*.js",
-						"/**/*.jpg",
-						"/**/*.png",
-						"/**/*.gif"
-				).permitAll()
+						"**.html",
+						"/**.htm",
+						"/**.css",
+						"/**.js",
+						"/**.jpg",
+						"/**.png",
+						"/**.gif"
+				).anonymous()
 				// 允许匿名访问
 				.antMatchers(antMatchers.split(Constants.COMMA)).anonymous()
 				// 除上面外的所有请求全部需要鉴权认证

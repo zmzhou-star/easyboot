@@ -2,6 +2,8 @@ package com.github.zmzhou.easyboot.framework.entity;
 
 import java.io.Serializable;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,16 +16,20 @@ import lombok.Data;
  */
 @Data
 @Builder
+@ApiModel(description = "下拉框对象vo类")
 public class OptionsVo implements Comparable<OptionsVo>, Serializable {
 	/** serialVersionUID */
 	private static final long serialVersionUID = -5251288314137220163L;
 	/**
 	 * The Sort by.
 	 */
+	@ApiModelProperty(value = "显示顺序")
 	private long sortBy;
 	/** 值 */
+	@ApiModelProperty(value = "值")
 	private String value;
 	/** 显示的值 */
+	@ApiModelProperty(value = "显示的值")
 	private String label;
 
 	/**

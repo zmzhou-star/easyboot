@@ -44,7 +44,7 @@ spring:
       # 给返回的页面添加后缀名
       suffix: .html
       # 定位模板的目录
-#      prefix: classpath:/templates/
+      prefix: classpath:/templates/
   jpa:
     open-in-view: false
     hibernate:
@@ -84,7 +84,7 @@ token:
   # Token前缀字符
   prefix: easybooy-
   # 配置不需要认证的接口
-  antMatchers: /index,/login/**,/favicon.ico,/common/captcha,/common/download,/common/avatar,/druid/**,**.png
+  antMatchers: /index,/login/**,/favicon.ico,/common/**,/druid/**,/swagger**/**,/doc.html,/webjars/**,/v2/api-docs
 #登录页验证码有效时间(单位分钟)/宽度/高度/位数
 captcha:
   expiration: 2

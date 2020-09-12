@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <el-form :inline="true">
-      <el-form-item label="菜单名称">
+    <el-form ref="queryForm" :model="queryParams" :inline="true">
+      <el-form-item label="菜单名称" prop="menuName">
         <el-input
           v-model="queryParams.menuName"
           placeholder="请输入菜单名称"
@@ -10,7 +10,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态">
+      <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="菜单状态" clearable size="small">
           <el-option
             v-for="dict in statusOptions"
@@ -20,7 +20,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="显示状态">
+      <el-form-item label="显示状态" prop="visible">
         <el-select v-model="queryParams.visible" placeholder="显示状态" clearable size="small">
           <el-option
             v-for="dict in visibleOptions"
@@ -32,6 +32,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
         <el-button v-hasPermi="['system:menu:add']" type="primary" icon="el-icon-plus" size="mini" @click="handleAdd">新增</el-button>
       </el-form-item>
     </el-form>
@@ -284,7 +285,7 @@ export default {
     },
     /** 查询菜单下拉树结构 */
     getTreeSelect() {
-      const queryParams={pageNum: 1, pageSize: 10000}
+      const queryParams = { pageNum: 1, pageSize: 10000 }
       listMenu(queryParams).then(response => {
         this.menuOptions = []
         const menu = { id: 0, menuName: '主类目', children: [] }
@@ -330,6 +331,11 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.getList()
+    },
+    /** 重置按钮操作 */
+    resetQuery() {
+      this.resetForm('queryForm')
+      this.handleQuery()
     },
     /** 新增按钮操作 */
     handleAdd(row) {

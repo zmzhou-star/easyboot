@@ -19,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.api.system.excel.SysUserExcel;
 import com.github.zmzhou.easyboot.api.system.service.RoleService;
+import com.github.zmzhou.easyboot.api.system.service.UserService;
 import com.github.zmzhou.easyboot.api.system.vo.SysUserVo;
+import com.github.zmzhou.easyboot.common.ErrorCode;
 import com.github.zmzhou.easyboot.common.excel.ExcelUtils;
 import com.github.zmzhou.easyboot.common.utils.FileUploadUtils;
 import com.github.zmzhou.easyboot.common.utils.ServletUtils;
@@ -29,9 +32,10 @@ import com.github.zmzhou.easyboot.framework.entity.Params;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.page.TableDataInfo;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
-import com.github.zmzhou.easyboot.api.system.entity.SysUser;
-import com.github.zmzhou.easyboot.api.system.service.UserService;
-import com.github.zmzhou.easyboot.common.ErrorCode;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 /**
  * @title UserController
@@ -40,6 +44,7 @@ import com.github.zmzhou.easyboot.common.ErrorCode;
  * @version 1.0
  * @date 2020/9/5 21:56
  */
+@Api(tags = {"用户管理"})
 @RestController
 @RequestMapping("/system/user")
 public class UserController extends BaseController {
@@ -60,7 +65,9 @@ public class UserController extends BaseController {
 	 * @date 2020/07/08 11:50
 	 */
 	@GetMapping(value = {"getOne", "getOne/{id}"})
-	public ApiResult<SysUserVo> getUser(@PathVariable(value = "id", required = false) Long id) {
+	@ApiOperation(value = "根据id获取用户信息")
+	public ApiResult<SysUserVo> getUser(@PathVariable(value = "id", required = false)
+                    @ApiParam(name = "id", value = "用户id") Long id) {
 		SysUser sysUser = userService.getUser(id);
 		SysUserVo user = new SysUserVo();
 		BeanUtils.copyProperties(sysUser, user);
@@ -79,6 +86,7 @@ public class UserController extends BaseController {
 	 * @date 2020/07/02 18:53
 	 */
 	@PostMapping(path = "list")
+	@ApiOperation(value = "获取用户列表")
 	public ApiResult<TableDataInfo> list(@RequestBody Params params) {
 		Pageable pageable = getPageable(params);
 		Page<SysUser> list = userService.findAll(params, pageable);
@@ -92,6 +100,7 @@ public class UserController extends BaseController {
 	 * @date 2020/8/30 21:50
 	 */
 	@PostMapping("/export")
+	@ApiOperation(value = "导出用户excel")
 	public ApiResult<String> export(@RequestBody(required = false) Params params) {
 		return ok(userService.export(params));
 	}
@@ -102,6 +111,7 @@ public class UserController extends BaseController {
 	 * @date 2020/9/5 21:17
 	 */
 	@GetMapping("/excelTemplate")
+	@ApiOperation(value = "下载excel导入模板")
 	public ApiResult<String> excelTemplate() {
 		return ok(userService.excelTemplate(SysUserExcel.class, "用户管理导入模板"));
 	}
@@ -114,6 +124,7 @@ public class UserController extends BaseController {
 	 * @date 2020/9/6 13:54
 	 */
 	@PostMapping("/importExcel")
+	@ApiOperation(value = "导入用户excel")
 	public ApiResult<String> importExcel(boolean isUpdate) throws IOException {
 		FileItem file = fileUploadUtils.singleUpload(ServletUtils.getRequest());
 		// excel数据
@@ -130,6 +141,7 @@ public class UserController extends BaseController {
 	 * @date 2020/07/02 18:52
 	 */
 	@PostMapping(path = "save")
+	@ApiOperation(value = "保存用户")
 	public ApiResult<SysUser> save(@Validated @RequestBody SysUserVo user) {
 		ApiResult<SysUser> result = new ApiResult<>();
 		if (null == user) {
@@ -150,6 +162,7 @@ public class UserController extends BaseController {
 	 * @date 2020/07/02 18:52
 	 */
 	@PutMapping(path = "update")
+	@ApiOperation(value = "修改用户信息")
 	public ApiResult<SysUser> update(@Validated @RequestBody SysUserVo user) {
 		ApiResult<SysUser> result = new ApiResult<>();
 		if (null == user || null == user.getId()) {
@@ -168,6 +181,7 @@ public class UserController extends BaseController {
 	 * @date 2020/07/07 14:02
 	 */
 	@PutMapping("/changeStatus")
+	@ApiOperation(value = "根据id修改用户状态")
 	public ApiResult<Integer> changeStatus(@RequestBody Params params) {
 		return ok(userService.updateUserStatus(params.getId(), params.getStatus()));
 	}
@@ -179,7 +193,9 @@ public class UserController extends BaseController {
 	 * @date 2020/07/02 18:51
 	 */
 	@DeleteMapping("delete/{ids}")
-	public ApiResult<Object> delete(@PathVariable("ids") Long[] ids) {
+	@ApiOperation(value = "删除用户")
+	public ApiResult<Object> delete(@PathVariable("ids")
+            @ApiParam(name = "ids", value = "id数组", required = true) Long[] ids) {
 		userService.delete(ids);
 		return new ApiResult<>();
 	}
@@ -190,6 +206,7 @@ public class UserController extends BaseController {
 	 * @date 2020/07/02 18:51
 	 */
 	@PutMapping("resetPwd")
+	@ApiOperation(value = "修改密码")
 	public ApiResult<SysUser> resetPwd(@RequestBody Params params) {
 		return ok(userService.resetPwd(params.getId(), params.getPassword()));
 	}

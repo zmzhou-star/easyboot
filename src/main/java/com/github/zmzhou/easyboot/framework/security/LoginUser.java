@@ -7,7 +7,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.zmzhou.easyboot.api.monitor.vo.SysUserOnlineVo;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
+
+import lombok.Data;
 
 /**
  * The type Login user.
@@ -17,47 +20,16 @@ import com.github.zmzhou.easyboot.api.system.entity.SysUser;
  * @Description 登录用户身份权限
  * @Date 2020 /07/10 9:53
  */
-public class LoginUser implements UserDetails {
+@Data
+public class LoginUser extends SysUserOnlineVo implements UserDetails {
 	/**
 	 * The constant serialVersionUID.
 	 */
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 8529094256919171580L;
 	/**
-	 * 用户唯一标识
-	 */
-	private String token;
-	
-	/**
-	 * 登陆时间
-	 */
-	private Long loginTime;
-	
-	/**
-	 * 过期时间
+	 * 登录信息过期时间
 	 */
 	private Long expireTime;
-	
-	/**
-	 * 登录IP地址
-	 */
-	private String ipaddr;
-	
-	/**
-	 * 登录地点
-	 */
-	private String loginLocation;
-	
-	/**
-	 * 浏览器类型
-	 */
-	private String browser;
-	
-	/**
-	 * 操作系统
-	 */
-	private String os;
-	
 	/**
 	 * 权限列表
 	 */
@@ -84,25 +56,7 @@ public class LoginUser implements UserDetails {
 		this.user = user;
 		this.permissions = permissions;
 	}
-	
-	/**
-	 * Gets token.
-	 *
-	 * @return the token
-	 */
-	public String getToken() {
-		return token;
-	}
-	
-	/**
-	 * Sets token.
-	 *
-	 * @param token the token
-	 */
-	public void setToken(String token) {
-		this.token = token;
-	}
-	
+
 	/**
 	 * Gets password.
 	 *
@@ -167,97 +121,7 @@ public class LoginUser implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-	
-	/**
-	 * Gets login time.
-	 *
-	 * @return the login time
-	 */
-	public Long getLoginTime() {
-		return loginTime;
-	}
-	
-	/**
-	 * Sets login time.
-	 *
-	 * @param loginTime the login time
-	 */
-	public void setLoginTime(Long loginTime) {
-		this.loginTime = loginTime;
-	}
-	
-	/**
-	 * Gets ipaddr.
-	 *
-	 * @return the ipaddr
-	 */
-	public String getIpaddr() {
-		return ipaddr;
-	}
-	
-	/**
-	 * Sets ipaddr.
-	 *
-	 * @param ipaddr the ipaddr
-	 */
-	public void setIpaddr(String ipaddr) {
-		this.ipaddr = ipaddr;
-	}
-	
-	/**
-	 * Gets login location.
-	 *
-	 * @return the login location
-	 */
-	public String getLoginLocation() {
-		return loginLocation;
-	}
-	
-	/**
-	 * Sets login location.
-	 *
-	 * @param loginLocation the login location
-	 */
-	public void setLoginLocation(String loginLocation) {
-		this.loginLocation = loginLocation;
-	}
-	
-	/**
-	 * Gets browser.
-	 *
-	 * @return the browser
-	 */
-	public String getBrowser() {
-		return browser;
-	}
-	
-	/**
-	 * Sets browser.
-	 *
-	 * @param browser the browser
-	 */
-	public void setBrowser(String browser) {
-		this.browser = browser;
-	}
-	
-	/**
-	 * Gets os.
-	 *
-	 * @return the os
-	 */
-	public String getOs() {
-		return os;
-	}
-	
-	/**
-	 * Sets os.
-	 *
-	 * @param os the os
-	 */
-	public void setOs(String os) {
-		this.os = os;
-	}
-	
+
 	/**
 	 * Gets expire time.
 	 *

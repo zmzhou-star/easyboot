@@ -30,12 +30,16 @@ import com.github.zmzhou.easyboot.framework.security.LoginUser;
 import com.github.zmzhou.easyboot.framework.security.service.TokenService;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 /**
  *  @title MenuController
  *  @Description 菜单管理
  *  @author zmzhou
  *  @Date 2020/08/27 11:42
  */
+@Api(tags = {"菜单管理"})
 @RestController
 @RequestMapping("/system/menu")
 public class MenuController extends BaseController {
@@ -53,6 +57,7 @@ public class MenuController extends BaseController {
 	 * @date 2020/08/27 11:42
 	 */
 	@PostMapping(path = "list")
+	@ApiOperation(value = "获取菜单列表")
 	public ApiResult<TableDataInfo> list(@RequestBody Params params) {
 		Pageable pageable = getPageable(params);
 		Page<SysMenu> list = menuService.findAll(params, pageable);
@@ -67,6 +72,7 @@ public class MenuController extends BaseController {
 	 * @date 2020/9/8 22:59
 	 */
 	@GetMapping(value = {"getOne", "getOne/{id}"})
+	@ApiOperation(value = "根据菜单id获取详细信息")
 	public ApiResult<SysMenu> getOne(@PathVariable(value = "id", required = false) Long id) {
 		return ok(menuService.getOne(id));
 	}
@@ -79,6 +85,7 @@ public class MenuController extends BaseController {
 	 * @date 2020/08/29 18:19
 	 */
 	@GetMapping("/treeSelect")
+	@ApiOperation(value = "获取菜单下拉树列表")
 	public ApiResult<List<TreeSelect>> treeSelect(SysMenuVo menu) {
 		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
 		// 当前登录用户id
@@ -95,6 +102,7 @@ public class MenuController extends BaseController {
 	 * @date 2020/08/29 17:04
 	 */
 	@GetMapping(value = "/roleMenuTreeSelect/{roleId}")
+	@ApiOperation(value = "加载对应角色菜单列表树")
 	public ApiResult<JSONObject> roleMenuTreeSelect(@PathVariable("roleId") Long roleId) {
 		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
 		// 根据用户查询系统菜单列表
@@ -116,6 +124,7 @@ public class MenuController extends BaseController {
 	 * @date 2020/9/8 23:23
 	 */
 	@PostMapping
+	@ApiOperation(value = "新增菜单")
 	public ApiResult<SysMenu> add(@Validated @RequestBody SysMenuVo menuVo) {
 		ApiResult<SysMenu> result = new ApiResult<>();
 		// 校验菜单名称是否唯一
@@ -138,6 +147,7 @@ public class MenuController extends BaseController {
 	 * @date 2020/9/9 22:06
 	 */
 	@PutMapping
+	@ApiOperation(value = "修改菜单信息")
 	public ApiResult<SysMenu> update(@Validated @RequestBody SysMenuVo menuVo) {
 		ApiResult<SysMenu> result = new ApiResult<>();
 		// 校验菜单名称是否唯一
@@ -160,6 +170,7 @@ public class MenuController extends BaseController {
 	 * @date 2020/9/9 22:13
 	 */
 	@DeleteMapping("/{menuId}")
+	@ApiOperation(value = "删除菜单")
 	public ApiResult<Integer> remove(@PathVariable("menuId") Long menuId) {
 		ApiResult<Integer> result = new ApiResult<>();
 		// 判断是否存在菜单子节点

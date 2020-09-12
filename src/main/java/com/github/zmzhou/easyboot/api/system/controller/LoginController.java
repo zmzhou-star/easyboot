@@ -25,12 +25,16 @@ import com.github.zmzhou.easyboot.framework.security.LoginUser;
 import com.github.zmzhou.easyboot.framework.security.service.TokenService;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 /**
  * @author zmzhou
  * @title LoginController
  * @Description 用户登录
  * @Date 2020/07/10 9:36
  */
+@Api(tags = {"用户登录"})
 @RestController
 public class LoginController extends BaseController {
 	@Autowired
@@ -51,18 +55,20 @@ public class LoginController extends BaseController {
 	 * @date 2020/07/03 14:54
 	 */
 	@PostMapping("login")
+	@ApiOperation(value = "登录")
 	public ApiResult<JSONObject> login(@RequestBody LoginBody loginBody) {
 		// 登录验证并生成令牌返回
 		String token = loginService.login(loginBody);
 		return ok(Collections.singletonMap(Constants.TOKEN, token));
 	}
-	
+
 	/**
 	 * 获取用户信息
 	 *
 	 * @author zmzhou
 	 * @date 2020/07/03 17:29
 	 */
+	@ApiOperation(value = "获取用户信息")
 	@GetMapping("getUserInfo")
 	public ApiResult<UserInfo> getUserInfo() {
 		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
@@ -75,15 +81,16 @@ public class LoginController extends BaseController {
 				.build();
 		return ok(userInfo);
 	}
-	
+
 	/**
-	 * 获取路由信息
+	 * 获取菜单路由信息
 	 *
 	 * @return ApiResult<SysMenu>
 	 * @author zmzhou
 	 * @date 2020/07/10 9:50
 	 */
 	@GetMapping("getRouters")
+	@ApiOperation(value = "获取菜单路由信息")
 	public ApiResult<RouterVo> getRouters() {
 		// 获取当前登录用户信息
 		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());

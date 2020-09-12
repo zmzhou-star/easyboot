@@ -15,15 +15,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.zmzhou.easyboot.common.Constants;
-import com.github.zmzhou.easyboot.framework.page.ApiResult;
-import com.github.zmzhou.easyboot.framework.web.BaseController;
-import com.wf.captcha.SpecCaptcha;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.common.utils.FileUtil;
+import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.redis.RedisUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginBody;
+import com.github.zmzhou.easyboot.framework.web.BaseController;
+import com.wf.captcha.SpecCaptcha;
 
 import cn.hutool.core.util.IdUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -33,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Date 2020/07/08 18:04
  */
 @Slf4j
+@Api(tags = {"通用工具接口"})
 @RestController
 @RequestMapping("common")
 public class CommonController extends BaseController {
@@ -80,6 +84,7 @@ public class CommonController extends BaseController {
 	 * @date 2020/08/29 16:09
 	 */
 	@GetMapping("/captcha")
+	@ApiOperation(value = "生成验证码")
 	public ApiResult<LoginBody> captcha() {
 		// png类型 https://gitee.com/whvse/EasyCaptcha
 		SpecCaptcha captcha = new SpecCaptcha(width, height, digit);
@@ -102,7 +107,9 @@ public class CommonController extends BaseController {
 	 * @param del 是否删除
 	 */
 	@GetMapping("/download")
-	public void download(String fileName, String del, HttpServletResponse response, HttpServletRequest request){
+	@ApiOperation(value = "下载文件")
+	public void download(@ApiParam(name = "文件名", value = "fileName") String fileName, String del,
+                 HttpServletResponse response, HttpServletRequest request){
 		try {
 			if (FileUtil.isValidFilename(fileName)) {
 				throw new BaseException(HttpStatus.BAD_REQUEST.value(),
@@ -138,6 +145,7 @@ public class CommonController extends BaseController {
 	 * @date 2020/9/6 0:27
 	 */
 	@GetMapping("/avatar")
+	@ApiOperation(value = "访问用户头像")
 	public void avatar(HttpServletResponse response, HttpServletRequest request){
 		// 文件相对路径
 		String url = request.getParameter("url");

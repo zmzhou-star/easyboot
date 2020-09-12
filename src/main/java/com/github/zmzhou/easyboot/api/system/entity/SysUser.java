@@ -82,6 +82,11 @@ public class SysUser extends BaseEntity {
 	@Column(name = "LOGIN_IP")
 	private String loginIp;
 	/**
+	 * The Login address.
+	 */
+	@Column(name = "LOGIN_ADDR")
+	private String loginAddr;
+	/**
 	 * The Login date.
 	 */
 	@Column(name = "LOGIN_DATE")

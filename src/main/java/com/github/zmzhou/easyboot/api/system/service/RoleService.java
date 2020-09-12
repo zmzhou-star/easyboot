@@ -325,6 +325,8 @@ public class RoleService extends BaseService {
 				throw new BaseException(HttpStatus.UNAUTHORIZED.value(),
 						String.format("%1$s已分配,不能删除", role.getRoleName()));
 			}
+			// 删除角色与菜单关联
+			roleMenuDao.deleteAll(findAll(role.getId()));
 			roleDao.deleteById(roleId);
 			// 删除计数
 			count ++;

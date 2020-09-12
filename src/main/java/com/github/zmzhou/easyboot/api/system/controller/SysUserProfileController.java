@@ -18,22 +18,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.zmzhou.easyboot.api.system.entity.SysUser;
+import com.github.zmzhou.easyboot.api.system.service.RoleService;
+import com.github.zmzhou.easyboot.api.system.service.UserService;
 import com.github.zmzhou.easyboot.api.system.vo.SysUserVo;
 import com.github.zmzhou.easyboot.common.Constants;
+import com.github.zmzhou.easyboot.common.ErrorCode;
+import com.github.zmzhou.easyboot.common.exception.BaseException;
+import com.github.zmzhou.easyboot.common.utils.FileUploadUtils;
+import com.github.zmzhou.easyboot.common.utils.FileUtil;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
 import com.github.zmzhou.easyboot.common.utils.ServletUtils;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
 import com.github.zmzhou.easyboot.framework.security.service.TokenService;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
-import com.github.zmzhou.easyboot.api.system.entity.SysUser;
-import com.github.zmzhou.easyboot.api.system.service.RoleService;
-import com.github.zmzhou.easyboot.api.system.service.UserService;
-import com.github.zmzhou.easyboot.common.ErrorCode;
-import com.github.zmzhou.easyboot.common.exception.BaseException;
-import com.github.zmzhou.easyboot.common.utils.FileUploadUtils;
-import com.github.zmzhou.easyboot.common.utils.FileUtil;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -44,6 +47,7 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2020/9/5 22:03
  */
 @Slf4j
+@Api(tags = {"用户个人中心管理"})
 @RestController
 @RequestMapping("/system/user/profile")
 public class SysUserProfileController extends BaseController {
@@ -63,6 +67,7 @@ public class SysUserProfileController extends BaseController {
 	 * @date 2020/9/5 22:24
 	 */
 	@GetMapping
+	@ApiOperation(value = "获取用户个人信息")
 	public ApiResult<JSONObject> profile() {
 		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
 		SysUser user = loginUser.getUser();
@@ -82,6 +87,7 @@ public class SysUserProfileController extends BaseController {
 	 * @date 2020/9/5 22:25
 	 */
 	@PutMapping
+	@ApiOperation(value = "修改用户个人信息")
 	public ApiResult<SysUser> update(@Validated @RequestBody SysUserVo user) {
 		ApiResult<SysUser> result = new ApiResult<>();
 		if (null == user || null == user.getId()) {
@@ -106,7 +112,9 @@ public class SysUserProfileController extends BaseController {
 	 * @date 2020/9/5 22:43
 	 */
 	@PutMapping("/updatePwd")
-	public ApiResult<SysUser> updatePwd(String oldPassword, String newPassword) {
+	@ApiOperation(value = "修改用户密码")
+	public ApiResult<SysUser> updatePwd(@ApiParam(name = "oldPassword",value="原密码",required=true)String oldPassword,
+                    @ApiParam(name = "newPassword", value = "新密码", required = true) String newPassword) {
 		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
 		SysUser sysUser = loginUser.getUser();
 		String password = loginUser.getPassword();
@@ -130,6 +138,7 @@ public class SysUserProfileController extends BaseController {
 	 * @date 2020/9/5 22:45
 	 */
 	@PostMapping("/avatar")
+	@ApiOperation(value = "用户上传头像")
 	public ApiResult<SysUser> avatar() {
 		HttpServletRequest request = ServletUtils.getRequest();
 		LoginUser loginUser = tokenService.getLoginUser(request);

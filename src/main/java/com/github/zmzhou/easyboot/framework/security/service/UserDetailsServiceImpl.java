@@ -53,7 +53,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			throw new BaseException(ErrorCode.USER_DISABLE, username);
 		}
 		// 更新用户登录时间和登录在线状态
-		userService.updateLoginTime(user.getId());
+		user = userService.updateLoginTime(user);
 		return new LoginUser(user, menuService.getMenuPermission(user));
 	}
 	

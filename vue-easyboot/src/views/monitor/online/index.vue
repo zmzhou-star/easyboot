@@ -1,19 +1,19 @@
 <template>
   <div class="app-container">
     <el-form ref="queryForm" :model="queryParams" :inline="true">
-      <el-form-item label="登录地址" prop="ipaddr">
+      <el-form-item label="用户名称" prop="userName">
         <el-input
-          v-model="queryParams.ipaddr"
-          placeholder="请输入登录地址"
+          v-model="queryParams.userName"
+          placeholder="请输入用户名称"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="用户名称" prop="userName">
+      <el-form-item label="登录地址" prop="ipAddr">
         <el-input
-          v-model="queryParams.userName"
-          placeholder="请输入用户名称"
+          v-model="queryParams.ipAddr"
+          placeholder="请输入登录地址"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
@@ -35,18 +35,17 @@
           <span>{{ (pageNum - 1) * pageSize + scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="会话编号" align="center" prop="tokenId" :show-overflow-tooltip="true" />
+      <el-table-column label="会话ID" align="center" prop="token" :show-overflow-tooltip="true" />
       <el-table-column label="登录名称" align="center" prop="userName" :show-overflow-tooltip="true" />
-      <el-table-column label="部门名称" align="center" prop="deptName" />
-      <el-table-column label="主机" align="center" prop="ipaddr" :show-overflow-tooltip="true" />
-      <el-table-column label="登录地点" align="center" prop="loginLocation" />
-      <el-table-column label="浏览器" align="center" prop="browser" />
-      <el-table-column label="操作系统" align="center" prop="os" />
+      <el-table-column label="登录IP" align="center" prop="ipAddr" :show-overflow-tooltip="true" />
+      <el-table-column label="登录地点" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
       <el-table-column label="登录时间" align="center" prop="loginTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.loginTime) }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="浏览器" align="center" prop="browser" />
+      <el-table-column label="操作系统" align="center" prop="os" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -81,8 +80,8 @@ export default {
       pageSize: 10,
       // 查询参数
       queryParams: {
-        ipaddr: undefined,
-        userName: undefined
+        userName: undefined,
+        ipAddr: undefined
       }
     }
   },
@@ -94,8 +93,8 @@ export default {
     getList() {
       this.loading = true
       list(this.queryParams).then(response => {
-        this.list = response.rows
-        this.total = response.total
+        this.list = response
+        this.total = response.length
         this.loading = false
       })
     },
@@ -111,16 +110,18 @@ export default {
     },
     /** 强退按钮操作 */
     handleForceLogout(row) {
-      this.$confirm('是否确认强退名称为"' + row.userName + '"的数据项?', '警告', {
+      this.$confirm('是否确认强退用户"' + row.userName + '"?', '操作警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function() {
-        return forceLogout(row.tokenId)
+        return forceLogout(row.token)
       }).then(() => {
-        this.getList()
         this.msgSuccess('强退成功')
-      }).catch(function() {})
+        this.getList()
+      }).catch(function(e) {
+        console.error(e)
+      })
     }
   }
 }

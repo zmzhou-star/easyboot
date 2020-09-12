@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author zmzhou
- * @title RedisCache
+ * @title RedisUtils
  * @Description spring redis 工具类
  * @Date 2020/07/03 15:18
  */
@@ -58,7 +58,7 @@ public final class RedisUtils {
 	
 	/**
 	 * 删除单个对象
-	 * @param key
+	 * @param key key
 	 */
 	public void delete(String key) {
 		redisTemplate.delete(key);
@@ -71,7 +71,7 @@ public final class RedisUtils {
 	 * @return 对象列表
 	 */
 	public Collection<String> keys(String pattern) {
-		return redisTemplate.keys(pattern);
+		return redisTemplate.keys(pattern + "*");
 	}
 	/**
 	 * 获取ValueOperations

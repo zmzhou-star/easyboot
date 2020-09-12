@@ -62,7 +62,7 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 			// 设置Cookie;Secure;HttpOnly
 			res.setHeader( "Set-Cookie", "JSESSIONID=" + session.getId() + "; Secure; HttpOnly");
 			// 设置X-Frame-Options 只要包含在框架中的站点与为页面提供服务的站点相同，仍然可以在框架中使用该页面
-			res.setHeader("X-Frame-Options", "SAMEORIGIN");
+			res.setHeader("X-Frame-Options", "DENY");
 			// 当检测到反射的XSS攻击时阻止加载页面：
 			res.setHeader("X-XSS-Protection", "1; mode=block");
 		}

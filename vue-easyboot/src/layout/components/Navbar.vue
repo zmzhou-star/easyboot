@@ -7,6 +7,12 @@
     <div class="right-menu">
 
       <template v-if="device!=='mobile'">
+        <el-tooltip content="源码地址" effect="dark" placement="bottom">
+          <git id="easyboot-git" class="right-menu-item hover-effect" />
+        </el-tooltip>
+        <el-tooltip content="接口文档" effect="dark" placement="bottom">
+          <doc id="easyboot-doc" class="right-menu-item hover-effect" />
+        </el-tooltip>
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
         <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
@@ -31,7 +37,7 @@
           <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/" rel="noopener noreferrer">
             <el-dropdown-item>Github</el-dropdown-item>
           </a>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/" rel="noopener noreferrer">
+          <a target="_blank" href="https://panjiachen.gitee.io/vue-element-admin-site/zh/" rel="noopener noreferrer">
             <el-dropdown-item>Docs</el-dropdown-item>
           </a>
           <el-dropdown-item divided @click.native="logout">
@@ -49,13 +55,17 @@ import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
+import Doc from '@/components/Doc'
+import Git from '@/components/Git'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
     Screenfull,
-    SizeSelect
+    SizeSelect,
+    Doc,
+    Git
   },
   computed: {
     ...mapGetters([
@@ -124,7 +134,7 @@ export default {
 
     .right-menu-item {
       display: inline-block;
-      padding: 0 8px;
+      padding: 0 10px;
       height: 100%;
       font-size: 18px;
       color: #5a5e66;

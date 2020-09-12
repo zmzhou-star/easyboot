@@ -22,21 +22,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import com.github.zmzhou.easyboot.api.system.dao.UserDao;
 import com.github.zmzhou.easyboot.api.system.dao.UserRoleDao;
+import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.api.system.entity.SysUserRole;
 import com.github.zmzhou.easyboot.api.system.excel.SysUserExcel;
 import com.github.zmzhou.easyboot.api.system.vo.SysUserVo;
 import com.github.zmzhou.easyboot.common.Constants;
+import com.github.zmzhou.easyboot.common.excel.BaseExcel;
+import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.common.utils.IpUtils;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
-import com.github.zmzhou.easyboot.common.utils.ServletUtils;
 import com.github.zmzhou.easyboot.framework.entity.Params;
 import com.github.zmzhou.easyboot.framework.specification.Operator;
 import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
-import com.github.zmzhou.easyboot.api.system.dao.UserDao;
-import com.github.zmzhou.easyboot.api.system.entity.SysUser;
-import com.github.zmzhou.easyboot.common.excel.BaseExcel;
-import com.github.zmzhou.easyboot.common.exception.BaseException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -259,15 +258,21 @@ public class UserService extends BaseService {
 	
 	/**
 	 * 更新用户登录时间
-	 * @param userId 用户id
+	 * @param user 用户信息
 	 * @author zmzhou
 	 * @date 2020/08/27 14:05
 	 */
 	@CachePut
-	public void updateLoginTime(Long userId) {
-		String realIp = IpUtils.getRealAddressByIP(IpUtils.getIpAddr(ServletUtils.getRequest()));
-		log.info("用户登录IP：{}", realIp);
-		userDao.updateLoginTime(userId, realIp);
+	public SysUser updateLoginTime(SysUser user) {
+		String realIp = IpUtils.getRealIp();
+		String realAddr = IpUtils.getRealAddress();
+		log.info("用户登录IP：{}，地址：{}", realIp, realAddr);
+		userDao.updateLoginTime(user.getId(), realIp, realAddr);
+		// 更新redis缓存和内存中的用户登录信息
+		user.setLoginAddr(realAddr);
+		user.setLoginDate(new Date());
+		user.setLoginIp(realIp);
+		return user;
 	}
 
 	/**

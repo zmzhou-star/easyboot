@@ -3,7 +3,7 @@
 #### 介绍
 spring boot、spring security、jwt token、redis、jpa + vue-admin-template实现前后端分离简单入门框架
 
-#据库文档生成工具
+#数据库文档生成工具
 src\test\java\com\github\zmzhou\easyboot\DBGenerationTool.java  
 参考：[screw](https://gitee.com/leshalv/screw/tree/master/)
 

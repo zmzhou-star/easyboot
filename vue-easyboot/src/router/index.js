@@ -73,36 +73,6 @@ export const constantRoutes = [
       }
     ]
   },
-
-  {
-    path: '/example',
-    component: Layout,
-    hidden: true,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
-    children: [
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-  {
-    path: '/form',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'form', icon: 'form' }
-      }
-    ]
-  },
   {
     path: 'external-link',
     component: Layout,

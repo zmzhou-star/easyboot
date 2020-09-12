@@ -1,6 +1,6 @@
 <template>
   <div v-loading="loading" :style="'height:'+ height">
-    <iframe :src="src" frameborder="no" style="width: 100%;height: 100%" scrolling="auto" />
+    <iframe :src="src" title="druid" name="druid" frameborder="no" class="page-content" scrolling="auto" />
   </div>
 </template>
 <script>

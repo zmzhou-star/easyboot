@@ -36,7 +36,9 @@ export function parseTime(time, pattern) {
   const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
+    if (key === 'a') {
+      return ['日', '一', '二', '三', '四', '五', '六'][value]
+    }
     if (result.length > 0 && value < 10) {
       value = '0' + value
     }
@@ -83,7 +85,9 @@ export function download(fileName, notDelete) {
 
 // 字符串格式化(%s )
 export function sprintf(str) {
-  var args = arguments; var flag = true; var i = 1
+  var args = arguments
+  var flag = true
+  var i = 1
   str = str.replace(/%s/g, function() {
     var arg = args[i++]
     if (typeof arg === 'undefined') {
@@ -120,13 +124,13 @@ export function handleTree(data, id, parentId, children, rootId) {
   const cloneData = JSON.parse(JSON.stringify(data))
   // 循环所有项
   const treeData = cloneData.filter(father => {
-	  const branchArr = cloneData.filter(child => {
-		  // 返回每一项的子级数组
-		  return father[id] === child[parentId]
-	  })
-	  branchArr.length > 0 ? father.children = branchArr : ''
-	  // 返回第一层
-	  return father[parentId] === rootId
+    const branchArr = cloneData.filter(child => {
+      // 返回每一项的子级数组
+      return father[id] === child[parentId]
+    })
+    branchArr.length > 0 ? father.children = branchArr : ''
+    // 返回第一层
+    return father[parentId] === rootId
   })
   return treeData !== '' ? treeData : data
 }

@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import com.github.zmzhou.easyboot.api.system.entity.SysMenu;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 /**
  *  @title Params
@@ -12,13 +14,16 @@ import lombok.Data;
  *  @Date 2020/07/07 16:43
  */
 @Data
+@ApiModel(description = "请求参数vo类")
 public class Params implements Serializable {
 	/** serialVersionUID */
 	private static final long serialVersionUID = 243622579032240361L;
 	/** 页码 */
-	private Integer pageNum;
+	@ApiModelProperty(value = "页码")
+	private Integer pageNum = 1;
 	/** 每页显示记录数 */
-	private Integer pageSize;
+	@ApiModelProperty(value = "每页记录数")
+	private Integer pageSize = 20;
 	/** 开始时间 */
 	private String beginTime;
 	/** 结束时间 */
