@@ -94,12 +94,26 @@ public class UserService extends BaseService {
 	 * 更新用户在线状态
 	 * @param id 用户id
 	 * @param online 在线状态
-	 * @return 更新结果
+	 * @return 更新记录数
 	 * @author zmzhou
 	 * @date 2020/9/6 23:09
 	 */
 	public int updateOnline(Long id, String online){
 		return userDao.updateOnline(id, online);
+	}
+
+	/**
+	 * 更新不在线用户状态
+	 * @param ids 在线用户id集合
+	 * @return 更新记录数
+	 * @author zmzhou
+	 * @date 2020/9/13 12:45
+	 */
+	public int updateOffline(List<Long> ids){
+		if (ids.isEmpty()){
+			ids.add(0L);
+		}
+		return userDao.updateOffline(ids);
 	}
 
 	/**

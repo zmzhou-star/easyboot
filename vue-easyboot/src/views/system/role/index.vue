@@ -93,13 +93,22 @@
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
+    <el-table
+      v-loading="loading"
+      :data="roleList"
+      stripe
+      height="485"
+      fit
+      highlight-current-row
+      @sort-change="sortChange"
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="角色编号" prop="id" width="100" />
       <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" width="150" />
-      <el-table-column label="角色编码" prop="roleCode" :show-overflow-tooltip="true" width="150" />
-      <el-table-column label="显示顺序" prop="sortBy" width="100" />
-      <el-table-column label="状态" align="center">
+      <el-table-column label="角色编码" prop="roleCode" :show-overflow-tooltip="true" width="150" sortable="custom" />
+      <el-table-column label="显示顺序" prop="sortBy" width="100" sortable="custom" />
+      <el-table-column label="状态" align="center" prop="status" sortable="custom">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.status"
@@ -109,12 +118,12 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="150">
+      <el-table-column label="创建时间" align="center" prop="createTime" width="150" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="150">
+      <el-table-column label="更新时间" align="center" prop="updateTime" width="150" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateTime) }}</span>
         </template>
@@ -414,7 +423,14 @@ export default {
       this.resetForm('queryForm')
       this.handleQuery()
     },
-    // 多选框选中数据
+    sortChange(sort) {
+      this.queryParams.prop = sort.prop
+      this.queryParams.order = sort.order
+      this.handleQuery()
+    },
+    /**
+     * 多选框选中数据
+     */
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
       this.single = selection.length !== 1

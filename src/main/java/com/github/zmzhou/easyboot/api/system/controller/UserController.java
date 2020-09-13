@@ -93,7 +93,7 @@ public class UserController extends BaseController {
 		return ok(list);
 	}
 	/**
-	 * @description 导出excel
+	 * 导出excel
 	 * @param params 查询参数
 	 * @return ApiResult<String> excel文件名
 	 * @author zmzhou
@@ -105,7 +105,7 @@ public class UserController extends BaseController {
 		return ok(userService.export(params));
 	}
 	/**
-	 * @description 下载excel导入模板
+	 * 下载excel导入模板
 	 * @return ApiResult<String> excel文件名
 	 * @author zmzhou
 	 * @date 2020/9/5 21:17

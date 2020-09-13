@@ -1,5 +1,7 @@
 package com.github.zmzhou.easyboot.api.system.dao;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -21,7 +23,7 @@ public interface UserDao extends JpaRepository<SysUser, Long>, JpaSpecificationE
 	 * 根据id修改用户状态
 	 * @param id 用户id
 	 * @param status 用户状态
-	 * @return
+	 * @return 修改结果
 	 * @author zmzhou
 	 * @date 2020/07/07 14:51
 	 */
@@ -45,10 +47,22 @@ public interface UserDao extends JpaRepository<SysUser, Long>, JpaSpecificationE
 	 * 更新用户在线状态
 	 * @param id 用户id
 	 * @param online 在线状态
+	 * @return 修改结果
 	 * @author zmzhou
 	 * @date 2020/9/6 23:13
 	 */
 	@Modifying
 	@Query("update SysUser u set u.online=?2,u.loginDate=now() where u.id=?1")
 	int updateOnline(Long id, String online);
+
+	/**
+	 * 更新不在线用户状态
+	 * @param ids 在线用户id集合
+	 * @return 更新结果
+	 * @author zmzhou
+	 * @date 2020/9/13 12:45
+	 */
+	@Modifying
+	@Query("update SysUser u set u.online='0' where u.online<>'0' and u.id not in (?1)")
+	int updateOffline(List<Long> ids);
 }

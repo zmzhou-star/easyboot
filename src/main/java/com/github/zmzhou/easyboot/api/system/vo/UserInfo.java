@@ -13,6 +13,7 @@ import lombok.Data;
 /**
  * UserInfo
  * 用户信息
+ *
  * @author zmzhou
  * @version 1.0
  * @date 2020/9/7 22:20
@@ -21,15 +22,28 @@ import lombok.Data;
 @Builder
 @ApiModel(description = "用户信息")
 public class UserInfo implements Serializable {
-	/** serialVersionUID */
+	/**
+	 * serialVersionUID
+	 */
 	private static final long serialVersionUID = -5596543324343317337L;
-	/** 用户个人信息 */
+	/**
+	 * 用户个人信息
+	 */
 	@ApiModelProperty(value = "用户个人信息实体")
 	private SysUser user;
+	/**
+	 * 用户角色信息
+	 */
 	@ApiModelProperty(value = "用户角色集合")
-	/** 用户角色信息 */
 	private Set<String> roles;
-	/** 用户菜单权限信息 */
+	/**
+	 * 用户角色名称集合（多个角色以,隔开）
+	 */
+	@ApiModelProperty(value = "用户角色名称集合(以,隔开)")
+	private String roleName;
+	/**
+	 * 用户菜单权限信息
+	 */
 	@ApiModelProperty(value = "用户菜单权限集合")
 	private Set<String> permissions;
 }

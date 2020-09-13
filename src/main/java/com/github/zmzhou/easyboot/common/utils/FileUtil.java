@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -76,36 +77,54 @@ public final class FileUtil {
     /**
      * 删除文件
      * @param filePath 文件路径
+     * @param immediate 是否立刻删除，否则只删除10分钟前的文件
      * @return 删除成功
      * @author zmzhou
      * @date 2020/8/30 21:18
      */
-    public static boolean deleteFile(String filePath) {
+    public static boolean deleteFile(String filePath, boolean immediate) {
+        // 当前时间减一小时
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MINUTE, -10);
         boolean flag = false;
         File file = new File(filePath);
         // 路径为文件且不为空则进行删除
         if (file.isFile() && file.exists()) {
-            try {
-                Files.delete(file.toPath());
-                log.info("删除文件：{}", file.getAbsolutePath());
-            } catch (IOException e) {
-                log.error("删除文件[{}]失败", file.getAbsolutePath());
+            if (immediate || file.lastModified() < cal.getTime().getTime()) {
+                flag = delete(file);
             }
-            flag = true;
-        } else if (file.isDirectory()){
+        } else if (file.isDirectory()) {
             // 是文件夹，先删除里面的文件，再删除文件夹
             File[] files = file.listFiles();
-            if (null != files && files.length > 0){
+            if (null != files && files.length > 0) {
                 for (File value : files) {
-                    deleteFile(value.getAbsolutePath());
+                    deleteFile(value.getAbsolutePath(), immediate);
                 }
             }
             // 删除文件夹
-            file.deleteOnExit();
+            if (immediate || file.lastModified() < cal.getTime().getTime()) {
+                flag = delete(file);
+            }
         }
         return flag;
     }
-
+    /**
+     * 删除文件
+     * @param file 文件
+     * @return 删除成功结果
+     * @author zmzhou
+     * @date 2020/9/13 16:23
+     */
+    public static boolean delete(File file) {
+        try {
+            Files.delete(file.toPath());
+            log.info("删除文件：{}", file.getAbsolutePath());
+            return true;
+        } catch (IOException e) {
+            log.error("删除文件[{}]失败", file.getAbsolutePath());
+            return false;
+        }
+    }
     /**
      * 下载文件名重新编码
      *

@@ -27,6 +27,10 @@
 
     <el-table
       v-loading="loading"
+      stripe
+      height="485"
+      fit
+      highlight-current-row
       :data="list.slice((pageNum-1)*pageSize,pageNum*pageSize)"
       style="width: 100%;"
     >

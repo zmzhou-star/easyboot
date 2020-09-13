@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.api.system.service.RoleService;
 import com.github.zmzhou.easyboot.api.system.service.UserService;
 import com.github.zmzhou.easyboot.api.system.vo.SysUserVo;
+import com.github.zmzhou.easyboot.api.system.vo.UserInfo;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.ErrorCode;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
@@ -61,20 +61,20 @@ public class SysUserProfileController extends BaseController {
 	private FileUploadUtils fileUploadUtils;
 
 	/**
+	 * 获取用户个人信息
 	 * @return ApiResult<JSONObject>
-	 * @description 获取用户个人信息
 	 * @author zmzhou
 	 * @date 2020/9/5 22:24
 	 */
 	@GetMapping
 	@ApiOperation(value = "获取用户个人信息")
-	public ApiResult<JSONObject> profile() {
+	public ApiResult<UserInfo> profile() {
+		// 从redis缓存获取当前用户身份信息
 		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
 		SysUser user = loginUser.getUser();
-		JSONObject info = new JSONObject();
-		info.put("userInfo", user);
-		// 获取用户角色
-		info.put("roleName", roleService.selectUserRole(user.getId()));
+		UserInfo info = UserInfo.builder().user(user)
+				// 获取用户角色名称集合
+				.roleName(roleService.selectUserRole(user.getId())).build();
 		return ok(info);
 	}
 
@@ -104,10 +104,10 @@ public class SysUserProfileController extends BaseController {
 	}
 
 	/**
+	 * 修改密码
 	 * @param oldPassword 原密码
 	 * @param newPassword 新密码
 	 * @return {@link ApiResult}
-	 * @description 修改密码
 	 * @author zmzhou
 	 * @date 2020/9/5 22:43
 	 */
@@ -132,7 +132,7 @@ public class SysUserProfileController extends BaseController {
 	}
 
 	/**
-	 * @description 用户上传头像
+	 * 用户上传头像
 	 * @return ApiResult
 	 * @author zmzhou
 	 * @date 2020/9/5 22:45

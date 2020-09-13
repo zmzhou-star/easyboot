@@ -17,6 +17,7 @@ server:
   file-path-avatar: /opt/eboot/avatar/
   file-path-upload: /opt/eboot/uploadPath/
   file-path-download: /opt/eboot/downloadPath/
+  file-path-temp: ${server.file-path-download}temp/
 # Spring配置
 spring:
   application:

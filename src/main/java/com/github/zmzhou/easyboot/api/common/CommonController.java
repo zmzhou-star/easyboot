@@ -130,7 +130,7 @@ public class CommonController extends BaseController {
 			FileUtil.writeBytes(filePath, response.getOutputStream());
 			// 下载之后是否要删除服务器上的文件
 			if (Boolean.parseBoolean(del)) {
-				FileUtil.deleteFile(filePath);
+				FileUtil.deleteFile(filePath, true);
 			}
 		} catch (IOException e) {
 			log.error("下载文件失败", e);
@@ -138,7 +138,7 @@ public class CommonController extends BaseController {
 	}
 
 	/**
-	 * @description 访问用户头像
+	 * 访问用户头像
 	 * @param response  HttpServletResponse
 	 * @param request  HttpServletRequest
 	 * @author zmzhou

@@ -81,7 +81,7 @@ export default {
   methods: {
     getUser() {
       getUserProfile().then(response => {
-        this.user = response.userInfo
+        this.user = response.user
         this.roleName = response.roleName
       })
     }

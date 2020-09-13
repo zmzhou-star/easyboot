@@ -44,6 +44,9 @@ public class FileUploadUtils {
 	private String maxRequestSize;
 	/** 文件保存路径 */
 	private String location;
+	/** 临时文件保存路径 */
+	@Value("${server.file-path-temp}")
+	private String tempFilePath;
 	/**
 	 * 用户头像路径
 	 */
@@ -66,7 +69,7 @@ public class FileUploadUtils {
 			upload.setHeaderEncoding(StandardCharsets.UTF_8.displayName());
 			//设置缓冲区大小与临时文件目录
 			factory.setSizeThreshold(Constants.BUFFER_SIZE);
-			File uploadTemp = new File(location + "temp");
+			File uploadTemp = new File(tempFilePath);
 			FileUtil.existsAndMkdirs(uploadTemp.getAbsolutePath());
 			factory.setRepository(uploadTemp);
 			//设置单个文件大小限制

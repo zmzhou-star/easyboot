@@ -52,7 +52,7 @@ public class RoleController extends BaseController {
 		return ok(list);
 	}
 	/**
-	 * @description 导出excel
+	 * 导出excel
 	 * @param params 查询参数
 	 * @return ApiResult<String> excel文件名
 	 * @author zmzhou

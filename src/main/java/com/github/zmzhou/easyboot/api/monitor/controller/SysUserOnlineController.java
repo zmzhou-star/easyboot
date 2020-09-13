@@ -21,8 +21,7 @@ import io.swagger.annotations.ApiParam;
 
 /**
  * 在线用户监控
- * SysUserOnlineController
- *
+ * @title SysUserOnlineController
  * @author zmzhou
  * @version 1.0
  * @date 2020/9/12 17:20

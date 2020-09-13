@@ -95,7 +95,7 @@
       <el-table-column label="用户昵称" align="center" prop="nickName" :show-overflow-tooltip="true" />
       <el-table-column label="手机号码" align="center" prop="tel" :show-overflow-tooltip="true" width="110" />
       <el-table-column label="邮箱" align="center" prop="email" :show-overflow-tooltip="true" width="120" />
-      <el-table-column label="性别" align="center" prop="sex" :show-overflow-tooltip="true" width="50">
+      <el-table-column label="性别" align="center" prop="sex" :show-overflow-tooltip="true" width="70" sortable="custom">
         <template slot-scope="scope">
           <div>{{ scope.row.sex == 1 ? '男' : scope.row.sex == 0 ? '女' : '未知' }}</div>
         </template>
@@ -111,13 +111,13 @@
         </template>
       </el-table-column>
       <el-table-column label="最后登录IP" align="center" prop="loginIp" :show-overflow-tooltip="true" width="110" />
-      <el-table-column align="center" prop="loginDate" label="最后登录时间" width="165">
+      <el-table-column align="center" prop="loginDate" label="最后登录时间" width="165" sortable="custom">
         <template slot-scope="scope">
           <em class="el-icon-time" />
           <span>{{ scope.row.loginDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="createTime" label="创建时间" width="155" />
+      <el-table-column align="center" prop="createTime" label="创建时间" width="155" sortable="custom" />
       <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">修改</el-button>
