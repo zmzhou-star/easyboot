@@ -1,4 +1,4 @@
-package com.github.zmzhou.easyboot.framework.entity;
+package com.github.zmzhou.easyboot.framework.vo;
 
 import java.io.Serializable;
 

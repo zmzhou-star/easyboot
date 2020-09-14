@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,15 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.github.zmzhou.easyboot.api.system.entity.SysMenu;
 import com.github.zmzhou.easyboot.api.system.service.MenuService;
+import com.github.zmzhou.easyboot.api.system.vo.SysMenuParams;
 import com.github.zmzhou.easyboot.api.system.vo.SysMenuVo;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.utils.ServletUtils;
-import com.github.zmzhou.easyboot.framework.entity.Params;
-import com.github.zmzhou.easyboot.framework.entity.TreeSelect;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
-import com.github.zmzhou.easyboot.framework.page.TableDataInfo;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
 import com.github.zmzhou.easyboot.framework.security.service.TokenService;
+import com.github.zmzhou.easyboot.framework.vo.TreeSelect;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
 import io.swagger.annotations.Api;
@@ -58,9 +55,8 @@ public class MenuController extends BaseController {
 	 */
 	@PostMapping(path = "list")
 	@ApiOperation(value = "获取菜单列表")
-	public ApiResult<TableDataInfo> list(@RequestBody Params params) {
-		Pageable pageable = getPageable(params);
-		Page<SysMenu> list = menuService.findAll(params, pageable);
+	public ApiResult<List<SysMenu>> list(@RequestBody(required = false) SysMenuParams params) {
+		List<SysMenu> list = menuService.findAll(params);
 		return ok(list);
 	}
 

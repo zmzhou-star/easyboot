@@ -3,6 +3,8 @@ package com.github.zmzhou.easyboot.common.excel;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -19,6 +21,7 @@ import com.github.zmzhou.easyboot.common.excel.listener.UploadDataListener;
 import com.github.zmzhou.easyboot.common.utils.DateUtils;
 import com.github.zmzhou.easyboot.common.utils.FileUtil;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
+import com.github.zmzhou.easyboot.common.utils.ThreadPoolUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,12 +37,6 @@ import static com.alibaba.excel.EasyExcelFactory.write;
 @Slf4j
 @Component
 public final class ExcelUtils {
-    /** 魔法值：param */
-    private static final String KEY_PARAM = "param";
-    /** 魔法值：data */
-    private static final String KEY_DATA = "data";
-    /** 魔法值：excelClass */
-    private static final String KEY_EXCEL_CLASS = "excelClass";
     /**
      * 文件下载路径
      */
@@ -57,24 +54,35 @@ public final class ExcelUtils {
      * @param excelClass excel类名
      * @param excelName excel文件名,表头名
      */
-    public String download(List<? extends BaseExcel> list, Class<? extends BaseExcel> excelClass, String excelName) {
-        // 文件名加上时间戳，避免重名
-        String fileName = SecurityUtils.getUsername() + Constants.SEPARATOR + excelName + Constants.UNDERLINE
-                + DateFormatUtils.format(new Date(), DateUtils.FILE_NAME_PATTERN) + ExcelTypeEnum.XLSX.getValue();
-        String filePath = downloadPath + fileName;
-        FileUtil.existsAndMkdirs(downloadPath + SecurityUtils.getUsername());
-        log.info("filePath:{}", filePath);
-        // 表头的策略
-        WriteCellStyle headWriteCellStyle = new WriteCellStyle();
-        // 修改背景色
-        headWriteCellStyle.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
-        // 这个策略是 头是头的样式 内容是内容的样式 其他的策略可以自己实现
-        HorizontalCellStyleStrategy horizontalCellStyleStrategy =
-                new HorizontalCellStyleStrategy(headWriteCellStyle, new WriteCellStyle());
-        // 把生成的Excel文件路径设置返回对象
-        write(filePath, excelClass).registerWriteHandler(horizontalCellStyleStrategy)
-                .registerWriteHandler(new StyleCellWriteHandler(excelName)).sheet(excelName).doWrite(list);
-        return fileName;
+    public String download(List<? extends BaseExcel> list, Class<? extends BaseExcel> excelClass, String excelName)
+            throws InterruptedException {
+        String username = SecurityUtils.getUsername();
+        // 用线程去执行导出excel避免导出任务冲突
+        Future<String> future = ThreadPoolUtils.submit(() -> {
+            // 文件名加上时间戳，避免重名
+            String fileName = username + Constants.SEPARATOR + excelName + Constants.UNDERLINE
+                    + DateFormatUtils.format(new Date(), DateUtils.FILE_NAME_PATTERN) + ExcelTypeEnum.XLSX.getValue();
+            String filePath = downloadPath + fileName;
+            FileUtil.existsAndMkdirs(downloadPath + username);
+            log.info("filePath:{}", filePath);
+            // 表头的策略
+            WriteCellStyle headWriteCellStyle = new WriteCellStyle();
+            // 修改背景色
+            headWriteCellStyle.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
+            // 这个策略是 头是头的样式 内容是内容的样式 其他的策略可以自己实现
+            HorizontalCellStyleStrategy horizontalCellStyleStrategy =
+                    new HorizontalCellStyleStrategy(headWriteCellStyle, new WriteCellStyle());
+            // 把生成的Excel文件路径设置返回对象
+            write(filePath, excelClass).registerWriteHandler(horizontalCellStyleStrategy)
+                    .registerWriteHandler(new StyleCellWriteHandler(excelName)).sheet(excelName).doWrite(list);
+            return fileName;
+        });
+        try {
+            return future.get();
+        } catch (ExecutionException e) {
+            log.error("导出excel失败");
+        }
+        return null;
     }
 
     /**

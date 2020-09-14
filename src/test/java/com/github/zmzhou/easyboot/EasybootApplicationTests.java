@@ -10,7 +10,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.zmzhou.easyboot.common.Constants;
-import com.github.zmzhou.easyboot.framework.entity.Params;
+import com.github.zmzhou.easyboot.framework.vo.Params;
 
 /**
  * The type Easyboot application tests.
@@ -32,10 +32,7 @@ public class EasybootApplicationTests {
     protected static Params params;
     static {
         params = new Params();
-        params.setPageNum(1);
-        params.setPageSize(10);
         params.setStatus("1");
-        params.setPassword(PD);
     }
     /**
      * Init.

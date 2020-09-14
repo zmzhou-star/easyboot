@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.github.zmzhou.easyboot.EasybootApplicationTests;
 import com.github.zmzhou.easyboot.api.system.entity.SysRole;
+import com.github.zmzhou.easyboot.api.system.vo.SysRoleParams;
 import com.github.zmzhou.easyboot.api.system.vo.SysRoleVo;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
@@ -49,6 +50,9 @@ class RoleControllerTest extends EasybootApplicationTests {
 	 */
 	@Test
 	void list() {
+		SysRoleParams params = new SysRoleParams();
+		params.setPageNum(1);
+		params.setPageSize(10);
 		ApiResult<TableDataInfo> res = controller.list(params);
 		Assertions.assertNotNull(res);
 	}
@@ -72,6 +76,7 @@ class RoleControllerTest extends EasybootApplicationTests {
 	 */
 	@Test
 	void changeStatus() {
+		SysRoleParams params = new SysRoleParams();
 		params.setId(2L);
 		params.setStatus("1");
 		ApiResult<Integer> res = controller.changeStatus(params);

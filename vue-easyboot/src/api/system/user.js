@@ -74,7 +74,7 @@ export function resetPwd(id, password) {
   return request({
     url: '/system/user/resetPwd',
     method: 'put',
-    data: data
+    params: data
   })
 }
 

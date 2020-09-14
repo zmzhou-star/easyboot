@@ -13,9 +13,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
+import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.utils.IpUtils;
 import com.github.zmzhou.easyboot.common.utils.ServletUtils;
+import com.github.zmzhou.easyboot.framework.vo.IpInfo;
 import com.github.zmzhou.easyboot.framework.redis.RedisUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
 
@@ -179,9 +181,26 @@ public class TokenService {
      */
     public void setUserAgent(LoginUser loginUser) {
         UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
-        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
-        loginUser.setIpAddr(ip);
-        loginUser.setLoginLocation(IpUtils.getRealAddress());
+        // 获取用户ip定位信息
+        IpInfo ipInfo = IpUtils.getIpInfo();
+        loginUser.setIpInfo(ipInfo);
+        // 更新用户登录时间和登录在线状态
+        SysUser user = loginUser.getUser();
+        if (null == user){
+            // 登录失败user为空
+            user = new SysUser();
+            loginUser.setUser(user);
+        }
+        user.setLoginDate(new Date());
+        if (null != ipInfo){
+            loginUser.setIpAddr(ipInfo.getIp());
+            loginUser.setLoginLocation(ipInfo.getAddr());
+            // 更新redis缓存和内存中的用户登录信息
+            user.setLoginAddr(ipInfo.getAddr());
+            user.setLoginIp(ipInfo.getIp());
+        } else {
+            loginUser.setIpAddr(IpUtils.getIpAddr(ServletUtils.getRequest()));
+        }
         loginUser.setBrowser(userAgent.getBrowser().getName());
         loginUser.setOs(userAgent.getOperatingSystem().getName());
     }

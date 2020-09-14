@@ -41,7 +41,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 	 */
 	@Override
 	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication auth) {
-		// // 获取用户身份信息
+		// 获取用户身份信息
 		LoginUser loginUser = tokenService.getLoginUser(request);
 		if (null != loginUser) {
 			SysUser user = loginUser.getUser();

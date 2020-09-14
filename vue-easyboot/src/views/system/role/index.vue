@@ -104,10 +104,10 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="角色编号" prop="id" width="100" />
-      <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" width="150" />
-      <el-table-column label="角色编码" prop="roleCode" :show-overflow-tooltip="true" width="150" sortable="custom" />
-      <el-table-column label="显示顺序" prop="sortBy" width="100" sortable="custom" />
+      <el-table-column label="角色编号" prop="id" align="center" width="100" />
+      <el-table-column label="角色名称" prop="roleName" align="center" :show-overflow-tooltip="true" width="150" />
+      <el-table-column label="角色编码" prop="roleCode" align="center" :show-overflow-tooltip="true" width="150" sortable="custom" />
+      <el-table-column label="显示顺序" prop="sortBy" align="center" width="100" sortable="custom" />
       <el-table-column label="状态" align="center" prop="status" sortable="custom">
         <template slot-scope="scope">
           <el-switch

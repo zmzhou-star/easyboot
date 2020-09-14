@@ -6,10 +6,10 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.alibaba.excel.annotation.write.style.ContentRowHeight;
 import com.alibaba.excel.annotation.write.style.HeadRowHeight;
+import com.github.zmzhou.easyboot.api.system.entity.SysUser;
+import com.github.zmzhou.easyboot.common.excel.BaseExcel3;
 import com.github.zmzhou.easyboot.common.excel.converters.GenderConverter;
 import com.github.zmzhou.easyboot.common.excel.converters.StatusConverter;
-import com.github.zmzhou.easyboot.api.system.entity.SysUser;
-import com.github.zmzhou.easyboot.common.excel.BaseExcel;
 
 import lombok.Data;
 
@@ -24,7 +24,7 @@ import lombok.Data;
 @ContentRowHeight(20)
 @HeadRowHeight(25)
 @ColumnWidth(15)
-public class SysUserExcel extends BaseExcel {
+public class SysUserExcel extends BaseExcel3 {
     /** serialVersionUID */
     private static final long serialVersionUID = -3304319243957836923L;
 

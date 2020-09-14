@@ -228,8 +228,6 @@ export default {
       statusOptions: [],
       // 查询参数
       queryParams: {
-        pageNum: 1,
-        pageSize: 10000,
         menuName: undefined,
         status: undefined,
         visible: undefined
@@ -268,7 +266,7 @@ export default {
     getList() {
       this.loading = true
       listMenu(this.queryParams).then(response => {
-        this.menuList = this.handleTree(response.rows, 'id')
+        this.menuList = this.handleTree(response, 'id')
         this.loading = false
       })
     },
@@ -285,11 +283,10 @@ export default {
     },
     /** 查询菜单下拉树结构 */
     getTreeSelect() {
-      const queryParams = { pageNum: 1, pageSize: 10000 }
-      listMenu(queryParams).then(response => {
+      listMenu().then(response => {
         this.menuOptions = []
         const menu = { id: 0, menuName: '主类目', children: [] }
-        menu.children = this.handleTree(response.rows, 'id')
+        menu.children = this.handleTree(response, 'id')
         this.menuOptions.push(menu)
       })
     },

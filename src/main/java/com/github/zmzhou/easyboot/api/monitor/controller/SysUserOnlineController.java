@@ -2,7 +2,8 @@ package com.github.zmzhou.easyboot.api.monitor.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,9 +31,9 @@ import io.swagger.annotations.ApiParam;
 @RestController
 @RequestMapping("/monitor/online")
 public class SysUserOnlineController extends BaseController {
-	@Autowired
+	@Resource
 	private SysUserOnlineService userOnlineService;
-	@Autowired
+	@Resource
 	private TokenService tokenService;
 
 	/**

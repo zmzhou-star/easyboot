@@ -22,13 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.zmzhou.easyboot.common.Constants;
-import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
-import com.github.zmzhou.easyboot.framework.entity.OptionsVo;
-import com.github.zmzhou.easyboot.framework.entity.Params;
-import com.github.zmzhou.easyboot.framework.specification.Operator;
-import com.github.zmzhou.easyboot.framework.specification.SimpleSpecification;
-import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
 import com.github.zmzhou.easyboot.api.system.dao.RoleDao;
 import com.github.zmzhou.easyboot.api.system.dao.RoleMenuDao;
 import com.github.zmzhou.easyboot.api.system.dao.UserRoleDao;
@@ -37,8 +30,15 @@ import com.github.zmzhou.easyboot.api.system.entity.SysRoleMenu;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.api.system.entity.SysUserRole;
 import com.github.zmzhou.easyboot.api.system.excel.SysRoleExcel;
+import com.github.zmzhou.easyboot.api.system.vo.SysRoleParams;
+import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.excel.BaseExcel;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
+import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
+import com.github.zmzhou.easyboot.framework.specification.Operator;
+import com.github.zmzhou.easyboot.framework.specification.SimpleSpecification;
+import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
+import com.github.zmzhou.easyboot.framework.vo.OptionsVo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,7 +52,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @CacheConfig(cacheNames = {"system:role"})
 @Transactional(rollbackFor = Exception.class)
-public class RoleService extends BaseService {
+public class RoleService extends BaseService<SysRoleParams> {
 	@Autowired
 	private RoleDao roleDao;
 	@Autowired
@@ -131,7 +131,7 @@ public class RoleService extends BaseService {
 	 * @author zmzhou
 	 * @date 2020/08/28 17:56
 	 */
-	public Page<SysRole> findAll(Params params, Pageable pageable) {
+	public Page<SysRole> findAll(SysRoleParams params, Pageable pageable) {
 		// 构造分页和排序条件
 		Pageable page = pageable;
 		if (pageable.getSort().equals(Sort.unsorted())) {
@@ -365,7 +365,7 @@ public class RoleService extends BaseService {
 	 * @date 2020/9/3 22:18
 	 */
     @Override
-	public String export(Params params) {
+	public String export(SysRoleParams params) throws InterruptedException {
 		Page<SysRole> list = findAll(params, getExcelPageable(params));
 		List<BaseExcel> excelList = new ArrayList<>();
 		while (list.hasNext()) {

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSON;
-import com.github.zmzhou.easyboot.framework.entity.IpInfo;
+import com.github.zmzhou.easyboot.framework.vo.IpInfo;
 
 import lombok.extern.slf4j.Slf4j;
 

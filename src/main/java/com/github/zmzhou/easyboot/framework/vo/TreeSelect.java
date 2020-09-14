@@ -1,4 +1,4 @@
-package com.github.zmzhou.easyboot.framework.entity;
+package com.github.zmzhou.easyboot.framework.vo;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,11 +16,11 @@ import lombok.Data;
  *
  * @author zmzhou
  * @title TreeSelect
- * @Description TreeSelect树结构实体类
+ * @Description TreeSelect树结构vo类
  * @Date 2020 /08/29 17:16
  */
 @Data
-@ApiModel(description = "TreeSelect树结构实体类")
+@ApiModel(description = "TreeSelect树结构vo类")
 public class TreeSelect implements Serializable {
 	/**
 	 * The constant serialVersionUID.

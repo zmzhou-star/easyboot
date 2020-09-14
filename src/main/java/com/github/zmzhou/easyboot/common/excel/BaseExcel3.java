@@ -1,59 +1,51 @@
-package com.github.zmzhou.easyboot.framework.entity;
+package com.github.zmzhou.easyboot.common.excel;
 
 import java.util.Date;
 
-import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.format.DateTimeFormat;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
 
 import lombok.Data;
 
 /**
- * The type Base entity.
+ * excel导出vo带有创建时间，更新时间和备注的父类
+ * The type Base excel 3.
  *
  * @author zmzhou
- * @description 实体类父类
- * @date 2020 /07/02 17:25
+ * @version 1.0
+ * @title BaseExcel
+ * @date 2020/9/3 20:58
  */
 @Data
 @MappedSuperclass
-public class BaseEntity extends BaseIdEntity {
+public class BaseExcel3 extends BaseExcel {
     /**
      * serialVersionUID
      */
-    private static final long serialVersionUID = -519908860784980193L;
-    /**
-     * 创建者
-     */
-    @Column(name = "CREATE_BY")
-    private String createBy;
-    
+    private static final long serialVersionUID = -6324113722059171793L;
     /**
      * 创建时间
      */
-    @JSONField(format = "yyyy-MM-dd HH:mm")
-    @Column(name = "CREATE_TIME")
+    @ColumnWidth(20)
+    @ExcelProperty(value = {EXCEL_NAME, "", "创建时间"})
+    @DateTimeFormat(DATE_PATTERN)
     private Date createTime;
-    
-    /**
-     * 更新者
-     */
-    @Column(name = "UPDATE_BY")
-    private String updateBy;
-    
     /**
      * 更新时间
      */
-    @JSONField(format = "yyyy-MM-dd HH:mm")
-    @Column(name = "UPDATE_TIME")
+    @ColumnWidth(20)
+    @ExcelProperty(value = {EXCEL_NAME, "", "更新时间"})
+    @DateTimeFormat(DATE_PATTERN)
     private Date updateTime;
     /**
      * The Remark.
      */
-    @Column(name = "REMARK")
+    @ExcelProperty(value = {EXCEL_NAME, "", "备注"})
+    @ColumnWidth(15)
     private String remark;
-    
     /**
      * Gets create time.
      *
@@ -65,7 +57,7 @@ public class BaseEntity extends BaseIdEntity {
         }
         return (Date) (this.createTime).clone();
     }
-    
+
     /**
      * Sets create time.
      *
@@ -78,7 +70,7 @@ public class BaseEntity extends BaseIdEntity {
             this.createTime = (Date) (createTime).clone();
         }
     }
-    
+
     /**
      * Gets update time.
      *
@@ -90,7 +82,7 @@ public class BaseEntity extends BaseIdEntity {
         }
         return (Date) (this.updateTime).clone();
     }
-    
+
     /**
      * Sets update time.
      *

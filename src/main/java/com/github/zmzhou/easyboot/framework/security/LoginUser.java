@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.zmzhou.easyboot.api.monitor.vo.SysUserOnlineVo;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
+import com.github.zmzhou.easyboot.framework.vo.IpInfo;
 
 import lombok.Data;
 
@@ -39,7 +40,10 @@ public class LoginUser extends SysUserOnlineVo implements UserDetails {
 	 * 用户信息
 	 */
 	private SysUser user;
-	
+
+	/** 用户定位信息 */
+	private IpInfo ipInfo;
+
 	/**
 	 * Instantiates a new Login user.
 	 */

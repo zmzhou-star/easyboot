@@ -69,6 +69,8 @@ public final class Constants {
     public static final String SORT_BY = "sortBy";
     /** status */
     public static final String STATUS = "status";
+    /** loginTime */
+    public static final String LOGIN_TIME = "loginTime";
     /** 文件下载缓冲区大小 */
     public static final int BUFFER_SIZE = 2 * 1024 * 1024;
 

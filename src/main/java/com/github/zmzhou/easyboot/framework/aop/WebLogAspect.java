@@ -3,6 +3,7 @@ package com.github.zmzhou.easyboot.framework.aop;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
@@ -18,9 +19,10 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.alibaba.fastjson.JSON;
-import com.github.zmzhou.easyboot.common.utils.IpUtils;
-import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
+import com.github.zmzhou.easyboot.framework.page.ApiResult;
+import com.github.zmzhou.easyboot.framework.security.LoginUser;
+import com.github.zmzhou.easyboot.framework.security.service.TokenService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,6 +35,8 @@ import lombok.extern.slf4j.Slf4j;
 @Aspect
 @Component
 public class WebLogAspect {
+    @Resource
+    private TokenService tokenService;
 
     /**
      * api controller包的切入点的名称
@@ -41,6 +45,7 @@ public class WebLogAspect {
      */
     @Pointcut("execution(public * com.github.zmzhou.easyboot.api.*.controller..*.*(..))")
     public void controllerLog() {
+        log.debug("api controller类切点");
     }
 
     /**
@@ -50,6 +55,7 @@ public class WebLogAspect {
      */
     @Pointcut("execution(public * com.github.zmzhou.easyboot.framework.*.controller..*.*(..))")
     public void frameworkControllerLog() {
+        log.debug("framework controller类切点");
     }
 
     /**
@@ -69,6 +75,13 @@ public class WebLogAspect {
         String method = joinPoint.getSignature().getName();
         String args = JSON.toJSONString(joinPoint.getArgs());
         long startTimeMillis = System.currentTimeMillis();
+        // 获取用户身份信息
+        LoginUser loginUser = tokenService.getLoginUser(request);
+        String ip = "";
+        // 登录成功前为空
+        if (loginUser != null) {
+            ip = loginUser.getIpAddr();
+        }
         try {
             // 调用 proceed() 方法才会真正的执行实际被代理的方法
             Object result = joinPoint.proceed();
@@ -77,9 +90,9 @@ public class WebLogAspect {
             sb.append(System.lineSeparator()).append("-----------------------")
                 .append(DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss", Locale.SIMPLIFIED_CHINESE))
                 .append("-----------------------").append(System.lineSeparator())
-                .append("Class  : ").append(joinPoint.getSignature().getDeclaringType().getName())
+                .append("Class  : ").append(joinPoint.getSignature().getDeclaringTypeName())
                 .append(System.lineSeparator())
-                .append("Method : ").append(method).append("\t remote ip : ").append(IpUtils.getIpAddr(request))
+                .append("Method : ").append(method).append("\t remote ip : ").append(ip)
                 .append(System.lineSeparator())
                 .append("Params : ").append(request.getMethod()).append(" ").append(request.getRequestURL())
                 .append(" ").append(args).append(System.lineSeparator())

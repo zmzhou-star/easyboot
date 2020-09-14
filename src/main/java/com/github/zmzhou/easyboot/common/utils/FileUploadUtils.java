@@ -86,4 +86,16 @@ public class FileUploadUtils {
 		}
 		throw new BaseException(ErrorCode.NO_FILE);
 	}
+
+	/**
+	 * 删除用户头像
+	 * @param username 用户名
+	 * @author zmzhou
+	 * @date 2020/9/14 22:41
+	 */
+	public void deleteAvatar(String username) {
+		String path = avatarPath + username;
+		boolean flag = FileUtil.deleteFile(path, true);
+		log.info("删除用户头像:{}，结果:{}", path, flag);
+	}
 }

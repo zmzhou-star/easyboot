@@ -251,6 +251,7 @@ import { getList, getOne, del, add, update, exportUser, resetPwd, changeUserStat
 import { getToken } from '@/utils/auth'
 
 export default {
+  name: 'User',
   filters: {
     statusFilter(status) {
       const statusMap = {

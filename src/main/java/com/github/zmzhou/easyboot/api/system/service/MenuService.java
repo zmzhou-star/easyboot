@@ -2,6 +2,7 @@ package com.github.zmzhou.easyboot.api.system.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,14 +10,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,13 +26,13 @@ import com.github.zmzhou.easyboot.api.system.entity.SysRoleMenu;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.api.system.vo.MetaVo;
 import com.github.zmzhou.easyboot.api.system.vo.RouterVo;
+import com.github.zmzhou.easyboot.api.system.vo.SysMenuParams;
 import com.github.zmzhou.easyboot.api.system.vo.SysMenuVo;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
-import com.github.zmzhou.easyboot.framework.entity.Params;
-import com.github.zmzhou.easyboot.framework.entity.TreeSelect;
 import com.github.zmzhou.easyboot.framework.specification.Operator;
 import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
+import com.github.zmzhou.easyboot.framework.vo.TreeSelect;
 
 /**
  * @author zmzhou
@@ -47,9 +45,9 @@ import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBui
 @Transactional(rollbackFor = Exception.class)
 public class MenuService {
 	
-	@Autowired
+	@Resource
 	private MenuDao menuDao;
-	@Autowired
+	@Resource
 	private RoleMenuDao roleMenuDao;
 	
 	/**
@@ -81,21 +79,17 @@ public class MenuService {
 	 * 获取菜单列表
 	 *
 	 * @param params 查询参数
-	 * @param pageable 分页条件
-	 * @return ApiResult<TableDataInfo>
+	 * @return List<SysMenu>
 	 * @author zmzhou
 	 * @date 2020/08/27 11:45
 	 */
-	public Page<SysMenu> findAll(Params params, Pageable pageable) {
-		// 构造分页排序条件
-		Pageable page = pageable;
-		if (pageable.getSort().equals(Sort.unsorted())) {
-			Sort sort = Sort.by(Sort.Order.asc("parentId"), Sort.Order.asc("sortBy"));
-			page = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-		}
+	public List<SysMenu> findAll(SysMenuParams params) {
 		// 构造查询条件
 		Specification<SysMenu> spec = menuListSpec(params);
-		return menuDao.findAll(spec, page);
+		List<SysMenu> list = menuDao.findAll(spec);
+		// 排序
+		Collections.sort(list);
+		return list;
 	}
 	
 	/**
@@ -105,13 +99,15 @@ public class MenuService {
 	 * @author zmzhou
 	 * @date 2020/08/29 17:37
 	 */
-	private Specification<SysMenu> menuListSpec(Params params){
+	private Specification<SysMenu> menuListSpec(SysMenuParams params){
+		SimpleSpecificationBuilder<SysMenu> builder = new SimpleSpecificationBuilder<>();
 		// 构造查询条件
-		return new SimpleSpecificationBuilder<SysMenu>()
-				.and("menuName", Operator.LIKE, params.getMenuName())
-				.and("visible", Operator.EQUAL, params.getVisible())
-				.and(Constants.STATUS, Operator.EQUAL, params.getStatus())
-				.build();
+		if (null != params) {
+			builder.and("menuName", Operator.LIKE, params.getMenuName())
+					.and("visible", Operator.EQUAL, params.getVisible())
+					.and(Constants.STATUS, Operator.EQUAL, params.getStatus());
+		}
+		return builder.build();
 	}
 	/**
 	 * 根据用户ID查询菜单
@@ -261,7 +257,6 @@ public class MenuService {
 	 * @author zmzhou
 	 * @date 2020/08/29 17:15
 	 */
-	@Cacheable
 	public List<SysMenu> selectMenuList(Long userId) {
 		// 查询有效可见的菜单
 		SysMenu menu = new SysMenu();
@@ -279,7 +274,7 @@ public class MenuService {
 	 * @date 2020/08/29 17:15
 	 */
 	public List<SysMenu> selectMenuList(SysMenu menu, Long userId) {
-		Params params = new Params(menu);
+		SysMenuParams params = new SysMenuParams(menu);
 		List<SysMenu> menuList;
 		// 管理员显示所有菜单信息
 		if (SysUser.isAdmin(userId)) {
@@ -299,7 +294,6 @@ public class MenuService {
 	 * @author zmzhou
 	 * @date 2020/08/29 17:15
 	 */
-	@Cacheable
 	public List<Integer> selectMenuListByRoleId(Long roleId) {
 		return menuDao.selectMenuListByRoleId(roleId);
 	}

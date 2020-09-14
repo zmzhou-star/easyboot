@@ -27,7 +27,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "SYS_MENU")
-public class SysMenu extends BaseEntity {
+public class SysMenu extends BaseEntity implements Comparable<SysMenu> {
 	private static final long serialVersionUID = -3304319243957837933L;
 	/**
 	 * The Menu name.
@@ -90,4 +90,27 @@ public class SysMenu extends BaseEntity {
 	/** 子菜单 */
 	@Transient
 	private List<SysMenu> children = new ArrayList<>();
+
+	/**
+	 * 先按parentId排序，再按sortBy排序
+	 * @param menu the object to be compared.
+	 * @return a negative integer, zero, or a positive integer as this object
+	 * is less than, equal to, or greater than the specified object.
+	 * @throws NullPointerException if the specified object is null
+	 * @throws ClassCastException   if the specified object's type prevents it
+	 *                              from being compared to this object.
+	 */
+	@Override
+	public int compareTo(SysMenu menu) {
+		if (null != menu) {
+			// 先按parentId排序
+			int first = (int) (this.parentId - menu.getParentId());
+			if (first < 0) {
+				// 再按sortBy排序
+				return (int) (this.sortBy - menu.getSortBy());
+			}
+			return first;
+		}
+		return 0;
+	}
 }

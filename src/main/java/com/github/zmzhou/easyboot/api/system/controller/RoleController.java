@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.zmzhou.easyboot.api.system.entity.SysRole;
 import com.github.zmzhou.easyboot.api.system.service.RoleService;
+import com.github.zmzhou.easyboot.api.system.vo.SysRoleParams;
 import com.github.zmzhou.easyboot.api.system.vo.SysRoleVo;
-import com.github.zmzhou.easyboot.framework.entity.Params;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.page.TableDataInfo;
+import com.github.zmzhou.easyboot.framework.vo.Params;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
 import io.swagger.annotations.Api;
@@ -46,7 +47,7 @@ public class RoleController extends BaseController {
 	 */
 	@PostMapping(path = "list")
 	@ApiOperation(value = "获取角色列表")
-	public ApiResult<TableDataInfo> list(@RequestBody(required = false) Params params) {
+	public ApiResult<TableDataInfo> list(@RequestBody(required = false) SysRoleParams params) {
 		Pageable pageable = getPageable(params);
 		Page<SysRole> list = roleService.findAll(params, pageable);
 		return ok(list);
@@ -60,7 +61,7 @@ public class RoleController extends BaseController {
 	 */
 	@PostMapping("/export")
 	@ApiOperation(value = "导出角色excel")
-	public ApiResult<String> export(@RequestBody(required = false) Params params) {
+	public ApiResult<String> export(@RequestBody(required = false) SysRoleParams params) throws InterruptedException {
 		return ok(roleService.export(params));
 	}
 

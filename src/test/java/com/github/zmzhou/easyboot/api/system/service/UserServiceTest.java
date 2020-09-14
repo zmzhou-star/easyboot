@@ -8,10 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import com.github.zmzhou.easyboot.api.system.entity.SysUser;
+import com.github.zmzhou.easyboot.api.system.vo.SysUserParams;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
-import com.github.zmzhou.easyboot.framework.entity.Params;
-import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +32,7 @@ public class UserServiceTest {
 	 */
 	@Test
 	public void findAll() {
-		Params params = new Params();
+		SysUserParams params = new SysUserParams();
 		Pageable pageable = PageRequest.of(0, 5);
 		Page<SysUser> res = service.findAll(params, pageable);
 		log.info("findAll:{}", res.getContent());

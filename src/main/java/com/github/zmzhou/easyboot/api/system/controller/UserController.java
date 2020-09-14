@@ -23,14 +23,15 @@ import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.api.system.excel.SysUserExcel;
 import com.github.zmzhou.easyboot.api.system.service.RoleService;
 import com.github.zmzhou.easyboot.api.system.service.UserService;
+import com.github.zmzhou.easyboot.api.system.vo.SysUserParams;
 import com.github.zmzhou.easyboot.api.system.vo.SysUserVo;
 import com.github.zmzhou.easyboot.common.ErrorCode;
 import com.github.zmzhou.easyboot.common.excel.ExcelUtils;
 import com.github.zmzhou.easyboot.common.utils.FileUploadUtils;
 import com.github.zmzhou.easyboot.common.utils.ServletUtils;
-import com.github.zmzhou.easyboot.framework.entity.Params;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.page.TableDataInfo;
+import com.github.zmzhou.easyboot.framework.vo.Params;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
 import io.swagger.annotations.Api;
@@ -87,7 +88,7 @@ public class UserController extends BaseController {
 	 */
 	@PostMapping(path = "list")
 	@ApiOperation(value = "获取用户列表")
-	public ApiResult<TableDataInfo> list(@RequestBody Params params) {
+	public ApiResult<TableDataInfo> list(@RequestBody SysUserParams params) {
 		Pageable pageable = getPageable(params);
 		Page<SysUser> list = userService.findAll(params, pageable);
 		return ok(list);
@@ -101,7 +102,7 @@ public class UserController extends BaseController {
 	 */
 	@PostMapping("/export")
 	@ApiOperation(value = "导出用户excel")
-	public ApiResult<String> export(@RequestBody(required = false) Params params) {
+	public ApiResult<String> export(@RequestBody(required = false) SysUserParams params) throws InterruptedException {
 		return ok(userService.export(params));
 	}
 	/**
@@ -112,7 +113,7 @@ public class UserController extends BaseController {
 	 */
 	@GetMapping("/excelTemplate")
 	@ApiOperation(value = "下载excel导入模板")
-	public ApiResult<String> excelTemplate() {
+	public ApiResult<String> excelTemplate() throws InterruptedException {
 		return ok(userService.excelTemplate(SysUserExcel.class, "用户管理导入模板"));
 	}
 
@@ -201,13 +202,15 @@ public class UserController extends BaseController {
 	}
 	/**
 	 * 重置密码
-	 * @param params 用户ID和密码
+	 * @param id 用户ID
+	 * @param password 新密码
 	 * @author zmzhou
 	 * @date 2020/07/02 18:51
 	 */
 	@PutMapping("resetPwd")
 	@ApiOperation(value = "修改密码")
-	public ApiResult<SysUser> resetPwd(@RequestBody Params params) {
-		return ok(userService.resetPwd(params.getId(), params.getPassword()));
+	public ApiResult<SysUser> resetPwd(@ApiParam(name = "id", value = "用户ID", required = true) Long id,
+                       @ApiParam(name = "password", value = "新密码", required = true) String password) {
+		return ok(userService.resetPwd(id, password));
 	}
 }

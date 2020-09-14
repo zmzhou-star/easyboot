@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import com.github.zmzhou.easyboot.common.utils.DateUtils;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.page.TableDataInfo;
-import com.github.zmzhou.easyboot.framework.entity.Params;
+import com.github.zmzhou.easyboot.framework.vo.PageParams;
 
 /**
  * @description web层通用数据处理
@@ -43,7 +43,7 @@ public class BaseController {
      * @author zmzhou
      * @date 2020/07/09 11:31
      */
-    protected Pageable getPageable(Params params) {
+    protected Pageable getPageable(PageParams params) {
         if (null == params) {
             return PageRequest.of(0, 10);
         }

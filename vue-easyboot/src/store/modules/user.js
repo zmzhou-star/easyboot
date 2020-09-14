@@ -61,7 +61,7 @@ const actions = {
         }
         const user = res.user
         // 设置用户头像访问路径
-        const avatar = user.avatar === '' ? '' : avatarPrefix + user.avatar
+        const avatar = !user.avatar ? '' : avatarPrefix + user.avatar
         if (res.roles && res.roles.length > 0) { // 验证返回的roles是否是一个非空数组
           commit('SET_ROLES', res.roles)
           commit('SET_PERMISSIONS', res.permissions)

@@ -9,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 
 import com.github.zmzhou.easyboot.EasybootApplicationTests;
+import com.github.zmzhou.easyboot.api.system.entity.SysUser;
+import com.github.zmzhou.easyboot.api.system.vo.SysUserParams;
 import com.github.zmzhou.easyboot.api.system.vo.SysUserVo;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.page.TableDataInfo;
-import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 
 /**
  * The type User controller test.
@@ -36,6 +37,9 @@ class UserControllerTest extends EasybootApplicationTests {
      */
     @Test
     void list() {
+        SysUserParams params = new SysUserParams();
+        params.setPageNum(1);
+        params.setPageSize(10);
         ApiResult<TableDataInfo> res = controller.list(params);
         Assertions.assertNotNull(res);
     }
@@ -48,6 +52,11 @@ class UserControllerTest extends EasybootApplicationTests {
     void save() {
         ApiResult<SysUserVo> res = controller.getUser(2L);
         Assertions.assertNotNull(res);
+        SysUserParams params = new SysUserParams();
+        params.setPageNum(1);
+        params.setPageSize(10);
+        params.setStatus("1");
+        params.setPassword(PD);
         params.setId(2L);
         // 根据id修改用户状态
         ApiResult<Integer> res2 = controller.changeStatus(params);
@@ -72,13 +81,13 @@ class UserControllerTest extends EasybootApplicationTests {
         Assertions.assertNotNull(result2);
         try {
             // 重置密码
-            ApiResult<SysUser> res3 = controller.resetPwd(params);
+            ApiResult<SysUser> res3 = controller.resetPwd(params.getId(), PD);
             Assertions.assertNotNull(res3);
             params.setId(1L);
-            res3 = controller.resetPwd(params);
+            res3 = controller.resetPwd(params.getId(), PD);
             Assertions.assertNotNull(res3);
             params.setId(999L);
-            res3 = controller.resetPwd(params);
+            res3 = controller.resetPwd(params.getId(), PD);
             Assertions.assertNotNull(res3);
         } catch (BaseException e) {
             Assertions.assertNotNull(e);

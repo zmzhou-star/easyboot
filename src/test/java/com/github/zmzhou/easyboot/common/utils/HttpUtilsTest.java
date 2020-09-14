@@ -6,7 +6,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.github.zmzhou.easyboot.framework.entity.IpInfo;
+import com.github.zmzhou.easyboot.framework.vo.IpInfo;
 
 /**
  * HttpUtilsTest

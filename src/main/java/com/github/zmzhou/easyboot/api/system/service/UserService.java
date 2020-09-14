@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -27,13 +28,15 @@ import com.github.zmzhou.easyboot.api.system.dao.UserRoleDao;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.api.system.entity.SysUserRole;
 import com.github.zmzhou.easyboot.api.system.excel.SysUserExcel;
+import com.github.zmzhou.easyboot.api.system.vo.SysUserParams;
 import com.github.zmzhou.easyboot.api.system.vo.SysUserVo;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.excel.BaseExcel;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
-import com.github.zmzhou.easyboot.common.utils.IpUtils;
+import com.github.zmzhou.easyboot.common.utils.FileUploadUtils;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
-import com.github.zmzhou.easyboot.framework.entity.Params;
+import com.github.zmzhou.easyboot.common.utils.ThreadPoolUtils;
+import com.github.zmzhou.easyboot.framework.security.LoginUser;
 import com.github.zmzhou.easyboot.framework.specification.Operator;
 import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
 
@@ -49,11 +52,16 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @CacheConfig(cacheNames = {"system:user"})
 @Transactional(rollbackFor = Exception.class)
-public class UserService extends BaseService {
-	@Autowired
+public class UserService extends BaseService<SysUserParams> {
+	@Resource
 	private UserDao userDao;
-	@Autowired
+	@Resource
 	private UserRoleDao userRoleDao;
+	/**
+	 * 用户头像删除
+	 */
+	@Resource
+	private FileUploadUtils fileUploadUtils;
 	/**
 	 * 查询所有数据
 	 * @param params 查询参数
@@ -62,7 +70,7 @@ public class UserService extends BaseService {
 	 * @author zmzhou
 	 * @date 2020/07/07 14:52
 	 */
-	public Page<SysUser> findAll(Params params, Pageable pageable) {
+	public Page<SysUser> findAll(SysUserParams params, Pageable pageable) {
 		// 构造分页排序条件
 		Pageable page = pageable;
 		if (pageable.getSort().equals(Sort.unsorted())) {
@@ -190,7 +198,7 @@ public class UserService extends BaseService {
 			user = update(userVo.toEntity());
 		    userRoleDao.deleteByUserId(userVo.getId());
 		}
-		if (!userVo.getRoles().isEmpty()) {
+		if (null != userVo.getRoles() && !userVo.getRoles().isEmpty()) {
 			// 保存新添加的角色关联数据
 			userVo.getRoles().forEach(roleId -> {
 			    userRole.setRoleId(Long.parseLong(roleId));
@@ -241,6 +249,8 @@ public class UserService extends BaseService {
 			// 根据用户id删除用户角色关联数据
 			userRoleDao.deleteByUserId(id);
 			userDao.deleteById(id);
+			// 删除用户头像
+			ThreadPoolUtils.execute(()-> fileUploadUtils.deleteAvatar(getUser(id).getUsername()));
 		}
 	}
 	
@@ -272,21 +282,16 @@ public class UserService extends BaseService {
 	
 	/**
 	 * 更新用户登录时间
-	 * @param user 用户信息
+	 * @param loginUser 用户登录信息
 	 * @author zmzhou
 	 * @date 2020/08/27 14:05
 	 */
 	@CachePut
-	public SysUser updateLoginTime(SysUser user) {
-		String realIp = IpUtils.getRealIp();
-		String realAddr = IpUtils.getRealAddress();
+	public void updateLoginTime(LoginUser loginUser) {
+		String realIp = loginUser.getIpAddr();
+		String realAddr = loginUser.getLoginLocation();
 		log.info("用户登录IP：{}，地址：{}", realIp, realAddr);
-		userDao.updateLoginTime(user.getId(), realIp, realAddr);
-		// 更新redis缓存和内存中的用户登录信息
-		user.setLoginAddr(realAddr);
-		user.setLoginDate(new Date());
-		user.setLoginIp(realIp);
-		return user;
+		userDao.updateLoginTime(loginUser.getUser().getId(), realIp, realAddr);
 	}
 
 	/**
@@ -297,7 +302,7 @@ public class UserService extends BaseService {
 	 * @date 2020/9/3 22:59
 	 */
 	@Override
-	public String export(Params params) {
+	public String export(SysUserParams params) throws InterruptedException {
 		Page<SysUser> list = findAll(params, getExcelPageable(params));
 		List<BaseExcel> excelList = new ArrayList<>();
 		while (list.hasNext()) {
