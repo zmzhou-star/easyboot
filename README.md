@@ -4,7 +4,7 @@
 spring boot、spring security、jwt token、redis、jpa + vue-admin-template实现前后端分离简单入门框架
 
 #数据库文档生成工具
-src\test\java\com\github\zmzhou\easyboot\DBGenerationTool.java  
+`src\test\java\com\github\zmzhou\easyboot\DBGenerationTool.java`    
 参考：[screw](https://gitee.com/leshalv/screw/tree/master/)
 
 #sonar扫描命令
@@ -12,8 +12,15 @@ src\test\java\com\github\zmzhou\easyboot\DBGenerationTool.java
 mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true install sonar:sonar -X
 ```
 #### 软件架构
-软件架构说明
+软件架构说明  
+spring boot、spring security、jwt token、redis、jpa + vue-admin-template
+#### 系统截图
 
+![登录页面](docs/login.png)
+![角色管理](docs/role.png)
+![swagger+knife4j接口文档](docs/doc.png)
+
+![sonar扫描报告](docs/sonar.png)
 
 #### 安装教程
 
@@ -22,13 +29,14 @@ mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.igno
 3.  xxxx
 
 #### 使用说明
-
+```
 1. @EnableCaching常用注解说明
 @Cacheable     触发缓存填充（查询）
 @CachePut      更新缓存而不会干扰方法执行（更新）
 @CacheEvict    触发缓存驱逐（删除）
 @Caching       重新组合要在方法上应用的多个缓存操作
 @CacheConfig   在类级别共享一些常见的缓存相关设置
+```
 
 #### 参与贡献
 

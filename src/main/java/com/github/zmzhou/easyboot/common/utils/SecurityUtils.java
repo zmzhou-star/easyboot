@@ -76,7 +76,7 @@ public final class SecurityUtils {
 		BCryptPasswordEncoder passwordEncoder = ServletUtils.getBean(BCryptPasswordEncoder.class);
 		// 默认密码
 		if (StringUtils.isBlank(password)){
-			return passwordEncoder.encode(Constants.DEFAULT_PASSWORD);
+			return passwordEncoder.encode(Constants.DEFAULT_PD);
 		}
 		return passwordEncoder.encode(password);
 	}

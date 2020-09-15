@@ -28,7 +28,7 @@ public class EasybootApplicationTests {
     /** junit */
     protected static final String JUNIT = "junit";
     /** pd */
-    protected static final String PD = Constants.DEFAULT_PASSWORD;
+    protected static final String PD = Constants.DEFAULT_PD;
     /** 默认分页参数 */
     protected static PageParams params;
     static {

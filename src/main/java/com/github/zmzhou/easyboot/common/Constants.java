@@ -8,7 +8,7 @@ package com.github.zmzhou.easyboot.common;
  */
 public final class Constants {
     /** 系统默认密码 */
-    public static final String DEFAULT_PASSWORD = "Zmzhou.123";
+    public static final String DEFAULT_PD = "Zmzhou.123";
     /**
      * 验证码 redis key
      */

@@ -4,7 +4,7 @@
 spring boot、spring security、jwt token、redis、jpa + vue-admin-template实现前后端分离简单入门框架
 
 #数据库文档生成工具
-src\test\java\com\github\zmzhou\easyboot\DBGenerationTool.java  
+`src\test\java\com\github\zmzhou\easyboot\DBGenerationTool.java`    
 参考：[screw](https://gitee.com/leshalv/screw/tree/master/)
 
 #sonar扫描命令
@@ -13,6 +13,15 @@ mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.igno
 ```
 #### Software Architecture
 Software architecture description
+
+spring boot、spring security、jwt token、redis、jpa + vue-admin-template
+#### system screenshot
+
+![login page](docs/login.png)
+![role management](docs/role.png)
+![swagger+knife4j Interface Documentation](docs/doc.png)
+
+![sonar scan report](docs/sonar.png)
 
 #### Installation
 
