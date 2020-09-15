@@ -3,7 +3,6 @@ package com.github.zmzhou.easyboot.framework.vo;
 import java.io.Serializable;
 import java.util.regex.Pattern;
 
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**

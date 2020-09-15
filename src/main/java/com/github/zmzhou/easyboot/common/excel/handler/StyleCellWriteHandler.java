@@ -95,7 +95,7 @@ public class StyleCellWriteHandler implements CellWriteHandler {
             // 设置斑马线
             if (0 == cell.getRowIndex() % NumberUtils.INTEGER_TWO) {
                 // 背景色
-                cellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+                cellStyle.setFillForegroundColor(IndexedColors.PALE_BLUE.getIndex());
                 // 要指定 FillPatternType 为FillPatternType.SOLID_FOREGROUND 不然无法显示背景颜色.
                 // 表头默认了 FillPatternType所以可以不指定
                 cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -110,7 +110,7 @@ public class StyleCellWriteHandler implements CellWriteHandler {
         } else if (1 == cell.getRowIndex() && 0 == cell.getColumnIndex()) {
             // 设置打印时间样式
             String date = DateFormatUtils.format(new Date(), DateUtils.YYYY_MM_DD_HH_MM_SS);
-            cell.setCellValue(String.format("打印时间：%s", date));
+            cell.setCellValue(String.format("导出时间：%s", date));
             // 设置 水平居右
             cellStyle.setAlignment(HorizontalAlignment.RIGHT);
             // 背景色

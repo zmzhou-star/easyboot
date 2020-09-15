@@ -19,9 +19,11 @@ import com.github.zmzhou.easyboot.common.enums.UserStatus;
 public class StatusConverter implements Converter<String> {
 
     /**
+     * 构造器
      * Instantiates a new Status converter.
      */
     public StatusConverter() {
+        // 构造器
     }
 
     /**

@@ -80,7 +80,7 @@ public final class ExcelUtils {
         try {
             return future.get();
         } catch (ExecutionException e) {
-            log.error("导出excel失败");
+            log.error("导出excel失败", e);
         }
         return null;
     }

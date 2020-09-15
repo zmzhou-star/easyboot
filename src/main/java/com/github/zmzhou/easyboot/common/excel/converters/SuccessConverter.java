@@ -17,9 +17,11 @@ import com.github.zmzhou.easyboot.common.enums.SuccessStatus;
 public class SuccessConverter implements Converter<String> {
 
     /**
+     * 构造器
      * Instantiates a new Status converter.
      */
     public SuccessConverter() {
+        // 构造器
     }
 
     /**

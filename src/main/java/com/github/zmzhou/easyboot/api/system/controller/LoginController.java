@@ -3,7 +3,8 @@ package com.github.zmzhou.easyboot.api.system.controller;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,14 +38,13 @@ import io.swagger.annotations.ApiOperation;
 @Api(tags = {"用户登录"})
 @RestController
 public class LoginController extends BaseController {
-	@Autowired
+	@Resource
 	private TokenService tokenService;
-	
-	@Autowired
+	@Resource
 	private LoginService loginService;
-	@Autowired
+	@Resource
 	private MenuService menuService;
-	@Autowired
+	@Resource
 	private RoleService roleService;
 	
 	/**

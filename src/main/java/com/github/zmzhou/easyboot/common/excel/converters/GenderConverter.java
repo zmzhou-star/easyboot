@@ -19,9 +19,11 @@ import com.github.zmzhou.easyboot.common.enums.Gender;
 public class GenderConverter implements Converter<String> {
 
     /**
+     * 构造器
      * Instantiates a new Gender converter.
      */
     public GenderConverter() {
+        // 构造器
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.github.zmzhou.easyboot.framework.vo;
 
+import javax.validation.constraints.NotNull;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -37,6 +39,7 @@ public class PageParams extends Params {
 	private String order;
 
 	/** 导出excel的文件名 */
+	@NotNull(message = "导出excel的文件名不能为空")
 	@ApiModelProperty(value = "导出excel的文件名")
 	private String excelName;
 }

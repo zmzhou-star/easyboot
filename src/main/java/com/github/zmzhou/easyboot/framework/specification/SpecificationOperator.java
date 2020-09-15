@@ -23,7 +23,7 @@ public class SpecificationOperator implements Serializable {
     /**
      * 具体的查询条件
      */
-    private Object value;
+    private transient Object value;
     /**
      * 操作符，自己定义的一组操作符，用来方便查询
      */

@@ -54,7 +54,7 @@ public class SysLoginLogService extends BaseService<SysLoginLogParams> {
 	public void saveSuccessLog(LoginUser loginUser) {
 		SysLoginLog loginLog = createSysLoginLog(loginUser);
 		loginLog.setMsg("登录成功");
-		loginLog.setStatus("1");
+		loginLog.setStatus(Constants.ONE);
 		// 保存登录成功日志
 		ThreadPoolUtils.execute(() -> loginLogDao.saveAndFlush(loginLog));
 	}
@@ -73,7 +73,7 @@ public class SysLoginLogService extends BaseService<SysLoginLogParams> {
 		SysLoginLog loginLog = createSysLoginLog(loginUser);
 		loginLog.setUserName(userName);
 		loginLog.setMsg(msg);
-		loginLog.setStatus("0");
+		loginLog.setStatus(Constants.ZERO);
 		// 保存登录失败的日志
 		ThreadPoolUtils.execute(() -> loginLogDao.saveAndFlush(loginLog));
 	}

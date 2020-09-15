@@ -1,6 +1,7 @@
 package com.github.zmzhou.easyboot;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -10,7 +11,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.zmzhou.easyboot.common.Constants;
-import com.github.zmzhou.easyboot.framework.vo.Params;
+import com.github.zmzhou.easyboot.framework.vo.PageParams;
 
 /**
  * The type Easyboot application tests.
@@ -29,10 +30,12 @@ public class EasybootApplicationTests {
     /** pd */
     protected static final String PD = Constants.DEFAULT_PASSWORD;
     /** 默认分页参数 */
-    protected static Params params;
+    protected static PageParams params;
     static {
-        params = new Params();
+        params = new PageParams();
         params.setStatus("1");
+        params.setPageNum(1);
+        params.setPageSize(10);
     }
     /**
      * Init.
@@ -55,6 +58,7 @@ public class EasybootApplicationTests {
      */
     @Test
     void contextLoads() {
+        Assertions.assertNotNull(params);
         log.info("测试");
     }
 

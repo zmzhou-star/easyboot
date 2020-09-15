@@ -45,13 +45,6 @@ class FileUtilTest {
         FileUtil.existsAndMkdirs("/opt/eboot/downloadPath/");
         FileUtil.existsAndMkdirs("/opt/eboot/downloadPath/temp");
         FileUtil.delete(new File("/opt/eboot/downloadPath/temp"));
-    }
-
-    /**
-     * Exists.
-     */
-    @Test
-    void exists() {
         assertFalse(FileUtil.exists("/admin/1#3.png"));
     }
 
@@ -60,7 +53,7 @@ class FileUtilTest {
      */
     @Test
     void getFileSuffix() {
-        assertEquals(FileUtil.getFileSuffix("23/png"), ".png");
-        assertEquals(FileUtil.getFileSuffix(""), "");
+        assertEquals(".png", FileUtil.getFileSuffix("23/png"));
+        assertEquals("", FileUtil.getFileSuffix(""));
     }
 }

@@ -64,7 +64,7 @@ public final class ThreadPoolUtils {
 	 */
 	private static ThreadPoolExecutor get() {
 		if (threadPool != null) {
-			log.info("线程池已创建");
+			log.debug("线程池已创建");
 			return threadPool;
 		} else {
 			synchronized (ThreadPoolUtils.class) {
@@ -73,13 +73,13 @@ public final class ThreadPoolUtils {
 					// 获取处理器数量
 					int cpuNum = Runtime.getRuntime().availableProcessors();
 					// 根据cpu数量,计算出合理的线程并发数
-					int threadNum = cpuNum * 2 + 1;
+					int threadNum = cpuNum * 2;
 					// 创建线程池
 					threadPool = new ThreadPoolExecutor(
 							// 核心线程数
-							threadNum - 1,
-							// 最大线程数
 							threadNum,
+							// 最大线程数
+							threadNum + 1,
 							// 闲置线程存活时间
 							Integer.MAX_VALUE,
 							// 时间单位
@@ -88,7 +88,7 @@ public final class ThreadPoolUtils {
 							new LinkedBlockingDeque<>(Integer.MAX_VALUE),
 							// 线程工厂
 							new ThreadFactoryBuilder().setNameFormat("easy-thread-%d").build(),
-							// 队列已满,而且当前线程数已经超过最大线程数时的异常处理策略
+							// 队列已满,而且当前线程数已经超过最大线程数时的异常处理策略 来电运行政策
 							new ThreadPoolExecutor.CallerRunsPolicy()
 					);
 					log.info("创建线程池完成:{}", threadPool.toString());

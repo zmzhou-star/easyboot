@@ -1,6 +1,7 @@
 package com.github.zmzhou.easyboot.framework.security;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -187,6 +188,6 @@ public class LoginUser extends SysUserOnlineVo implements UserDetails {
 	 */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		return Collections.emptyList();
 	}
 }

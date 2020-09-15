@@ -92,7 +92,10 @@ captcha:
   width: 120
   height: 50
   digit: 4
-
+# 高德地图 IP定位
+amap:
+  url: https://restapi.amap.com/v3/ip
+  key: 051db8271016d725a284e90e9ad0da4e
 # Actuator Web 访问端口
 management:
   endpoint:

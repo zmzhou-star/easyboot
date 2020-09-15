@@ -29,13 +29,14 @@ public class ApiResult<T> implements Serializable {
     private String msg = HttpStatus.OK.getReasonPhrase();
     /** 列表数据 */
     @ApiModelProperty(value = "请求返回的数据")
-    private T data;
+    private transient T data;
     /**
      * 构造器
      * @author zmzhou
      * @date 2020/9/12 11:33
      */
     public ApiResult() {
+    	// 构造器
     }
     
     /**

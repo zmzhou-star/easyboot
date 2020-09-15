@@ -79,7 +79,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          v-hasPermi="['system:loginLog:export']"
+          v-hasPermi="['monitor:loginLog:export']"
           type="warning"
           icon="el-icon-download"
           size="mini"
@@ -107,10 +107,10 @@
       <el-table-column label="浏览器" align="center" prop="browser" />
       <el-table-column label="操作系统" align="center" prop="os" />
       <el-table-column class-name="status-col" label="登录状态" width="110" prop="status" align="center">
-       <template slot-scope="scope">
-         <el-tag :type="scope.row.status | statusFilter">{{ statusFormat(scope.row) }}</el-tag>
-       </template>
-     </el-table-column>
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.status | statusFilter">{{ statusFormat(scope.row) }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作信息" align="center" prop="msg" />
       <el-table-column label="登录时间" align="center" prop="loginTime" width="180">
         <template slot-scope="scope">

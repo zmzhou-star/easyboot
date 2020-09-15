@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @SpringBootTest
-public class UserServiceTest {
+class UserServiceTest {
 	/**
 	 * The Service.
 	 */
@@ -31,7 +31,7 @@ public class UserServiceTest {
 	 * Find all.
 	 */
 	@Test
-	public void findAll() {
+	void findAll() {
 		SysUserParams params = new SysUserParams();
 		Pageable pageable = PageRequest.of(0, 5);
 		Page<SysUser> res = service.findAll(params, pageable);
@@ -43,7 +43,7 @@ public class UserServiceTest {
 	 * Update user status.
 	 */
 	@Test
-	public void updateUserStatus() {
+	void updateUserStatus() {
 		int res = service.updateUserStatus(2L, "1");
 		Assertions.assertEquals(1, res);
 	}
@@ -52,7 +52,7 @@ public class UserServiceTest {
 	 * Gets user.
 	 */
 	@Test
-	public void getUser() {
+	void getUser() {
 		SysUser res = service.getUser(1L);
 		log.info("getUser:{}", res);
 		Assertions.assertNotNull(res);
@@ -75,6 +75,7 @@ public class UserServiceTest {
 			service.update(user);
 		}catch (BaseException e){
 			log.error("", e);
+			Assertions.assertNotNull(e);
 		}
 		service.delete(new Long[]{user.getId()});
 	}
@@ -83,7 +84,7 @@ public class UserServiceTest {
 	 * Exists.
 	 */
 	@Test
-	public void exists() {
+	void exists() {
 		SysUser user = service.getUser(1L);
 		boolean res = service.exists(user);
 		Assertions.assertTrue(res);
@@ -93,7 +94,7 @@ public class UserServiceTest {
 	 * Reset pwd.
 	 */
 	@Test
-	public void resetPwd() {
+	void resetPwd() {
 		SysUser res = service.resetPwd(2L, SecurityUtils.sha256Encrypt("Zmzhou.1324"));
 		Assertions.assertNotNull(res);
 	}

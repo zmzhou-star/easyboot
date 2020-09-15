@@ -4,9 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
@@ -49,13 +50,13 @@ import io.swagger.annotations.ApiParam;
 @RestController
 @RequestMapping("/system/user")
 public class UserController extends BaseController {
-	@Autowired
+	@Resource
 	private UserService userService;
-	@Autowired
+	@Resource
 	private RoleService roleService;
-	@Autowired
+	@Resource
 	private FileUploadUtils fileUploadUtils;
-	@Autowired
+	@Resource
 	private ExcelUtils excelUtils;
 	
 	/**
