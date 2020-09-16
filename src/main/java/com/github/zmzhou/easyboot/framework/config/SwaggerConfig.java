@@ -3,6 +3,7 @@ package com.github.zmzhou.easyboot.framework.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +41,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ConditionalOnClass(SpringfoxWebMvcConfiguration.class)
 public class SwaggerConfig implements WebMvcConfigurer {
 	/**
+	 * swagger开关
+	 */
+	@Value("${server.swagger.enabled}")
+	private boolean enabled;
+
+	/**
 	 * Add resource handlers.
 	 *
 	 * @param registry the registry
@@ -67,7 +74,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
 	public Docket createRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				// 是否启用Swagger
-				.enable(true)
+				.enable(enabled)
 				// 用来创建该API的基本信息，展示在文档的页面中（自定义展示的信息）
 				.apiInfo(apiInfo())
 				// 设置哪些接口暴露给Swagger展示

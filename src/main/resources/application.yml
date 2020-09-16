@@ -18,6 +18,12 @@ server:
   file-path-upload: /opt/eboot/uploadPath/
   file-path-download: /opt/eboot/downloadPath/
   file-path-temp: ${server.file-path-download}temp/
+  # swagger开关
+  swagger:
+    enabled: true
+  # 操作日志记录开关
+  operate-log:
+    enabled: true
 # Spring配置
 spring:
   application:
@@ -94,8 +100,8 @@ captcha:
   digit: 4
 # 高德地图 IP定位
 amap:
-  url: https://restapi.amap.com/v3/ip
-  key: 051db8271016d725a284e90e9ad0da4e
+  ip-url: https://restapi.amap.com/v3/ip
+  web-key: 051db8271016d725a284e90e9ad0da4e
 # Actuator Web 访问端口
 management:
   endpoint:
@@ -114,7 +120,7 @@ logging:
   config: classpath:log4j2.xml
   level:
     web: INFO
-    com.github.zmzhou: debug
+    com.github.zmzhou: INFO
     org.springframework: INFO
 #eureka:
 #  instance:

@@ -3,6 +3,7 @@ package com.github.zmzhou.easyboot.api.system.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
@@ -117,7 +118,7 @@ public class UserService extends BaseService<SysUserParams> {
 	 * @author zmzhou
 	 * @date 2020/9/13 12:45
 	 */
-	public int updateOffline(List<Long> ids){
+	public int updateOffline(Set<Long> ids){
 		if (ids.isEmpty()){
 			ids.add(0L);
 		}

@@ -57,6 +57,8 @@ public final class Constants {
     public static final String COMMA = ",";
     /** 点 . */
     public static final String DOT = ".";
+    /** 分号 ; */
+    public static final String SEMICOLON = ";";
     /** 下划线 _ */
     public static final String UNDERLINE = "_";
     /** 文件分隔符 / */

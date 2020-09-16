@@ -32,6 +32,10 @@ public class SysUserOnlineVo implements Comparable<SysUserOnlineVo>, Serializabl
 	 */
 	private String loginLocation;
 	/**
+	 * 所在城市中心经纬度坐标
+	 */
+	private String coordinate;
+	/**
 	 * 浏览器类型
 	 */
 	private String browser;

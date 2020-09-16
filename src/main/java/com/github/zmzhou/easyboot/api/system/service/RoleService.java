@@ -322,8 +322,7 @@ public class RoleService extends BaseService<SysRoleParams> {
 			SysRole role = selectRoleById(roleId);
 			// 通过角色ID查询角色使用数量
 			if (countUserRoleByRoleId(roleId) > 0) {
-				throw new BaseException(HttpStatus.UNAUTHORIZED.value(),
-						String.format("%1$s已分配,不能删除", role.getRoleName()));
+				throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "角色‘[0]’已分配,不能删除", role.getRoleName());
 			}
 			// 删除角色与菜单关联
 			roleMenuDao.deleteAll(findAll(role.getId()));

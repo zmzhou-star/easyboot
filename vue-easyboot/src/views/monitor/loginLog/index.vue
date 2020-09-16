@@ -104,6 +104,7 @@
       <el-table-column label="用户名称" align="center" prop="userName" />
       <el-table-column label="登录IP" align="center" prop="ipAddr" width="130" :show-overflow-tooltip="true" />
       <el-table-column label="登录地点" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
+      <el-table-column label="经纬度坐标" align="center" prop="coordinate" width="150" :show-overflow-tooltip="true" />
       <el-table-column label="浏览器" align="center" prop="browser" />
       <el-table-column label="操作系统" align="center" prop="os" />
       <el-table-column class-name="status-col" label="登录状态" width="110" prop="status" align="center">

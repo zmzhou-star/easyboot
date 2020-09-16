@@ -1,6 +1,5 @@
 package com.github.zmzhou.easyboot.framework.aop;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
@@ -14,26 +13,19 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.hibernate.validator.internal.engine.ConstraintViolationImpl;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.alibaba.fastjson.JSON;
-import com.github.zmzhou.easyboot.api.monitor.entity.SysOperLog;
 import com.github.zmzhou.easyboot.api.monitor.service.SysOperLogService;
-import com.github.zmzhou.easyboot.api.system.controller.LoginController;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
-import com.github.zmzhou.easyboot.common.utils.ThreadPoolUtils;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
 import com.github.zmzhou.easyboot.framework.security.service.TokenService;
-import com.github.zmzhou.easyboot.framework.vo.IpInfo;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -57,7 +49,7 @@ public class WebLogAspect {
      */
     @Pointcut("execution(public * com.github.zmzhou.easyboot.api.*.controller..*.*(..))")
     public void controllerLog() {
-        log.debug("api controller类切点");
+        // api controller类切点
     }
 
     /**
@@ -67,7 +59,7 @@ public class WebLogAspect {
      */
     @Pointcut("execution(public * com.github.zmzhou.easyboot.framework.*.controller..*.*(..))")
     public void frameworkControllerLog() {
-        log.debug("framework controller类切点");
+        // framework controller类切点
     }
 
     /**
@@ -113,102 +105,26 @@ public class WebLogAspect {
                 .append("Return : ").append(JSON.toJSONString(result)).append(System.lineSeparator())
                 .append("Cost   : ").append(execTimeMillis);
             log.info("{}", sb);
+            // 记录操作日志
+            operLogService.saveOperLog(request, clazz, method, args, result, Constants.ONE, "");
             // 返回方法执行结果
-            this.saveOperLog(request, clazz, method, args, result, Constants.ONE, "");
             return result;
         } catch (BaseException e) {
-            this.saveOperLog(request, clazz, method, args, result, Constants.ZERO, e.getErrMsg());
+            // 记录操作失败日志
+            operLogService.saveOperLog(request, clazz, method, args, result, Constants.ZERO, e.getErrMsg());
             throw e;
         } catch (ConstraintViolationException e) {
-            this.saveOperLog(request, clazz, method, args, result, Constants.ZERO, e.getConstraintViolations().toString());
+            operLogService.saveOperLog(request, clazz, method, args, result, Constants.ZERO,
+                    e.getConstraintViolations().toString());
             log.error("参数校验异常：{}", e.getConstraintViolations(), e);
             ConstraintViolationImpl<?> impl = (ConstraintViolationImpl<?>) e.getConstraintViolations().toArray()[0];
             return ApiResult.badRequest().error(impl.getMessageTemplate());
         } catch (Throwable throwable) {
-            this.saveOperLog(request, clazz, method, args, result, Constants.ZERO, throwable.getMessage());
+            operLogService.saveOperLog(request, clazz, method, args, result, Constants.ZERO, throwable.getMessage());
             log.error("记录日志异常", throwable);
         }
         return ApiResult.badRequest();
     }
 
-    /**
-     * 保存操作日志
-     * @param request HttpServletRequest
-     * @author zmzhou
-     * @date 2020/9/14 23:36
-     */
-    private void saveOperLog(HttpServletRequest request, String clazz, String method, Object[] args,
-                             Object result, String status, String msg) {
-        // 获取用户身份信息
-        LoginUser loginUser = tokenService.getLoginUser(request);
-        // 登录成功前为空
-        if (loginUser == null) {
-            loginUser = new LoginUser();
-            tokenService.setUserAgent(loginUser);
-        }
-        LoginUser finalLoginUser = loginUser;
-        String requestMethod = request.getMethod();
-        StringBuffer requestUrl = request.getRequestURL();
-        // 交给线程池执行
-        ThreadPoolUtils.execute(() -> {
-            String methodDesc = null;
-            String title = null;
-            try {
-                Class<?> clz = Class.forName(clazz);
-                // 登录方法包含用户密码敏感信息，不记录日志
-                if (LoginController.class.equals(clz)) {
-                    return;
-                }
-                // 类注解获取模块标题
-                Api clzAnno = AnnotationUtils.findAnnotation(clz, Api.class);
-                if (clzAnno != null) {
-                    title = Arrays.toString(clzAnno.tags()).replaceAll("[\\[\\]]", "");
-                }
-                // 参数类型转换
-                Class<?>[] argClz = new Class[args.length];
-                for (int i = 0; i < args.length; i++) {
-                    if (null != args[i]) {
-                        argClz[i] = args[i].getClass();
-                    }
-                }
-                // 方法注解获取方法描述
-                ApiOperation methodAnno = AnnotationUtils.findAnnotation(clz.getMethod(method, argClz), ApiOperation.class);
-                if (methodAnno != null) {
-                    methodDesc = methodAnno.value();
-                }
-            } catch (ClassNotFoundException | NoSuchMethodException e) {
-                log.error("类造型异常", e);
-            }
-            // 用户定位信息
-            IpInfo ipInfo = finalLoginUser.getIpInfo();
-            // 设置操作日志信息
-            SysOperLog operLog = SysOperLog.builder()
-                    // 模块标题
-                    .title(title)
-                    // 方法名称
-                    .method(clazz + Constants.DOT + method)
-                    // 方法描述
-                    .methodDesc(methodDesc)
-                    // 操作人员
-                    .operName(finalLoginUser.getUsername())
-                    // 请求方式 POST/GET
-                    .requestMethod(requestMethod)
-                    // 请求URL
-                    .operUrl(requestUrl.toString())
-                    // 请求参数
-                    .operParam(JSON.toJSONString(args))
-                    // 操作结果
-                    .operResult(JSON.toJSONString(result))
-                    .operIp(ipInfo.getIp())
-                    .operLocation(ipInfo.getAddr())
-                    // 操作状态
-                    .status(status)
-                    // 错误消息
-                    .errorMsg(msg)
-                    .build();
-            // 保存操作日志
-            operLogService.saveOperLog(operLog);
-        });
-    }
 
 }

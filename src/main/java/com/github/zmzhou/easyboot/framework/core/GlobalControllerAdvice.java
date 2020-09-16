@@ -3,6 +3,7 @@ package com.github.zmzhou.easyboot.framework.core;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -19,9 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import com.github.zmzhou.easyboot.api.monitor.service.SysOperLogService;
+import com.github.zmzhou.easyboot.common.Constants;
+import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.common.utils.ServletUtils;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
-import com.github.zmzhou.easyboot.common.exception.BaseException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,7 +40,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestControllerAdvice
 public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
+	/** 正则表达式匹配[\d] */
 	private static final Pattern PATTERN = Pattern.compile("\\[(\\d)]");
+	@Resource
+	private SysOperLogService operLogService;
+
 	/**
 	 * 方法描述
 	 * @author zmzhou
@@ -85,6 +92,8 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 			}
 		}
 		log.error(msg, e);
+		// 记录操作失败日志
+		saveFailOperLog(e, msg);
 		return new ApiResult<>().error(e.getCode(), msg);
 	}
 	/**
@@ -98,6 +107,8 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 	ApiResult<Object> exceptionHandler(Exception e) {
 		String uri = ServletUtils.getRequest().getRequestURI();
 		log.error("[exceptionHandler] {} Catch an exception:", uri, e);
+		// 记录操作失败日志
+		saveFailOperLog(e, e.getMessage());
 		return ApiResult.badRequest();
 	}
 	
@@ -109,6 +120,8 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 		String uri = ServletUtils.getRequest().getRequestURI();
 		log.error(e.getMessage() + " {}", uri, e);
 		String message = e.getAllErrors().get(0).getDefaultMessage();
+		// 记录操作失败日志
+		saveFailOperLog(e, message);
 		return new ApiResult<>().error(message);
 	}
 	
@@ -124,6 +137,22 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 		if (null != fieldError){
 			message = fieldError.getDefaultMessage();
 		}
+		// 记录操作失败日志
+		saveFailOperLog(e, message);
 		return new ApiResult<>().error(message);
+	}
+
+	/**
+	 * 记录操作失败日志
+	 * @param e exception
+	 * @param message 错误信息
+	 * @author zmzhou
+	 * @date 2020/9/16 21:04
+	 */
+	private void saveFailOperLog(Exception e, String message) {
+		// 记录操作失败日志
+		StackTraceElement st = e.getStackTrace()[0];
+		operLogService.saveOperLog(ServletUtils.getRequest(), st.getClassName(), st.getMethodName(), new Object[]{},
+				null, Constants.ZERO, message);
 	}
 }

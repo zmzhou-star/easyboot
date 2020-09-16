@@ -1,9 +1,9 @@
 package com.github.zmzhou.easyboot.framework.quartz;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,7 +58,7 @@ public class EasyScheduler {
 	@Scheduled(cron = "0 0/2 * * * ?")
 	public void updateOfflineUserStatus() {
 		log.info("定时查询不在线用户，修改用户状态开始...");
-		List<Long> onlineIds = new ArrayList<>();
+		Set<Long> onlineIds = new HashSet<>();
 		// 获取所有登录用户的tokenId集合
 		Collection<String> keys = redisUtils.keys(Constants.LOGIN_TOKEN_KEY);
 		if (!keys.isEmpty()) {

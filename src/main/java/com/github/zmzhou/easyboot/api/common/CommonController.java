@@ -96,7 +96,7 @@ public class CommonController extends BaseController {
 		LoginBody body = new LoginBody();
 		body.setUuid(uuid);
 		body.setCode(captcha.toBase64());
-		log.debug("生成验证码：{}", result);
+		log.info("生成验证码：{}", result);
 		return ok(body);
 	}
 

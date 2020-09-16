@@ -5,21 +5,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.common.Constants;
+import com.github.zmzhou.easyboot.common.utils.AmapUtils;
 import com.github.zmzhou.easyboot.common.utils.IpUtils;
 import com.github.zmzhou.easyboot.common.utils.ServletUtils;
-import com.github.zmzhou.easyboot.framework.vo.IpInfo;
 import com.github.zmzhou.easyboot.framework.redis.RedisUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
+import com.github.zmzhou.easyboot.framework.vo.AmapAddressInfo;
+import com.github.zmzhou.easyboot.framework.vo.IpInfo;
 
 import cn.hutool.core.util.IdUtil;
 import eu.bitwalker.useragentutils.UserAgent;
@@ -56,8 +58,10 @@ public class TokenService {
     @Value("${token.prefix}")
     private String prefix;
 
-    @Autowired
+    @Resource
     private RedisUtils redisUtils;
+    @Resource
+    private AmapUtils amapUtils;
 
     /**
      * 获取用户身份信息
@@ -190,6 +194,12 @@ public class TokenService {
             // 登录失败user为空
             user = new SysUser();
             loginUser.setUser(user);
+        }
+        // 获取用户高德地图ip定位信息
+        AmapAddressInfo addressInfo = amapUtils.getAddressInfo();
+        if (null != addressInfo){
+            // 设置所在城市中心经纬度坐标
+            loginUser.setCoordinate(addressInfo.getCenterCoordinates());
         }
         user.setLoginDate(new Date());
         if (null != ipInfo){

@@ -1,6 +1,6 @@
 package com.github.zmzhou.easyboot.api.system.dao;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -64,5 +64,5 @@ public interface UserDao extends JpaRepository<SysUser, Long>, JpaSpecificationE
 	 */
 	@Modifying
 	@Query("update SysUser u set u.online='0' where u.online<>'0' and u.id not in (?1)")
-	int updateOffline(List<Long> ids);
+	int updateOffline(Set<Long> ids);
 }

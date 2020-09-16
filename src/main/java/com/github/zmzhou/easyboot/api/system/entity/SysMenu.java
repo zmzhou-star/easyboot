@@ -105,7 +105,7 @@ public class SysMenu extends BaseEntity implements Comparable<SysMenu> {
 		if (null != menu) {
 			// 先按parentId排序
 			int first = (int) (this.parentId - menu.getParentId());
-			if (first < 0) {
+			if (first == 0) {
 				// 再按sortBy排序
 				return (int) (this.sortBy - menu.getSortBy());
 			}
