@@ -18,7 +18,7 @@ public interface MenuDao extends JpaRepository<SysMenu, Long>, JpaSpecificationE
 	/**
 	 * 获取用户菜单权限
 	 * @param id 用户id
-	 * @return
+	 * @return 菜单权限集合
 	 * @author zmzhou
 	 * @date 2020/07/21 10:37
 	 */

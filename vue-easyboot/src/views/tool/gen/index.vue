@@ -85,27 +85,9 @@
           <span>{{ (queryParams.pageNum - 1) * queryParams.pageSize + scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="表名称"
-        align="center"
-        prop="tableName"
-        :show-overflow-tooltip="true"
-        width="130"
-      />
-      <el-table-column
-        label="表描述"
-        align="center"
-        prop="tableComment"
-        :show-overflow-tooltip="true"
-        width="130"
-      />
-      <el-table-column
-        label="实体"
-        align="center"
-        prop="className"
-        :show-overflow-tooltip="true"
-        width="130"
-      />
+      <el-table-column label="表名称" align="center" prop="tableName" :show-overflow-tooltip="true" width="130" />
+      <el-table-column label="表描述" align="center" prop="tableComment" :show-overflow-tooltip="true" width="130" />
+      <el-table-column label="实体类名称" align="center" prop="className" :show-overflow-tooltip="true" width="130" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="160" />
       <el-table-column label="更新时间" align="center" prop="updateTime" width="160" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -170,7 +152,7 @@ import { listTable, previewTable, delTable } from '@/api/tool/gen'
 import importTable from './importTable'
 import { downLoadZip } from '@/utils/zipdownload'
 export default {
-  name: 'Gen',
+  name: 'CodeGen',
   components: { importTable },
   data() {
     return {
@@ -269,18 +251,18 @@ export default {
     },
     /** 修改按钮操作 */
     handleEditTable(row) {
-      const tableId = row.tableId || this.ids[0]
-      this.$router.push({ path: '/gen/edit', query: { tableId: tableId }})
+      const id = row.id || this.ids[0]
+      this.$router.push({ path: '/gen/edit', query: { id: id }})
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const tableIds = row.tableId || this.ids
-      this.$confirm('是否确认删除表编号为"' + tableIds + '"的数据项?', '警告', {
+      const ids = row.id || this.ids
+      this.$confirm('是否确认删除表编号为"' + ids + '"的数据项?', '操作警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function() {
-        return delTable(tableIds)
+        return delTable(ids)
       }).then(() => {
         this.getList()
         this.msgSuccess('删除成功')

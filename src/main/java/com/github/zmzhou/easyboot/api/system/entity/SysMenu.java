@@ -28,6 +28,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "SYS_MENU")
 public class SysMenu extends BaseEntity implements Comparable<SysMenu> {
+	/** serialVersionUID */
 	private static final long serialVersionUID = -3304319243957837933L;
 	/**
 	 * The Menu name.

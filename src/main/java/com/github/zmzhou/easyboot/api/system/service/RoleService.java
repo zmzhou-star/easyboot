@@ -143,7 +143,7 @@ public class RoleService extends BaseService<SysRoleParams> {
 				.and("roleName", Operator.LIKE, params.getRoleName())
 				.and("roleCode", Operator.LIKE, params.getRoleCode())
 				.and( Constants.STATUS, Operator.EQUAL, params.getStatus())
-				.between("and", "createTime", params.getBeginTime(), params.getEndTime())
+				.between("and", Constants.CREATE_TIME, params.getBeginTime(), params.getEndTime())
 				.build();
 		return roleDao.findAll(spec, page);
 	}

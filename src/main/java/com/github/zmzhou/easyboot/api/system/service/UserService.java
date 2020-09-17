@@ -83,7 +83,7 @@ public class UserService extends BaseService<SysUserParams> {
 				.and(Constants.USERNAME, Operator.LIKE, params.getUsername())
 				.and( Constants.STATUS, Operator.EQUAL, params.getStatus())
 				.and("tel", Operator.R_LIKE, params.getTel())
-				.between("and", "createTime", params.getBeginTime(), params.getEndTime())
+				.between("and", Constants.CREATE_TIME, params.getBeginTime(), params.getEndTime())
 				.build();
 		return userDao.findAll(spec, page);
 	}

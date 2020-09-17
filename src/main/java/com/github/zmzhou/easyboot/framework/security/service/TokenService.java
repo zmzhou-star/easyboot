@@ -10,11 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.common.Constants;
+import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.common.utils.AmapUtils;
 import com.github.zmzhou.easyboot.common.utils.IpUtils;
 import com.github.zmzhou.easyboot.common.utils.ServletUtils;
@@ -195,14 +197,12 @@ public class TokenService {
             user = new SysUser();
             loginUser.setUser(user);
         }
-        // 获取用户高德地图ip定位信息
-        AmapAddressInfo addressInfo = amapUtils.getAddressInfo();
-        if (null != addressInfo){
-            // 设置所在城市中心经纬度坐标
-            loginUser.setCoordinate(addressInfo.getCenterCoordinates());
-        }
         user.setLoginDate(new Date());
         if (null != ipInfo){
+            // 判断用户网络环境是否变化
+            if (StringUtils.isNotBlank(user.getLoginIp()) && !user.getLoginIp().equals(ipInfo.getIp())) {
+               throw new BaseException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "网络环境变化，请重新登录！");
+            }
             loginUser.setIpAddr(ipInfo.getIp());
             loginUser.setLoginLocation(ipInfo.getAddr());
             // 更新redis缓存和内存中的用户登录信息
@@ -210,6 +210,12 @@ public class TokenService {
             user.setLoginIp(ipInfo.getIp());
         } else {
             loginUser.setIpAddr(IpUtils.getIpAddr(ServletUtils.getRequest()));
+        }
+        // 获取用户高德地图ip定位信息
+        AmapAddressInfo addressInfo = amapUtils.getAddressInfo();
+        if (null != addressInfo){
+            // 设置所在城市中心经纬度坐标
+            loginUser.setCoordinate(addressInfo.getCenterCoordinates());
         }
         loginUser.setBrowser(userAgent.getBrowser().getName());
         loginUser.setOs(userAgent.getOperatingSystem().getName());

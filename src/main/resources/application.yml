@@ -27,7 +27,7 @@ server:
 # Spring配置
 spring:
   application:
-    name: eboot
+    name: @project.name@
   profiles:
     active: dev
   # 文件上传
@@ -63,6 +63,11 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  #服务注册到nacos
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 127.0.0.1:8848
 #  boot:
 #    admin:
 #      client:

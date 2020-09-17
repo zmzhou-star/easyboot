@@ -73,6 +73,10 @@ public final class Constants {
     public static final String STATUS = "status";
     /** loginTime */
     public static final String LOGIN_TIME = "loginTime";
+    /** tableName */
+	public static final String TABLE_NAME = "tableName";
+    /** createTime */
+	public static final String CREATE_TIME = "createTime";
     /** 文件下载缓冲区大小 */
     public static final int BUFFER_SIZE = 2 * 1024 * 1024;
 

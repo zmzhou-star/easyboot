@@ -47,6 +47,12 @@ public class SysLoginLogExcel extends BaseExcel {
 	@ExcelProperty(value = {EXCEL_NAME, "", "登录地点"})
 	private String loginLocation;
 	/**
+	 * 所在城市中心经纬度坐标
+	 */
+	@ColumnWidth(20)
+	@ExcelProperty(value = {EXCEL_NAME, "", "经纬度坐标"})
+	private String coordinate;
+	/**
 	 * 浏览器类型
 	 */
 	@ExcelProperty(value = {EXCEL_NAME, "", "浏览器类型"})
