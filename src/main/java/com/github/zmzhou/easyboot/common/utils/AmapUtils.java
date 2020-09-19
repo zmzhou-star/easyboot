@@ -28,7 +28,16 @@ public class AmapUtils {
 	private String ipUrl;
 	/** 高德地图 Web服务API类型KEY */
 	private String webKey;
-	
+
+	/**
+	 * Get instance amap utils.
+	 *
+	 * @return the amap utils
+	 */
+	public static AmapUtils getInstance(){
+		return ServletUtils.getBean(AmapUtils.class);
+	}
+
 	/**
 	 * 获取用户高德地图ip定位信息
 	 * @return 高德地图定位信息

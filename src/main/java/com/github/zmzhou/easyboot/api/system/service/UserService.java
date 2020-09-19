@@ -58,11 +58,7 @@ public class UserService extends BaseService<SysUserParams> {
 	private UserDao userDao;
 	@Resource
 	private UserRoleDao userRoleDao;
-	/**
-	 * 用户头像删除
-	 */
-	@Resource
-	private FileUploadUtils fileUploadUtils;
+
 	/**
 	 * 查询所有数据
 	 * @param params 查询参数
@@ -251,7 +247,7 @@ public class UserService extends BaseService<SysUserParams> {
 			userRoleDao.deleteByUserId(id);
 			userDao.deleteById(id);
 			// 删除用户头像
-			ThreadPoolUtils.execute(()-> fileUploadUtils.deleteAvatar(getUser(id).getUsername()));
+			ThreadPoolUtils.execute(()-> FileUploadUtils.getInstance().deleteAvatar(getUser(id).getUsername()));
 		}
 	}
 	

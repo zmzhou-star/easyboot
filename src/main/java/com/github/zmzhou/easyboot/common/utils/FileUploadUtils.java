@@ -2,7 +2,6 @@ package com.github.zmzhou.easyboot.common.utils;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,6 +53,15 @@ public class FileUploadUtils {
 	private String avatarPath;
 
 	/**
+	 * Get instance file upload utils.
+	 *
+	 * @return the file upload utils
+	 */
+	public static FileUploadUtils getInstance(){
+		return ServletUtils.getBean(FileUploadUtils.class);
+	}
+
+	/**
 	 * @description 单文件上传
 	 * @param request HttpServletRequest
 	 * @return FileItem
@@ -62,16 +70,17 @@ public class FileUploadUtils {
 	 */
 	public FileItem singleUpload(HttpServletRequest request) {
 		try {
-			request.setCharacterEncoding(StandardCharsets.UTF_8.displayName());
+			request.setCharacterEncoding(Constants.CHARSETS.displayName());
 			DiskFileItemFactory factory = new DiskFileItemFactory();
-			ServletFileUpload upload = new ServletFileUpload(factory);
-			//文件名中文乱码处理也可以如此写
-			upload.setHeaderEncoding(StandardCharsets.UTF_8.displayName());
 			//设置缓冲区大小与临时文件目录
 			factory.setSizeThreshold(Constants.BUFFER_SIZE);
+			factory.setDefaultCharset(Constants.CHARSETS.displayName());
 			File uploadTemp = new File(tempFilePath);
 			FileUtil.existsAndMkdirs(uploadTemp.getAbsolutePath());
 			factory.setRepository(uploadTemp);
+			ServletFileUpload upload = new ServletFileUpload(factory);
+			//文件名中文乱码处理也可以如此写
+			upload.setHeaderEncoding(Constants.CHARSETS.displayName());
 			//设置单个文件大小限制
 			upload.setFileSizeMax(DataSize.parse(maxFileSize).toBytes());
 			//设置所有文件总和大小限制

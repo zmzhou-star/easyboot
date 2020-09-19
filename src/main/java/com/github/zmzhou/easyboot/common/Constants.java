@@ -1,5 +1,8 @@
 package com.github.zmzhou.easyboot.common;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 /**
  *  @title Constants
  *  @Description 通用常量信息
@@ -7,6 +10,8 @@ package com.github.zmzhou.easyboot.common;
  *  @Date 2020/07/03 15:24
  */
 public final class Constants {
+    /** 系统默认编码 */
+    public static final Charset CHARSETS = StandardCharsets.UTF_8;
     /** 系统默认密码 */
     public static final String DEFAULT_PD = "Zmzhou.123";
     /**
@@ -23,6 +28,8 @@ public final class Constants {
     public static final String ZERO = "0";
     /** 字符 1 */
     public static final String ONE = "1";
+    /** 数字 3 */
+    public static final int INT_THREE = 3;
     /** http请求  */
     public static final String HTTP = "http://";
     /** https请求 */
@@ -63,6 +70,10 @@ public final class Constants {
     public static final String UNDERLINE = "_";
     /** 文件分隔符 / */
     public static final String SEPARATOR = "/";
+    /** 左括号( */
+    public static final String LEFT_PARENTHESIS = "(";
+    /** 右括号) */
+    public static final String RIGHT_PARENTHESIS = ")";
     /** 百分号 % */
     public static final String PERCENT_SIGN = "%";
     /** username */
@@ -80,7 +91,7 @@ public final class Constants {
     /** 文件下载缓冲区大小 */
     public static final int BUFFER_SIZE = 2 * 1024 * 1024;
 
-    /**
+	/**
      * 私有构造器
      * @author zmzhou
      * @date 2020/08/29 14:12

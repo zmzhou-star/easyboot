@@ -105,7 +105,7 @@
             size="small"
             icon="el-icon-edit"
             @click="handleEditTable(scope.row)"
-          >编辑</el-button>
+          >修改</el-button>
           <el-button
             v-hasPermi="['tool:gen:remove']"
             type="text"
@@ -237,14 +237,14 @@ export default {
     },
     /** 预览按钮 */
     handlePreview(row) {
-      previewTable(row.tableId).then(response => {
+      previewTable(row.id).then(response => {
         this.preview.data = response.data
         this.preview.open = true
       })
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.tableId)
+      this.ids = selection.map(item => item.id)
       this.tableNames = selection.map(item => item.tableName)
       this.single = selection.length !== 1
       this.multiple = !selection.length

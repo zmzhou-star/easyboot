@@ -62,8 +62,6 @@ public class TokenService {
 
     @Resource
     private RedisUtils redisUtils;
-    @Resource
-    private AmapUtils amapUtils;
 
     /**
      * 获取用户身份信息
@@ -192,16 +190,17 @@ public class TokenService {
         loginUser.setIpInfo(ipInfo);
         // 更新用户登录时间和登录在线状态
         SysUser user = loginUser.getUser();
-        if (null == user){
+        if (null == user) {
             // 登录失败user为空
             user = new SysUser();
             loginUser.setUser(user);
         }
         user.setLoginDate(new Date());
-        if (null != ipInfo){
+        if (null != ipInfo) {
             // 判断用户网络环境是否变化
-            if (StringUtils.isNotBlank(user.getLoginIp()) && !user.getLoginIp().equals(ipInfo.getIp())) {
-               throw new BaseException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "网络环境变化，请重新登录！");
+            if (Constants.ONE.equals(user.getOnline()) &&
+                    StringUtils.isNotBlank(user.getLoginIp()) && !user.getLoginIp().equals(ipInfo.getIp())) {
+                throw new BaseException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "网络环境变化，请重新登录！");
             }
             loginUser.setIpAddr(ipInfo.getIp());
             loginUser.setLoginLocation(ipInfo.getAddr());
@@ -212,8 +211,8 @@ public class TokenService {
             loginUser.setIpAddr(IpUtils.getIpAddr(ServletUtils.getRequest()));
         }
         // 获取用户高德地图ip定位信息
-        AmapAddressInfo addressInfo = amapUtils.getAddressInfo();
-        if (null != addressInfo){
+        AmapAddressInfo addressInfo = AmapUtils.getInstance().getAddressInfo();
+        if (null != addressInfo) {
             // 设置所在城市中心经纬度坐标
             loginUser.setCoordinate(addressInfo.getCenterCoordinates());
         }

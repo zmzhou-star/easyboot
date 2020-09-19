@@ -67,13 +67,9 @@ public class AmapAddressInfo implements Serializable {
 	 * 所在城市矩形区域范围 所在城市范围的左下右上对标对
 	 */
 	private String rectangle;
-	/**
-	 * 所在城市中心经纬度坐标
-	 */
-	private String centerCoordinates;
 
 	/**
-	 * 获取中心经纬度坐标
+	 * 获取所在城市中心经纬度坐标
 	 *
 	 * @return 中心经纬度坐标
 	 * @author zmzhou

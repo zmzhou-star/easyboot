@@ -54,8 +54,7 @@ class LoginControllerTest extends EasybootApplicationTests {
 	/**
 	 * Login.
 	 */
-	@Test
-	void login() throws Exception {
+	void login() {
 		ApiResult<LoginBody> captcha = commonController.captcha();
 		LoginBody loginBody = captcha.getData();
 		ApiResult<JSONObject> res;
@@ -83,14 +82,23 @@ class LoginControllerTest extends EasybootApplicationTests {
 		} catch (BaseException e) {
 			Assertions.assertEquals(ErrorCode.CAPTCHA_EXPIRE.getMsg(), e.getErrMsg());
 		}
-
+	}
+	
+	/**
+	 * logout.
+	 */
+	@Test
+	void logout() throws Exception {
+		login();
 		// 退出登录
 		MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/logout"))
 				.andDo(MockMvcResultHandlers.print())
 				.andReturn();
 		log.info(mvcResult.getResponse().getContentAsString());
+		Assertions.assertNotNull(mvcResult);
+		login();
 	}
-	
+
 	/**
 	 * Gets user info.
 	 */

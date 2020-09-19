@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -62,10 +63,23 @@ public class CodeGenController extends BaseController {
 	 * @date 2020/9/17 20:28
 	 */
 	@GetMapping("/dbTable/list")
+	@ApiOperation(value = "查询数据库表列表")
 	public ApiResult<List<CodeGenTable>> dbTableList(@ApiParam(name = "tableName", value = "表名称") String tableName,
                                          @ApiParam(name = "tableComment", value = "表描述") String tableComment) {
 		List<CodeGenTable> list = genTableService.selectDbTableList(tableName, tableComment);
 		return ok(list);
+	}
+
+	/**
+	 * 导入生成代码的表结构保存
+	 * @param tables 表名数组
+	 * @return 导入结果
+	 * @author zmzhou
+	 * date 2020/9/18 21:36
+	 */
+	@PostMapping("/importTable")
+	public ApiResult<Object> importTable(@ApiParam(name = "tables", value = "表名数组", required = true) String tables) {
+		return ApiResult.builder().data(genTableService.importCodeGenTable(tables));
 	}
 
 	/**

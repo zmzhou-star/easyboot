@@ -42,16 +42,18 @@ public abstract class BaseService<P> {
     * 导出excel
     * @param  params 查询参数
     * @return excel文件路径名
+    * @throws InterruptedException 异常信息
     * @author zmzhou
     * @date 2020/9/3 22:59
     */
    public abstract String export(P params) throws InterruptedException;
-   
+
    /**
     * 下载excel导入模板
     * @param excelClass  excel模板类
     * @param excelName  excel模板文件名
     * @return  excel文件路径名
+    * @throws InterruptedException 异常信息
     * @author zmzhou
     * @date 2020/9/5 21:44
     */

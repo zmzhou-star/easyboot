@@ -42,6 +42,18 @@ public class BaseException extends RuntimeException {
 		this.errMsg = errMsg;
 		this.params = new Object[] {};
 	}
+
+	/**
+	 * Instantiates a new Base exception.
+	 *
+	 * @param errMsg the err msg
+	 * @param params the params
+	 */
+	public BaseException(String errMsg, Object... params) {
+		this.code = HttpStatus.BAD_REQUEST.value();
+		this.errMsg = errMsg;
+		this.params = params;
+	}
 	
 	/**
 	 * Instantiates a new Base exception.

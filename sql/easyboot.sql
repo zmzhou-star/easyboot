@@ -327,7 +327,7 @@ INSERT INTO sys_user_role VALUES (35, 5);
 drop table if exists code_gen_table;
 create table code_gen_table (
     id                bigint(20)      not null auto_increment    comment '编号',
-    table_name        varchar(200)    default ''                 comment '表名称',
+    table_name        varchar(200)    not null                   comment '表名称',
     table_comment     varchar(500)    default ''                 comment '表描述',
     class_name        varchar(100)    default ''                 comment '实体类名称',
     tpl_category      varchar(200)    default 'crud'             comment '使用的模板（crud单表操作 tree树表操作）',
@@ -352,10 +352,10 @@ create table code_gen_table (
 drop table if exists code_gen_table_column;
 create table code_gen_table_column (
     id                bigint(20)      not null auto_increment    comment '编号',
-    table_id          bigint(20)                                 comment '所属表编号',
-    column_name       varchar(200)                               comment '列名称',
+    table_id          bigint(20)      not null                   comment '所属表编号',
+    column_name       varchar(200)    not null                   comment '列名称',
     column_comment    varchar(500)                               comment '列描述',
-    column_type       varchar(100)                               comment '列类型',
+    column_type       varchar(100)    not null                   comment '列类型',
     java_type         varchar(500)                               comment 'JAVA类型',
     java_field        varchar(200)                               comment 'JAVA字段名',
     is_pk             char(1)                                    comment '是否主键（1是）',
@@ -376,6 +376,7 @@ create table code_gen_table_column (
     remark            varchar(500)    default null               comment '备注',
     primary key (id)
 ) engine=innodb auto_increment=1 comment = '代码生成业务表字段';
+ALTER table code_gen_table_column ADD INDEX IDX_CGTC_TABLE_ID(table_id);
 
 
 SET FOREIGN_KEY_CHECKS = 1;

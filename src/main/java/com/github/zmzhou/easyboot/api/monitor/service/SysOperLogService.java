@@ -1,5 +1,6 @@
 package com.github.zmzhou.easyboot.api.monitor.service;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -105,21 +106,9 @@ public class SysOperLogService extends BaseService<SysOperLogParams> {
 				if (clzAnno != null) {
 					title = Arrays.toString(clzAnno.tags()).replaceAll("[\\[\\]]", "");
 				}
-				// 参数类型转换
-				Class<?>[] argClz = new Class[args.length];
-				for (int i = 0; i < args.length; i++) {
-					if (null != args[i]) {
-						argClz[i] = args[i].getClass();
-					}
-				}
-				// 方法注解获取方法描述
-				ApiOperation methodAnno = AnnotationUtils.findAnnotation(clz.getMethod(method, argClz),
-						ApiOperation.class);
-				if (methodAnno != null) {
-					methodDesc = methodAnno.value();
-				}
-			} catch (ClassNotFoundException | NoSuchMethodException e) {
-				log.error("类造型异常", e);
+				methodDesc = this.getMethodDesc(clz, method);
+			} catch (ClassNotFoundException e) {
+				log.error("类找不到异常", e);
 			}
 			// 用户定位信息
 			IpInfo ipInfo = finalLoginUser.getIpInfo();
@@ -153,6 +142,31 @@ public class SysOperLogService extends BaseService<SysOperLogParams> {
 			operLogDao.saveAndFlush(operLog);
 		});
 	}
+
+	/**
+	 * Gets method desc.
+	 *
+	 * @param clz    the clz
+	 * @param method the method
+	 * @return the method desc
+	 */
+	private String getMethodDesc(Class<?> clz, String method) {
+		String methodDesc = null;
+		Method[] methods = clz.getDeclaredMethods();
+		// 遍历查找方法
+		for (Method m : methods) {
+			if (m.getName().equals(method)) {
+				// 方法注解获取方法描述
+				ApiOperation methodAnno = AnnotationUtils.findAnnotation(m, ApiOperation.class);
+				if (methodAnno != null) {
+					methodDesc = methodAnno.value();
+				}
+				break;
+			}
+		}
+		return methodDesc;
+	}
+
 	/**
 	 * 获取登录日志记录列表
 	 * @param params 查询参数

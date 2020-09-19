@@ -165,7 +165,7 @@ import logo from '@/assets/logo.png'
 import CodeTypeDialog from './CodeTypeDialog'
 import DraggableItem from './DraggableItem'
 
-const emptyActiveData = { style: {}, autosize: {}}
+// const emptyActiveData = { style: {}, autosize: {}}
 let oldActiveId
 let tempActiveData
 

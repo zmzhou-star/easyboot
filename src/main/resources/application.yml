@@ -107,6 +107,18 @@ captcha:
 amap:
   ip-url: https://restapi.amap.com/v3/ip
   web-key: 051db8271016d725a284e90e9ad0da4e
+
+# 代码生成
+gen:
+  # 作者
+  author: zmzhou
+  # 默认生成包路径 system 需改成自己的模块名称 如 system monitor tool
+  packageName: com.github.zmzhou.easyboot.api.system
+  # 表前缀（生成类名不会包含表前缀，多个用逗号分隔）
+  tablePrefix: sys_
+  # 自动去除表前缀，默认是true
+  autoRemovePre: false
+
 # Actuator Web 访问端口
 management:
   endpoint:

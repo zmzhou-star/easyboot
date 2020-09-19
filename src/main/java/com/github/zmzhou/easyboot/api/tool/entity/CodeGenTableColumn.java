@@ -4,9 +4,15 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.framework.entity.BaseEntity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -18,6 +24,9 @@ import lombok.ToString;
  */
 @Data
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "CODE_GEN_TABLE_COLUMN")
 public class CodeGenTableColumn extends BaseEntity {
@@ -26,7 +35,6 @@ public class CodeGenTableColumn extends BaseEntity {
 	/**
 	 * 归属表编号
 	 */
-	@NotBlank(message = "所属表ID不能为空")
 	private Long tableId;
 	/**
 	 * 列名称
@@ -94,4 +102,13 @@ public class CodeGenTableColumn extends BaseEntity {
 	 * 排序
 	 */
 	private Integer sortBy;
+	/**
+	 * 是否主键（1是）
+	 * @return 主键
+	 * @author zmzhou
+	 * date 2020/9/18 23:08
+	 */
+	public boolean isPk() {
+		return StringUtils.isNotBlank(this.isPk) && StringUtils.equals(Constants.ONE, this.isPk);
+	}
 }

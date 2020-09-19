@@ -60,11 +60,22 @@ class CodeGenControllerTest extends EasybootApplicationTests {
 	}
 
 	/**
+	 * Import table.
+	 */
+	@Test
+	void importTable() {
+		ApiResult<Object> res = controller.importTable("SYS_ROLE");
+		Assertions.assertNotNull(res);
+		res = controller.importTable("");
+		Assertions.assertNotNull(res);
+	}
+
+	/**
 	 * Delete.
 	 */
 	@Test
 	void delete() {
-		ApiResult<Object> res = controller.delete(new Long[]{0L});
+		ApiResult<Object> res = controller.delete(new Long[]{1L});
 		Assertions.assertNotNull(res);
 	}
 }

@@ -3,11 +3,11 @@ package com.github.zmzhou.easyboot.api.system.controller;
 import java.io.File;
 import java.io.IOException;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,14 +51,12 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/system/user/profile")
 public class SysUserProfileController extends BaseController {
-	@Autowired
+	@Resource
 	private UserService userService;
-	@Autowired
+	@Resource
 	private RoleService roleService;
-	@Autowired
+	@Resource
 	private TokenService tokenService;
-	@Autowired
-	private FileUploadUtils fileUploadUtils;
 
 	/**
 	 * 获取用户个人信息
@@ -143,7 +141,7 @@ public class SysUserProfileController extends BaseController {
 		HttpServletRequest request = ServletUtils.getRequest();
 		LoginUser loginUser = tokenService.getLoginUser(request);
 		// 头像文件
-		FileItem avatar = fileUploadUtils.singleUpload(request);
+		FileItem avatar = FileUploadUtils.getInstance().singleUpload(request);
 		// 保存的文件名
 		String fileName = loginUser.getUsername() + Constants.SEPARATOR
 				+ Constants.AVATAR + FileUtil.getFileSuffix(avatar.getContentType());
@@ -152,7 +150,7 @@ public class SysUserProfileController extends BaseController {
 		try {
 			// 保存文件
 			FileUtils.copyInputStreamToFile(avatar.getInputStream(),
-					new File(fileUploadUtils.getAvatarPath(), fileName));
+					new File(FileUploadUtils.getInstance().getAvatarPath(), fileName));
 			user.setAvatar(fileName);
 			// 更新用户信息
 			user = userService.update(user);

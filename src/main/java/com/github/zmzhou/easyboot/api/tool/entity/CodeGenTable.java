@@ -1,5 +1,6 @@
 package com.github.zmzhou.easyboot.api.tool.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotBlank;
 import com.github.zmzhou.easyboot.framework.entity.BaseEntity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -22,6 +24,7 @@ import lombok.ToString;
  */
 @Data
 @ToString
+@NoArgsConstructor
 @Entity
 @Table(name = "CODE_GEN_TABLE")
 public class CodeGenTable extends BaseEntity {
@@ -83,4 +86,19 @@ public class CodeGenTable extends BaseEntity {
 	@Valid
 	@Transient
 	private List<CodeGenTableColumn> columns;
+
+	/**
+	 * Instantiates a new Code gen table.
+	 *
+	 * @param tableName    the table name
+	 * @param tableComment the table comment
+	 * @param createTime   the create time
+	 */
+	public CodeGenTable(@NotBlank(message = "表名称不能为空") String tableName,
+	                    @NotBlank(message = "表描述不能为空") String tableComment,
+	                    Date createTime) {
+		this.tableName = tableName;
+		this.tableComment = tableComment;
+		setCreateTime(createTime);
+	}
 }

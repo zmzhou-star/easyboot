@@ -121,7 +121,7 @@
 </template>
 <script>
 export default {
-  name: 'BasicInfoForm',
+  name: 'GenInfoForm',
   props: {
     info: {
       type: Object,
