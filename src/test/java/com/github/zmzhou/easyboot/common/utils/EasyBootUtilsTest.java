@@ -22,6 +22,10 @@ class EasyBootUtilsTest {
 	void convertToCamelCase() {
 		String res = EasyBootUtils.convertToCamelCase("HELLO_WORLD");
 		Assertions.assertEquals("HelloWorld", res);
+		res = EasyBootUtils.convertToCamelCase("");
+		Assertions.assertEquals("", res);
+		res = EasyBootUtils.convertToCamelCase("hello");
+		Assertions.assertEquals("Hello", res);
 	}
 
 	/**
@@ -31,5 +35,9 @@ class EasyBootUtilsTest {
 	void toCamelCase() {
 		String res = EasyBootUtils.toCamelCase("HELLO_WORLD");
 		Assertions.assertEquals("helloWorld", res);
+		res = EasyBootUtils.toCamelCase("HELLO");
+		Assertions.assertEquals("hello", res);
+		res = EasyBootUtils.toCamelCase("");
+		Assertions.assertEquals("", res);
 	}
 }

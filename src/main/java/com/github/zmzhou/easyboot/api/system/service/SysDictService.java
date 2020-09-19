@@ -1,13 +1,16 @@
 package com.github.zmzhou.easyboot.api.system.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.zmzhou.easyboot.api.system.dao.SysDictDao;
 import com.github.zmzhou.easyboot.api.system.entity.SysDict;
+import com.github.zmzhou.easyboot.api.system.vo.SysDictTypeVo;
 
 /**
  *  @title SysDictService
@@ -18,7 +21,7 @@ import com.github.zmzhou.easyboot.api.system.entity.SysDict;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class SysDictService {
-	@Autowired
+	@Resource
 	private SysDictDao dictDao;
 	
 	/**
@@ -30,5 +33,18 @@ public class SysDictService {
 	 */
 	public List<SysDict> selectDictDataByType(String dictType) {
 		return dictDao.selectDictDataByType(dictType);
+	}
+
+	/**
+	 * 获取字典类型列表
+	 * Select dict types list.
+	 * @return the list
+	 */
+	public List<SysDictTypeVo> selectDictTypes() {
+		// 获取字典类型列表
+		List<String[]> typeList = dictDao.selectDictTypes();
+		List<SysDictTypeVo> res = new ArrayList<>();
+		typeList.forEach(obj -> res.add(SysDictTypeVo.builder().dictName(obj[0]).dictType(obj[1]).build()));
+		return res;
 	}
 }

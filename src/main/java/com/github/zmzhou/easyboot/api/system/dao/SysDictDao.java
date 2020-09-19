@@ -24,4 +24,13 @@ public interface SysDictDao extends JpaRepository<SysDict, Long>, JpaSpecificati
 	 */
 	@Query(value = "from SysDict where status = '1' and dictType = ?1 order by dictSort asc")
 	List<SysDict> selectDictDataByType(String dictType);
+
+	/**
+	 * 获取字典类型列表
+	 * @return 字典类型列表
+	 * @author zmzhou
+	 * date 2020/9/19 21:39
+	 */
+	@Query(value="select t.dict_name,t.dict_type from sys_dict t GROUP BY t.dict_name,t.dict_type", nativeQuery=true)
+	List<String[]> selectDictTypes();
 }

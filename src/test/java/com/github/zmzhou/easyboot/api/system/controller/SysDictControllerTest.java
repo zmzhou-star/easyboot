@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.zmzhou.easyboot.EasybootApplicationTests;
 import com.github.zmzhou.easyboot.api.system.entity.SysDict;
+import com.github.zmzhou.easyboot.api.system.vo.SysDictTypeVo;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 
 /**
@@ -24,6 +25,15 @@ class SysDictControllerTest extends EasybootApplicationTests {
 	@Test
 	void getDicts() {
 		ApiResult<SysDict> res = controller.getDicts("sys_user_sex");
+		Assertions.assertNotNull(res);
+	}
+
+	/**
+	 * Option select.
+	 */
+	@Test
+	void optionSelect() {
+		ApiResult<SysDictTypeVo> res = controller.optionSelect();
 		Assertions.assertNotNull(res);
 	}
 }

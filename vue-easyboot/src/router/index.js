@@ -84,6 +84,19 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/tool/gen/edit',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '/',
+        component: () => import('@/views/tool/gen/editTable'),
+        name: 'CodeGenEdit',
+        meta: { title: '修改代码生成配置' }
+      }
+    ]
+  },
 
   // 404 page must be placed at the end !!!
   {

@@ -43,6 +43,7 @@ public final class CodeGenUtils {
 		genTable.setFunctionName(replaceText(genTable.getTableComment()));
 		genTable.setFunctionAuthor(codeGenConfig.getAuthor());
 		genTable.setCreateBy(operName);
+		genTable.setTplCategory(CodeGenConstants.TPL_CRUD);
 	}
 
 	/**

@@ -51,6 +51,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class SysOperLogService extends BaseService<SysOperLogParams> {
+	/** 数据库允许的参数最大长度，超过截取 */
+	private static final int MAX_PARAMS_LENGTH = 2048;
+
 	/**
 	 * 操作日志记录开关
 	 */
@@ -127,15 +130,15 @@ public class SysOperLogService extends BaseService<SysOperLogParams> {
 					// 请求URL
 					.operUrl(requestUrl.toString())
 					// 请求参数
-					.operParam(JSON.toJSONString(args))
+					.operParam(StringUtils.substring(JSON.toJSONString(args), 0, MAX_PARAMS_LENGTH))
 					// 操作结果  超长字段处理
-					.operResult(StringUtils.substring(JSON.toJSONString(result), 0, 2048))
+					.operResult(StringUtils.substring(JSON.toJSONString(result), 0, MAX_PARAMS_LENGTH))
 					.operIp(ipInfo.getIp())
 					.operLocation(ipInfo.getAddr())
 					// 操作状态
 					.status(status)
 					// 错误消息
-					.errorMsg(StringUtils.substring(msg, 0, 2048))
+					.errorMsg(StringUtils.substring(msg, 0, MAX_PARAMS_LENGTH))
 					.operTime(new Date())
 					.build();
 			// 保存操作日志

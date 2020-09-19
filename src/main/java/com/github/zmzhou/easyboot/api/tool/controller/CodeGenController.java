@@ -6,16 +6,20 @@ import javax.annotation.Resource;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.zmzhou.easyboot.api.tool.entity.CodeGenTable;
 import com.github.zmzhou.easyboot.api.tool.service.CodeGenTableService;
 import com.github.zmzhou.easyboot.api.tool.vo.CodeGenTableParams;
+import com.github.zmzhou.easyboot.api.tool.vo.CodeGenTableVo;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.page.TableDataInfo;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
@@ -78,6 +82,7 @@ public class CodeGenController extends BaseController {
 	 * date 2020/9/18 21:36
 	 */
 	@PostMapping("/importTable")
+	@ApiOperation(value = "导入生成代码的表结构保存")
 	public ApiResult<Object> importTable(@ApiParam(name = "tables", value = "表名数组", required = true) String tables) {
 		return ApiResult.builder().data(genTableService.importCodeGenTable(tables));
 	}
@@ -94,5 +99,30 @@ public class CodeGenController extends BaseController {
 	                                @ApiParam(name = "ids", value = "id数组", required = true) Long[] ids) {
 		genTableService.delete(ids);
 		return new ApiResult<>();
+	}
+
+	/**
+	 * 根据id查询需要修改的代码生成信息
+	 *
+	 * @param id the id
+	 * @return the one
+	 */
+	@ApiOperation(value = "根据id查询代码生成信息")
+	@GetMapping(value = "/{id}")
+	public ApiResult<CodeGenTable> getOne(@PathVariable("id")
+                      @ApiParam(name = "id", value = "id", required = true) Long id) {
+		return ok(genTableService.getOne(id));
+	}
+
+	/**
+	 * 修改代码生成信息
+	 *
+	 * @param genTable the gen table
+	 * @return the api result
+	 */
+	@ApiOperation(value = "修改代码生成信息")
+	@PutMapping
+	public ApiResult<CodeGenTable> update(@Validated @RequestBody CodeGenTableVo genTable) {
+		return ok(genTableService.updateGenTable(genTable));
 	}
 }

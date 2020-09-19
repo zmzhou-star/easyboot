@@ -33,7 +33,7 @@ public class CodeGenTableColumn extends BaseEntity {
 	/** serialVersionUID */
 	private static final long serialVersionUID = 7589127122678497449L;
 	/**
-	 * 归属表编号
+	 * 所属表id
 	 */
 	private Long tableId;
 	/**

@@ -18,12 +18,16 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.zmzhou.easyboot.api.tool.dao.CodeGenTableColumnDao;
 import com.github.zmzhou.easyboot.api.tool.dao.CodeGenTableDao;
 import com.github.zmzhou.easyboot.api.tool.entity.CodeGenTable;
 import com.github.zmzhou.easyboot.api.tool.entity.CodeGenTableColumn;
+import com.github.zmzhou.easyboot.api.tool.util.CodeGenConstants;
 import com.github.zmzhou.easyboot.api.tool.util.CodeGenUtils;
 import com.github.zmzhou.easyboot.api.tool.vo.CodeGenTableParams;
+import com.github.zmzhou.easyboot.api.tool.vo.CodeGenTableVo;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
@@ -34,10 +38,11 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 代码生成业务表服务接口
- * @title CodeGenTableService
+ *
  * @author zmzhou
  * @version 1.0
- * @date 2020/9/16 23:28
+ * @title CodeGenTableService
+ * @date 2020 /9/16 23:28
  */
 @Slf4j
 @Service
@@ -54,10 +59,11 @@ public class CodeGenTableService {
 	/**
 	 * 获取代码生成列表
 	 *
-	 * @param params 查询参数
-	 * @return Page<CodeGenTable>
+	 * @param params   查询参数
+	 * @param pageable the pageable
+	 * @return Page<CodeGenTable> page
 	 * @author zmzhou
-	 * @date 2020/9/16 23:47
+	 * @date 2020 /9/16 23:47
 	 */
 	public Page<CodeGenTable> findAll(CodeGenTableParams params, Pageable pageable) {
 		// 构造分页排序条件
@@ -77,9 +83,10 @@ public class CodeGenTableService {
 
 	/**
 	 * 删除代码生成数据
+	 *
 	 * @param ids 代码生成ID
 	 * @author zmzhou
-	 * @date 2020/9/17 0:03
+	 * @date 2020 /9/17 0:03
 	 */
 	public void delete(Long[] ids) {
 		for (Long id: ids) {
@@ -92,11 +99,12 @@ public class CodeGenTableService {
 
 	/**
 	 * 查询数据库表列表
-	 * @param tableName 表名称
+	 *
+	 * @param tableName    表名称
 	 * @param tableComment 表描述
-	 * @return 数据库表列表
+	 * @return 数据库表列表 list
 	 * @author zmzhou
-	 * @date 2020/9/17 20:31
+	 * @date 2020 /9/17 20:31
 	 */
 	public List<CodeGenTable> selectDbTableList(String tableName, String tableComment) {
 		// 查询数据库表列表
@@ -107,10 +115,10 @@ public class CodeGenTableService {
 
 	/**
 	 * 根据表名查询数据库表信息
+	 *
 	 * @param tableNames 表名数组
-	 * @return 实体类集合
-	 * @author zmzhou
-	 * date 2020/9/18 21:40
+	 * @return 实体类集合 list
+	 * @author zmzhou  date 2020/9/18 21:40
 	 */
 	public List<CodeGenTable> selectDbTableList(String tableNames) {
 		if (StringUtils.isBlank(tableNames)) {
@@ -146,6 +154,7 @@ public class CodeGenTableService {
 	/**
 	 * 导入生成代码的表结构保存
 	 * Import Code gen table string.
+	 *
 	 * @param tableNames the table names
 	 * @return the string
 	 */
@@ -178,5 +187,71 @@ public class CodeGenTableService {
 			}
 		});
 		return "导入成功";
+	}
+
+	/**
+	 * Gets one.
+	 *
+	 * @param id the id
+	 * @return the one
+	 */
+	public CodeGenTable getOne(Long id) {
+		if (null == id) {
+			return new CodeGenTable();
+		}
+		CodeGenTable table = genTableDao.findById(id).orElse(new CodeGenTable());
+		if (table.getId() > 0) {
+			// 根据id查询所有的列
+			table.setColumns(tableColumnService.selectColumns(table.getId()));
+		}
+		return table;
+	}
+
+	/**
+	 * 修改保存参数校验
+	 * Validate edit.
+	 * @param genTable the gen table
+	 */
+	private void validate(CodeGenTableVo genTable) {
+		// 树表（增删改查）
+		if (CodeGenConstants.TPL_TREE.equals(genTable.getTplCategory())) {
+			JSONObject params = (JSONObject) genTable.getParams();
+			if (StringUtils.isEmpty(params.getString(CodeGenConstants.TREE_CODE))) {
+				throw new BaseException("树编码字段不能为空");
+			} else if (StringUtils.isEmpty(params.getString(CodeGenConstants.TREE_PARENT_CODE))) {
+				throw new BaseException("树父编码字段不能为空");
+			} else if (StringUtils.isEmpty(params.getString(CodeGenConstants.TREE_NAME))) {
+				throw new BaseException("树名称字段不能为空");
+			}
+		}
+	}
+
+	/**
+	 * 修改代码生成信息
+	 * Update gen table code gen table.
+	 * @param genTable the gen table
+	 * @return the code gen table
+	 */
+	public CodeGenTable updateGenTable(CodeGenTableVo genTable) {
+		// 修改保存参数校验
+		this.validate(genTable);
+		// 树表参数不为空
+		if (!genTable.getParams().isEmpty()){
+			String options = JSON.toJSONString(genTable.getParams());
+			genTable.setOthers(options);
+		}
+		genTable.setUpdateBy(SecurityUtils.getUsername());
+		genTable.setUpdateTime(new Date());
+		CodeGenTable table = genTableDao.saveAndFlush(genTable.toEntity());
+		if (!genTable.getColumns().isEmpty()) {
+			// 设置字段更新时间
+			genTable.getColumns().forEach(column -> {
+				column.setUpdateBy(SecurityUtils.getUsername());
+				column.setUpdateTime(new Date());
+			});
+			// 更新列信息
+			table.setColumns(tableColumnService.saveAll(genTable.getColumns()));
+		}
+		return table;
 	}
 }

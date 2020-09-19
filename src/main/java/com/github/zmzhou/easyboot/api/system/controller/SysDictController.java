@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.zmzhou.easyboot.api.system.entity.SysDict;
 import com.github.zmzhou.easyboot.api.system.service.SysDictService;
+import com.github.zmzhou.easyboot.api.system.vo.SysDictTypeVo;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
@@ -41,5 +42,16 @@ public class SysDictController extends BaseController {
 	public ApiResult<SysDict> getDicts(@PathVariable
             @ApiParam(name = "dictType", value = "字典类型", required = true) String dictType) {
 		return ok(dictService.selectDictDataByType(dictType));
+	}
+
+	/**
+	 * 获取字典类型选择框列表
+	 *
+	 * @return the api result
+	 */
+	@ApiOperation(value = "获取字典类型选择框列表")
+	@GetMapping("/type/optionSelect")
+	public ApiResult<SysDictTypeVo> optionSelect() {
+		return ok(dictService.selectDictTypes());
 	}
 }

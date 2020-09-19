@@ -71,6 +71,8 @@ INSERT INTO sys_dict VALUES (26, 9, '清空数据', '9', 'sys_oper_type', '', 'd
 INSERT INTO sys_dict VALUES (27, 1, '成功', '1', 'sys_common_status', '', 'primary', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '正常状态');
 INSERT INTO sys_dict VALUES (28, 2, '失败', '0', 'sys_common_status', '', 'danger', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '停用状态');
 
+ALTER TABLE sys_dict ADD COLUMN dict_name varchar(64) NULL COMMENT '字典名称' AFTER dict_value;
+
 -- ----------------------------
 -- Table structure for sys_log_login
 -- ----------------------------

@@ -4,8 +4,8 @@
       <el-tab-pane label="基本信息" name="basic">
         <basic-info-form ref="basicInfo" :info="info" />
       </el-tab-pane>
-      <el-tab-pane label="字段信息" name="cloum">
-        <el-table ref="dragTable" :data="cloumns" row-key="columnId" :max-height="tableHeight">
+      <el-tab-pane label="字段信息" name="column">
+        <el-table ref="dragTable" :data="columns" row-key="columnId" :max-height="tableHeight">
           <el-table-column label="序号" type="index" min-width="5%" class-name="allowDrag" />
           <el-table-column
             label="字段列名"
@@ -124,7 +124,7 @@
 </template>
 <script>
 import { getGenTable, updateGenTable } from '@/api/tool/gen'
-import { optionselect as getDictOptionselect } from '@/api/system/dict/type'
+import { optionSelect as getDictOptionSelect } from '@/api/system/dict/type'
 import basicInfoForm from './basicInfoForm'
 import genInfoForm from './genInfoForm'
 import Sortable from 'sortablejs'
@@ -137,11 +137,11 @@ export default {
   data() {
     return {
       // 选中选项卡的 name
-      activeName: 'cloum',
+      activeName: 'column',
       // 表格的高度
       tableHeight: document.documentElement.scrollHeight - 245 + 'px',
       // 表列信息
-      cloumns: [],
+      columns: [],
       // 字典信息
       dictOptions: [],
       // 表详细信息
@@ -149,16 +149,16 @@ export default {
     }
   },
   beforeCreate() {
-    const { tableId } = this.$route.query
-    if (tableId) {
+    const { id } = this.$route.query
+    if (id) {
       // 获取表详细信息
-      getGenTable(tableId).then(res => {
-        this.cloumns = res.data.rows
-        this.info = res.data.info
+      getGenTable(id).then(res => {
+        this.info = res
+        this.columns = res.columns
       })
       /** 查询字典下拉列表 */
-      getDictOptionselect().then(response => {
-        this.dictOptions = response.data
+      getDictOptionSelect().then(response => {
+        this.dictOptions = response
       })
     }
   },
@@ -167,10 +167,10 @@ export default {
     Sortable.create(el, {
       handle: '.allowDrag',
       onEnd: evt => {
-        const targetRow = this.cloumns.splice(evt.oldIndex, 1)[0]
-        this.cloumns.splice(evt.newIndex, 0, targetRow)
-        for (const index in this.cloumns) {
-          this.cloumns[index].sort = parseInt(index) + 1
+        const targetRow = this.columns.splice(evt.oldIndex, 1)[0]
+        this.columns.splice(evt.newIndex, 0, targetRow)
+        for (const index in this.columns) {
+          this.columns[index].sort = parseInt(index) + 1
         }
       }
     })
@@ -184,15 +184,15 @@ export default {
         const validateResult = res.every(item => !!item)
         if (validateResult) {
           const genTable = Object.assign({}, basicForm.model, genForm.model)
-          genTable.columns = this.cloumns
+          genTable.columns = this.columns
           genTable.params = {
             treeCode: genTable.treeCode,
             treeName: genTable.treeName,
             treeParentCode: genTable.treeParentCode
           }
           updateGenTable(genTable).then(res => {
-            this.msgSuccess(res.msg)
-            if (res.code === 200) {
+            if (res) {
+              this.msgSuccess('更新成功')
               this.close()
             }
           })

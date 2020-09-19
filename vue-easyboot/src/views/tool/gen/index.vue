@@ -252,7 +252,7 @@ export default {
     /** 修改按钮操作 */
     handleEditTable(row) {
       const id = row.id || this.ids[0]
-      this.$router.push({ path: '/gen/edit', query: { id: id }})
+      this.$router.push({ path: '/tool/gen/edit', query: { id: id }})
     },
     /** 删除按钮操作 */
     handleDelete(row) {

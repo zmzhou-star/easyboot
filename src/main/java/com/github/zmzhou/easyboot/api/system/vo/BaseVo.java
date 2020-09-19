@@ -16,7 +16,7 @@ public interface BaseVo extends Serializable {
 	 * vo转实体类
 	 * @author zmzhou
 	 * @return {@link BaseEntity}
-	 * @date 2020/9/7 22:16
+	 * date 2020/9/7 22:16
 	 */
 	BaseEntity toEntity();
 }

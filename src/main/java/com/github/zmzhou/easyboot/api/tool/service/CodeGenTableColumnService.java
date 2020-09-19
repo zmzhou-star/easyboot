@@ -6,11 +6,14 @@ import java.util.Optional;
 
 import javax.annotation.Resource;
 
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.zmzhou.easyboot.api.tool.dao.CodeGenTableColumnDao;
 import com.github.zmzhou.easyboot.api.tool.entity.CodeGenTableColumn;
+import com.github.zmzhou.easyboot.framework.specification.Operator;
+import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
 
 /**
  * 代码生成业务表字段服务接口
@@ -66,7 +69,21 @@ public class CodeGenTableColumnService {
 	 * Save all.
 	 * @param codeGenTableColumns the code gen table columns
 	 */
-	public void saveAll(List<CodeGenTableColumn> codeGenTableColumns) {
-		tableColumnDao.saveAll(codeGenTableColumns);
+	public List<CodeGenTableColumn> saveAll(List<CodeGenTableColumn> codeGenTableColumns) {
+		return tableColumnDao.saveAll(codeGenTableColumns);
+	}
+
+	/**
+	 * 根据tableId查询所有的列
+	 * Select columns list.
+	 * @param tableId the table id
+	 * @return the list
+	 */
+	public List<CodeGenTableColumn> selectColumns(Long tableId) {
+		// 构造查询条件
+		Specification<CodeGenTableColumn> spec = new SimpleSpecificationBuilder<CodeGenTableColumn>()
+				.and("tableId", Operator.EQUAL, tableId)
+				.build();
+		return tableColumnDao.findAll(spec);
 	}
 }

@@ -15,7 +15,7 @@
         <el-form-item prop="packageName">
           <span slot="label">
             生成包路径
-            <el-tooltip content="生成在哪个java包下，例如 com.zmzhou.system" placement="top">
+            <el-tooltip content="生成在哪个java包下，例如 com.github.zmzhou.system" placement="top">
               <em class="el-icon-question" />
             </el-tooltip>
           </span>

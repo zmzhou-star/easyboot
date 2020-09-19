@@ -36,6 +36,8 @@ public class SysDict extends BaseEntity {
 	 * The Dict value.
 	 */
 	private String dictValue;
+	/** 字典名称 */
+	private String dictName;
 	/**
 	 * The Dict type.
 	 */
