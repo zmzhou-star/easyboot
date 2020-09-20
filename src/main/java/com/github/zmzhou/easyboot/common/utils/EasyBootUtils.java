@@ -1,5 +1,7 @@
 package com.github.zmzhou.easyboot.common.utils;
 
+import java.lang.reflect.Method;
+
 import org.apache.commons.lang3.StringUtils;
 
 import com.github.zmzhou.easyboot.common.Constants;
@@ -74,5 +76,23 @@ public final class EasyBootUtils {
 			}
 		}
 		return sb.toString();
+	}
+
+	/**
+	 * Gets method.
+	 *
+	 * @param clazz  the clazz
+	 * @param method the method
+	 * @return the method
+	 */
+	public static Method getMethod(Class<?> clazz, String method) {
+		Method[] methods = clazz.getDeclaredMethods();
+		// 遍历查找方法
+		for (Method m : methods) {
+			if (m.getName().equals(method)) {
+				return m;
+			}
+		}
+		return null;
 	}
 }

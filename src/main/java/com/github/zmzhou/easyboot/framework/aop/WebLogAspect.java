@@ -44,10 +44,14 @@ public class WebLogAspect {
 
     /**
      * api controller包的切入点的名称
+     * <p>
+     *     排除带有NoPrintLog注解的方法或类
+     * </p>
      * @author zmzhou
      * @date 2020/08/29 16:18
      */
-    @Pointcut("execution(public * com.github.zmzhou.easyboot.api.*.controller..*.*(..))")
+    @Pointcut("execution(public * com.github.zmzhou.easyboot.api.*.controller..*.*(..))" +
+            " && !@annotation(com.github.zmzhou.easyboot.framework.annotations.NoPrintLog)")
     public void controllerLog() {
         // api controller类切点
     }
@@ -86,7 +90,7 @@ public class WebLogAspect {
         if (loginUser != null) {
             ip = loginUser.getIpAddr();
         }
-        String clazz = joinPoint.getSignature().getDeclaringTypeName();
+        Class<?> clazz = joinPoint.getSignature().getDeclaringType();
         Object result = null;
         try {
             // 调用 proceed() 方法才会真正的执行实际被代理的方法
@@ -96,7 +100,7 @@ public class WebLogAspect {
             sb.append(System.lineSeparator()).append("-----------------------")
                 .append(DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss", Locale.SIMPLIFIED_CHINESE))
                 .append("-----------------------").append(System.lineSeparator())
-                .append("Class  : ").append(clazz)
+                .append("Class  : ").append(clazz.getName())
                 .append(System.lineSeparator())
                 .append("Method : ").append(method).append("\t remote ip : ").append(ip)
                 .append(System.lineSeparator())

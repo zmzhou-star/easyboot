@@ -111,4 +111,26 @@ public class CodeGenTableColumn extends BaseEntity {
 	public boolean isPk() {
 		return StringUtils.isNotBlank(this.isPk) && StringUtils.equals(Constants.ONE, this.isPk);
 	}
+
+	/**
+	 * 是否列表字段（1：是）
+	 * Is list boolean.
+	 * @return the boolean
+	 */
+	public boolean isList() {
+		return this.isList != null && StringUtils.equals(Constants.ONE, this.isList);
+	}
+
+	/**
+	 * JAVA字段名是不是超类字段
+	 * Is super column boolean.
+	 * @return the boolean
+	 */
+	public boolean isSuperColumn() {
+		return StringUtils.equalsAnyIgnoreCase(this.javaField,
+				// BaseEntity
+				"createBy", "createTime", "updateBy", "updateTime", "remark",
+				// TreeEntity
+				"parentName", "parentId", "orderNum", "ancestors");
+	}
 }

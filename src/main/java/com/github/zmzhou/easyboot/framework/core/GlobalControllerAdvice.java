@@ -152,7 +152,7 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 	private void saveFailOperLog(Exception e, String message) {
 		// 记录操作失败日志
 		StackTraceElement st = e.getStackTrace()[0];
-		operLogService.saveOperLog(ServletUtils.getRequest(), st.getClassName(), st.getMethodName(), new Object[]{},
+		operLogService.saveOperLog(ServletUtils.getRequest(), st.getClass(), st.getMethodName(), new Object[]{},
 				null, Constants.ZERO, message);
 	}
 }

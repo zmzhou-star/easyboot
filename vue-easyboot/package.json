@@ -28,7 +28,7 @@
     "nprogress": "0.2.0",
     "path-to-regexp": "2.4.0",
     "screenfull": "^5.0.2",
-    "sortablejs": "^1.11.2-alpha.4",
+    "sortablejs": "1.10.2",
     "vue": "2.6.10",
     "vue-cropper": "^0.5.5",
     "vue-router": "3.0.6",

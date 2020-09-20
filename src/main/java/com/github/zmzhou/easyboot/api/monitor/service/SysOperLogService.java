@@ -29,6 +29,7 @@ import com.github.zmzhou.easyboot.api.system.controller.LoginController;
 import com.github.zmzhou.easyboot.api.system.service.BaseService;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.excel.BaseExcel;
+import com.github.zmzhou.easyboot.common.utils.EasyBootUtils;
 import com.github.zmzhou.easyboot.common.utils.ThreadPoolUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
 import com.github.zmzhou.easyboot.framework.security.service.TokenService;
@@ -78,7 +79,7 @@ public class SysOperLogService extends BaseService<SysOperLogParams> {
 	 * @author zmzhou
 	 * @date 2020/9/13 19:00
 	 */
-	public void saveOperLog(HttpServletRequest request, String clazz, String method, Object[] args,
+	public void saveOperLog(HttpServletRequest request, Class<?> clazz, String method, Object[] args,
 	                         Object result, String status, String msg) {
 		// 操作日志记录开关
 		if (!enabled){
@@ -98,21 +99,16 @@ public class SysOperLogService extends BaseService<SysOperLogParams> {
 		ThreadPoolUtils.execute(() -> {
 			String methodDesc = null;
 			String title = null;
-			try {
-				Class<?> clz = Class.forName(clazz);
-				// 登录方法包含用户密码敏感信息，不记录日志
-				if (LoginController.class.equals(clz)) {
-					return;
-				}
-				// 类注解获取模块标题
-				Api clzAnno = AnnotationUtils.findAnnotation(clz, Api.class);
-				if (clzAnno != null) {
-					title = Arrays.toString(clzAnno.tags()).replaceAll("[\\[\\]]", "");
-				}
-				methodDesc = this.getMethodDesc(clz, method);
-			} catch (ClassNotFoundException e) {
-				log.error("类找不到异常", e);
+			// 登录方法包含用户密码敏感信息，不记录日志
+			if (LoginController.class.equals(clazz)) {
+				return;
 			}
+			// 类注解获取模块标题
+			Api clzAnno = AnnotationUtils.findAnnotation(clazz, Api.class);
+			if (clzAnno != null) {
+				title = Arrays.toString(clzAnno.tags()).replaceAll("[\\[\\]]", "");
+			}
+			methodDesc = this.getMethodDesc(clazz, method);
 			// 用户定位信息
 			IpInfo ipInfo = finalLoginUser.getIpInfo();
 			// 设置操作日志信息
@@ -120,7 +116,7 @@ public class SysOperLogService extends BaseService<SysOperLogParams> {
 					// 模块标题
 					.title(title)
 					// 方法名称
-					.method(clazz + Constants.DOT + method)
+					.method(clazz.getName() + Constants.DOT + method)
 					// 方法描述
 					.methodDesc(methodDesc)
 					// 操作人员
@@ -155,16 +151,12 @@ public class SysOperLogService extends BaseService<SysOperLogParams> {
 	 */
 	private String getMethodDesc(Class<?> clz, String method) {
 		String methodDesc = null;
-		Method[] methods = clz.getDeclaredMethods();
-		// 遍历查找方法
-		for (Method m : methods) {
-			if (m.getName().equals(method)) {
-				// 方法注解获取方法描述
-				ApiOperation methodAnno = AnnotationUtils.findAnnotation(m, ApiOperation.class);
-				if (methodAnno != null) {
-					methodDesc = methodAnno.value();
-				}
-				break;
+		Method m = EasyBootUtils.getMethod(clz, method);
+		if (null != m) {
+			// 方法注解获取方法描述
+			ApiOperation methodAnno = AnnotationUtils.findAnnotation(m, ApiOperation.class);
+			if (methodAnno != null) {
+				methodDesc = methodAnno.value();
 			}
 		}
 		return methodDesc;

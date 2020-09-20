@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("common")
 public class CommonController extends BaseController {
-	@Autowired
+	@Resource
 	private RedisUtils redisUtils;
 	/**
 	 * 验证码 宽度

@@ -344,7 +344,8 @@ create table code_gen_table (
     update_by         varchar(64)     default ''                 comment '更新者',
     update_time       datetime        DEFAULT CURRENT_TIMESTAMP(0) comment '更新时间',
     remark            varchar(500)    default null               comment '备注',
-    primary key (id)
+    primary key (id),
+    UNIQUE INDEX UNI_TABLE_NAME(table_name)
 ) engine=innodb auto_increment=1 comment = '代码生成业务表';
 
 

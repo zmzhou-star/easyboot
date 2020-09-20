@@ -48,7 +48,10 @@ public class EasyWebMvcConfigurer implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedHeaders("*")
                 .allowedMethods("POST", "GET", "PUT", "DELETE")
+                // 允许凭证
+                .allowCredentials(true)
                 .maxAge(1800)
+                // 设置允许跨域请求的域名
                 .allowedOrigins("*");
     }
 

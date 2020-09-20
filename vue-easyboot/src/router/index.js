@@ -93,7 +93,7 @@ export const constantRoutes = [
         path: '/',
         component: () => import('@/views/tool/gen/editTable'),
         name: 'CodeGenEdit',
-        meta: { title: '修改代码生成配置' }
+        meta: { title: '修改代码生成配置', noCache: true }
       }
     ]
   },

@@ -1,15 +1,26 @@
 package com.github.zmzhou.easyboot.api.tool.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +37,8 @@ import com.github.zmzhou.easyboot.api.tool.entity.CodeGenTable;
 import com.github.zmzhou.easyboot.api.tool.entity.CodeGenTableColumn;
 import com.github.zmzhou.easyboot.api.tool.util.CodeGenConstants;
 import com.github.zmzhou.easyboot.api.tool.util.CodeGenUtils;
+import com.github.zmzhou.easyboot.api.tool.util.VelocityInitializer;
+import com.github.zmzhou.easyboot.api.tool.util.VelocityUtils;
 import com.github.zmzhou.easyboot.api.tool.vo.CodeGenTableParams;
 import com.github.zmzhou.easyboot.api.tool.vo.CodeGenTableVo;
 import com.github.zmzhou.easyboot.common.Constants;
@@ -89,7 +102,7 @@ public class CodeGenTableService {
 	 * @date 2020 /9/17 0:03
 	 */
 	public void delete(Long[] ids) {
-		for (Long id: ids) {
+		for (Long id : ids) {
 			// 删除表对应的字段数据
 			columnDao.deleteByTableIds(ids);
 			// 根据id删除代码生成数据
@@ -132,6 +145,7 @@ public class CodeGenTableService {
 
 	/**
 	 * 数据库表信息转换成实体类
+	 *
 	 * @param list 数据库表四要素(表名，表描述，创建时间，更新时间)集合
 	 * @return 实体类集合
 	 * @author zmzhou
@@ -195,7 +209,7 @@ public class CodeGenTableService {
 	 * @param id the id
 	 * @return the one
 	 */
-	public CodeGenTable getOne(Long id) {
+	public CodeGenTable findById(Long id) {
 		if (null == id) {
 			return new CodeGenTable();
 		}
@@ -208,8 +222,27 @@ public class CodeGenTableService {
 	}
 
 	/**
+	 * 根据tableName查询数据生成表信息
+	 *
+	 * @param tableName the table name
+	 * @return the code gen table
+	 */
+	public CodeGenTable findByName(String tableName) {
+		// 构造查询条件
+		Specification<CodeGenTable> spec = new SimpleSpecificationBuilder<CodeGenTable>()
+				.and("tableName", Operator.EQUAL, tableName)
+				.build();
+		CodeGenTable table = genTableDao.findOne(spec).orElse(new CodeGenTable());
+		if (table.getId() > 0) {
+			// 根据id查询所有的列
+			table.setColumns(tableColumnService.selectColumns(table.getId()));
+		}
+		return table;
+	}
+	/**
 	 * 修改保存参数校验
 	 * Validate edit.
+	 *
 	 * @param genTable the gen table
 	 */
 	private void validate(CodeGenTableVo genTable) {
@@ -229,6 +262,7 @@ public class CodeGenTableService {
 	/**
 	 * 修改代码生成信息
 	 * Update gen table code gen table.
+	 *
 	 * @param genTable the gen table
 	 * @return the code gen table
 	 */
@@ -236,7 +270,7 @@ public class CodeGenTableService {
 		// 修改保存参数校验
 		this.validate(genTable);
 		// 树表参数不为空
-		if (!genTable.getParams().isEmpty()){
+		if (!genTable.getParams().isEmpty()) {
 			String options = JSON.toJSONString(genTable.getParams());
 			genTable.setOthers(options);
 		}
@@ -253,5 +287,110 @@ public class CodeGenTableService {
 			table.setColumns(tableColumnService.saveAll(genTable.getColumns()));
 		}
 		return table;
+	}
+
+	/**
+	 * 预览代码
+	 *
+	 * @param tableId 表编号
+	 * @return 预览数据列表
+	 */
+	public Map<String, String> previewCode(Long tableId) {
+		// 查询表信息
+		CodeGenTable table = this.findById(tableId);
+		// 查询列信息
+		List<CodeGenTableColumn> columns = table.getColumns();
+		setPkColumn(table, columns);
+		// 初始化代码生成使用模板vm
+		VelocityInitializer.initVelocity();
+
+		VelocityContext context = VelocityUtils.prepareContext(table);
+		// 获取模板列表
+		List<String> templates = VelocityUtils.getTemplateList(table.getTplCategory());
+		Map<String, String> dataMap = new LinkedHashMap<>();
+		templates.forEach(temp -> {
+			// 渲染模板
+			StringWriter sw = new StringWriter();
+			Template template = Velocity.getTemplate(temp, Constants.CHARSETS.displayName());
+			template.merge(context, sw);
+			dataMap.put(temp, sw.toString());
+		});
+		return dataMap;
+	}
+
+	/**
+	 * 设置主键列信息
+	 *
+	 * @param table   业务表信息
+	 * @param columns 业务字段列表
+	 */
+	public void setPkColumn(CodeGenTable table, List<CodeGenTableColumn> columns) {
+		for (CodeGenTableColumn column : columns) {
+			// 是否主键
+			if (column.isPk()) {
+				table.setPkColumn(column);
+				break;
+			}
+		}
+		// 为空就选第一个字段
+		if (null == table.getPkColumn()) {
+			table.setPkColumn(columns.get(0));
+		}
+	}
+
+	/**
+	 * 批量生成代码
+	 *
+	 * @param tableNames 表数组
+	 * @return zip压缩包数据 byte [ ]
+	 */
+	public byte[] generatorCode(String tableNames) {
+		if (StringUtils.isBlank(tableNames)) {
+			throw new BaseException("请选择要生成代码的数据表");
+		}
+		String[] tables = tableNames.split(Constants.COMMA);
+		try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		     ZipOutputStream zipOs = new ZipOutputStream(bos)) {
+			for (String tableName : tables) {
+				generatorCode(tableName, zipOs);
+			}
+			return bos.toByteArray();
+		} catch (IOException e) {
+			log.error("批量生成代码异常", e);
+			throw new BaseException("批量生成代码异常");
+		}
+	}
+
+	/**
+	 * 查询表信息并生成代码
+	 * @param tableName 表名
+	 * @param zipOs ZipOutputStream
+	 */
+	private void generatorCode(String tableName, ZipOutputStream zipOs) {
+		// 查询表信息
+		CodeGenTable table = findByName(tableName);
+		// 查询列信息
+		List<CodeGenTableColumn> columns = table.getColumns();
+		setPkColumn(table, columns);
+
+		VelocityInitializer.initVelocity();
+		VelocityContext context = VelocityUtils.prepareContext(table);
+		// 获取模板列表
+		List<String> templates = VelocityUtils.getTemplateList(table.getTplCategory());
+		templates.forEach(template -> {
+			// 渲染模板
+			try (StringWriter sw = new StringWriter()) {
+				Template tpl = Velocity.getTemplate(template, Constants.CHARSETS.displayName());
+				tpl.merge(context, sw);
+				// 添加到zip
+				zipOs.putNextEntry(new ZipEntry(VelocityUtils.getFileName(template, table)));
+				IOUtils.write(sw.toString(), zipOs, Constants.CHARSETS.displayName());
+				zipOs.flush();
+				zipOs.closeEntry();
+			} catch (IOException e) {
+				log.error("渲染模板失败，表名：" + table.getTableName(), e);
+				throw new BaseException("渲染模板失败，表名：[0]", table.getTableName());
+			}
+		});
 	}
 }

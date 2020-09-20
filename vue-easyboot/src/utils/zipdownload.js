@@ -7,13 +7,15 @@ const mimeMap = {
 }
 
 const baseUrl = process.env.VUE_APP_BASE_URL
-export function downLoadZip(str, filename) {
-  var url = baseUrl + str
+export function downLoadZip(uri) {
+  var url = baseUrl + uri
   axios({
+    crossDomain: true,
+    withCredentials: false, // send cookies when cross-domain requests
     method: 'get',
     url: url,
     responseType: 'blob',
-    headers: { 'Authorization': 'Bearer ' + getToken() }
+    headers: { 'Authorization': getToken(), 'Access-Control-Allow-Origin': '*' }
   }).then(res => {
     resolveBlob(res, mimeMap.zip)
   })
@@ -27,9 +29,9 @@ export function resolveBlob(res, mimeType) {
   const aLink = document.createElement('a')
   var blob = new Blob([res.data], { type: mimeType })
   // //从response的headers中获取filename, 后端response.setHeader("Content-disposition", "attachment; filename=xxxx.docx") 设置的文件名;
-  var patt = new RegExp('filename=([^;]+\\.[^\\.;]+);*')
+  var regExp = new RegExp('fileName=([^;]+\\.[^\\.;]+);*')
   var contentDisposition = decodeURI(res.headers['content-disposition'])
-  var result = patt.exec(contentDisposition)
+  var result = regExp.exec(contentDisposition)
   var fileName = result[1]
   fileName = fileName.replace(/\"/g, '')
   aLink.href = URL.createObjectURL(blob)

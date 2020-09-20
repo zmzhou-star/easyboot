@@ -1,9 +1,14 @@
 package com.github.zmzhou.easyboot.api.tool.controller;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +25,8 @@ import com.github.zmzhou.easyboot.api.tool.entity.CodeGenTable;
 import com.github.zmzhou.easyboot.api.tool.service.CodeGenTableService;
 import com.github.zmzhou.easyboot.api.tool.vo.CodeGenTableParams;
 import com.github.zmzhou.easyboot.api.tool.vo.CodeGenTableVo;
+import com.github.zmzhou.easyboot.common.utils.FileUtil;
+import com.github.zmzhou.easyboot.framework.annotations.NoPrintLog;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.page.TableDataInfo;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
@@ -109,9 +116,9 @@ public class CodeGenController extends BaseController {
 	 */
 	@ApiOperation(value = "根据id查询代码生成信息")
 	@GetMapping(value = "/{id}")
-	public ApiResult<CodeGenTable> getOne(@PathVariable("id")
+	public ApiResult<CodeGenTable> findById(@PathVariable("id")
                       @ApiParam(name = "id", value = "id", required = true) Long id) {
-		return ok(genTableService.getOne(id));
+		return ok(genTableService.findById(id));
 	}
 
 	/**
@@ -124,5 +131,44 @@ public class CodeGenController extends BaseController {
 	@PutMapping
 	public ApiResult<CodeGenTable> update(@Validated @RequestBody CodeGenTableVo genTable) {
 		return ok(genTableService.updateGenTable(genTable));
+	}
+
+	/**
+	 * 预览生成的代码
+	 *
+	 * @param id the id
+	 * @return the api result
+	 */
+	@ApiOperation(value = "预览生成的代码")
+	@GetMapping("/preview/{id}")
+	public ApiResult<Map<String, String>> preview(@PathVariable("id") Long id) {
+		return ok(genTableService.previewCode(id));
+	}
+
+	/**
+	 * 批量生成代码
+	 *
+	 * @param tables   the tables
+	 * @param response the response
+	 * @param request  the request
+	 * @throws IOException the io exception
+	 */
+	@NoPrintLog
+	@ApiOperation(value = "批量生成代码")
+	@GetMapping("/batchGenCode")
+	public void batchGenCode(@ApiParam(name = "表名数组", value = "tables", required = true) String tables,
+                         HttpServletResponse response, HttpServletRequest request) throws IOException {
+		byte[] data = genTableService.generatorCode(tables);
+		response.reset();
+		response.setContentType("application/octet-stream; charset=UTF-8");
+		response.addHeader("Content-Length", "" + data.length);
+		response.setHeader("Content-Disposition",
+				"attachment;fileName=zmzhou_" + FileUtil.setFileDownloadHeader(request, tables) + ".zip");
+		// 解决跨域请求问题
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Cache-Control","no-cache");
+		// 解决前端无法获取headers的content-disposition字段
+		response.setHeader("Access-Control-Expose-Headers","Content-Disposition");
+		IOUtils.write(data, response.getOutputStream());
 	}
 }

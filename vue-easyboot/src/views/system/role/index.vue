@@ -468,7 +468,7 @@ export default {
                 this.open = false
                 this.getList()
               } else {
-                this.msgError('修改角色')
+                this.msgError('修改角色失败')
               }
             })
           } else {
@@ -479,7 +479,7 @@ export default {
                 this.open = false
                 this.getList()
               } else {
-                this.msgError('新增角色')
+                this.msgError('新增角色失败')
               }
             })
           }

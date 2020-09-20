@@ -85,12 +85,12 @@
           <span>{{ (queryParams.pageNum - 1) * queryParams.pageSize + scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="表名称" align="center" prop="tableName" :show-overflow-tooltip="true" width="130" />
-      <el-table-column label="表描述" align="center" prop="tableComment" :show-overflow-tooltip="true" width="130" />
-      <el-table-column label="实体类名称" align="center" prop="className" :show-overflow-tooltip="true" width="130" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="160" />
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="160" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="表名称" align="center" prop="tableName" :show-overflow-tooltip="true" />
+      <el-table-column label="表描述" align="center" prop="tableComment" :show-overflow-tooltip="true" />
+      <el-table-column label="实体类名称" align="center" prop="className" :show-overflow-tooltip="true" />
+      <el-table-column label="创建时间" align="center" prop="createTime" />
+      <el-table-column label="更新时间" align="center" prop="updateTime" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="300">
         <template slot-scope="scope">
           <el-button
             v-hasPermi="['tool:gen:preview']"
@@ -186,7 +186,7 @@ export default {
         open: false,
         title: '代码预览',
         data: {},
-        activeName: 'domain.java'
+        activeName: 'entity.java'
       }
     }
   },
@@ -219,11 +219,11 @@ export default {
     /** 生成代码操作 */
     handleGenTable(row) {
       const tableNames = row.tableName || this.tableNames
-      if (tableNames === '') {
-        this.msgError('请选择要生成的数据')
+      if (tableNames === '' || tableNames.length <= 0) {
+        this.msgInfo('请选择要生成代码的数据表')
         return
       }
-      downLoadZip('/tool/gen/batchGenCode?tables=' + tableNames, 'zmzhou')
+      downLoadZip('/tool/code/gen/batchGenCode?tables=' + tableNames)
     },
     /** 打开导入表弹窗 */
     openImportTable() {
@@ -238,7 +238,7 @@ export default {
     /** 预览按钮 */
     handlePreview(row) {
       previewTable(row.id).then(response => {
-        this.preview.data = response.data
+        this.preview.data = response
         this.preview.open = true
       })
     },

@@ -450,7 +450,7 @@ export default {
           if (response) {
             this.msgSuccess('修改成功，新密码是：' + value)
           } else {
-            this.msgError('修改')
+            this.msgError('修改密码失败')
           }
         })
       }).catch(() => {})
