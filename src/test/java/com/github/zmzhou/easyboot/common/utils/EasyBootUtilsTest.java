@@ -1,6 +1,7 @@
 package com.github.zmzhou.easyboot.common.utils;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -60,6 +61,25 @@ class EasyBootUtilsTest {
 		log.info("{}", res);
 		Assertions.assertNull(res);
 		res = EasyBootUtils.getMethod(EasyBootUtilsTest.class, "getMethod");
+		log.info("{}", res);
+		Assertions.assertNotNull(res);
+	}
+
+	/**
+	 * Json string to map.
+	 */
+	@Test
+	void jsonStringToMap() {
+		Map<String, Object> res = EasyBootUtils.jsonStringToMap("");
+		log.info("{}", res);
+		Assertions.assertNotNull(res);
+		res = EasyBootUtils.jsonStringToMap("{'abc':1}");
+		log.info("{}", res);
+		Assertions.assertNotNull(res);
+		res = EasyBootUtils.jsonStringToMap("{'abc':{'abc':1}}");
+		log.info("{}", res);
+		Assertions.assertNotNull(res);
+		res = EasyBootUtils.jsonStringToMap("{'abc':[{'abc':1}]}");
 		log.info("{}", res);
 		Assertions.assertNotNull(res);
 	}

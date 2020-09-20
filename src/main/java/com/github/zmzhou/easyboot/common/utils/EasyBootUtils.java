@@ -1,9 +1,17 @@
 package com.github.zmzhou.easyboot.common.utils;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.zmzhou.easyboot.common.Constants;
 
 /**
@@ -94,5 +102,44 @@ public final class EasyBootUtils {
 			}
 		}
 		return null;
+	}
+
+
+
+	/**
+	 * Json string to map map.
+	 *
+	 * @param jsonString the json string
+	 * @return the map
+	 */
+	public static Map<String, Object> jsonStringToMap(String jsonString) {
+		Map<String, Object> map = new HashMap<>();
+		if (StringUtils.isBlank(jsonString)){
+			return map;
+		}
+		JSONObject jsonObject = JSON.parseObject(jsonString);
+		for (Map.Entry<String, Object> entry : jsonObject.entrySet()) {
+			String key = entry.getKey();
+			Object value = entry.getValue();
+			if (value instanceof JSONArray) {
+				List<Map<String, Object>> list = new ArrayList<>();
+				for (Object obj : (JSONArray) value) {
+					list.add(jsonStringToMap(obj.toString()));
+				}
+				map.put(key, list);
+			} else if (value instanceof JSONObject) {
+				// 如果内层是json对象的话，继续解析
+				map.put(key, jsonStringToMap(value.toString()));
+			} else {
+				// 如果内层是普通对象的话，直接放入map中
+				if (value instanceof String) {
+					//这里使用的apache的common-text中的转义html方法
+					map.put(key, StringEscapeUtils.escapeHtml4(value.toString().trim()));
+				} else {
+					map.put(key, value);
+				}
+			}
+		}
+		return map;
 	}
 }

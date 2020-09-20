@@ -3,7 +3,12 @@ package com.github.zmzhou.easyboot.framework.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.DispatcherType;
+
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.util.MimeType;
@@ -15,16 +20,17 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.github.zmzhou.easyboot.common.utils.DateUtils;
+import com.github.zmzhou.easyboot.framework.security.filter.XssFilter;
 
 /**
- * @description web配置
+ * web配置
  * @author zmzhou
- * @date 2020/07/02 19:34
+ * date 2020/07/02 19:34
  */
 @Configuration
 public class EasyWebMvcConfigurer implements WebMvcConfigurer {
     /**
-     * 方法描述
+     * 解决静态资源无法访问
      * @param registry ResourceHandlerRegistry
      * @author zmzhou
      * @date 2020/07/02 19:35
@@ -83,5 +89,23 @@ public class EasyWebMvcConfigurer implements WebMvcConfigurer {
         mediaTypes.add(MediaType.APPLICATION_JSON);
         fastJsonHttpMessageConverter.setSupportedMediaTypes(mediaTypes);
         converters.add(fastJsonHttpMessageConverter);
+    }
+
+    /**
+     * 注册防御XSS(Cross Site Scripting)跨站脚本攻击过滤器
+     * Xss filter registration filter registration bean.
+     * @return the filter registration bean
+     */
+    @Bean
+    public FilterRegistrationBean<XssFilter> xssFilterRegistration() {
+        FilterRegistrationBean<XssFilter> registration = new FilterRegistrationBean<>();
+        registration.setDispatcherTypes(DispatcherType.REQUEST);
+        registration.setFilter(new XssFilter());
+        // 拦截所有请求
+        registration.addUrlPatterns("/*");
+        registration.setName("xssFilter");
+        // 最高等级注册
+        registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return registration;
     }
 }
