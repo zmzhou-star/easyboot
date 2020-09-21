@@ -1,0 +1,49 @@
+package ${packageName}.entity;
+
+#foreach ($import in $importList)
+import ${import};
+#end
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+#if($table.tplCategory == "crud")
+import com.github.zmzhou.easyboot.framework.entity.BaseEntity;
+#else
+import com.github.zmzhou.easyboot.framework.entity.TreeEntity;
+#end
+
+import lombok.Data;
+
+/**
+ * ${functionName}实体类 ${tableName}
+ * 
+ * @author ${author}
+ * @version 1.0
+ * date ${datetime}
+ */
+#if($table.tplCategory == "crud")
+#set($Entity="BaseEntity")
+#else
+#set($Entity="TreeEntity")
+#end
+@Data
+@Entity
+@Table(name = "${tableName}")
+public class ${ClassName} extends ${Entity} {
+    /** serialVersionUID */
+#foreach ($column in $columns)
+#if(!$column.isSuperColumn($column.javaField))
+    /** $column.columnComment */
+#if($column.list)
+#set($parentheseIndex=$column.columnComment.indexOf("（"))
+#if($parentheseIndex != -1)
+#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+#else
+#set($comment=$column.columnComment)
+#end
+#end
+    private $column.javaType $column.javaField;
+
+#end
+#end
+}

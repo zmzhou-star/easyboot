@@ -53,6 +53,15 @@ public final class DateUtils {
 	public static String getDate() {
 		return DateFormatUtils.format(now(), YYYY_MM_DD);
 	}
+
+	/**
+	 * Gets time.
+	 * 获取当前时间，格式为yyyy-MM-dd HH:mm:ss
+	 * @return the time
+	 */
+	public static String getTime() {
+		return DateFormatUtils.format(now(), YYYY_MM_DD_HH_MM_SS);
+	}
 	
 	/**
 	 * 日期型字符串转化为日期格式

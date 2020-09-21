@@ -1,6 +1,10 @@
 import request from '@/utils/request'
 
-// 查询生成表数据
+/**
+ * 查询生成表数据
+ * @param {Object} query
+ * @returns {Object}
+ */
 export function listTable(query) {
   return request({
     url: '/tool/code/gen/list',
@@ -8,7 +12,12 @@ export function listTable(query) {
     params: query
   })
 }
-// 查询db数据库列表
+
+/**
+ * 查询db数据库列表
+ * @param {Object} query
+ * @returns {Object}
+ */
 export function listDbTable(query) {
   return request({
     url: '/tool/code/gen/dbTable/list',
@@ -16,16 +25,22 @@ export function listDbTable(query) {
     params: query
   })
 }
-
-// 查询表详细信息
+/**
+ * 查询表详细信息
+ * @param {number} tableId
+ * @returns {Object}
+ */
 export function getGenTable(tableId) {
   return request({
     url: '/tool/code/gen/' + tableId,
     method: 'get'
   })
 }
-
-// 修改代码生成信息
+/**
+ * 修改代码生成信息
+ * @param {Object} data
+ * @returns {Object}
+ */
 export function updateGenTable(data) {
   return request({
     url: '/tool/code/gen',
@@ -33,8 +48,11 @@ export function updateGenTable(data) {
     data: data
   })
 }
-
-// 导入表
+/**
+ * 导入表
+ * @param {Object} data
+ * @returns {Object}
+ */
 export function importTable(data) {
   return request({
     url: '/tool/code/gen/importTable',
@@ -42,14 +60,22 @@ export function importTable(data) {
     params: data
   })
 }
-// 预览生成代码
+/**
+ * 预览生成代码
+ * @param {number} tableId
+ * @returns {Object}
+ */
 export function previewTable(tableId) {
   return request({
     url: '/tool/code/gen/preview/' + tableId,
     method: 'get'
   })
 }
-// 删除表数据
+/**
+ * 删除表数据
+ * @param {number} tableId
+ * @returns {Object}
+ */
 export function delTable(tableId) {
   return request({
     url: '/tool/code/gen/' + tableId,

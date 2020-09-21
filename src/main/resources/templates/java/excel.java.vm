@@ -1,0 +1,47 @@
+package ${packageName}.excel;
+
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
+import com.alibaba.excel.annotation.write.style.ContentRowHeight;
+import com.alibaba.excel.annotation.write.style.HeadRowHeight;
+import com.github.zmzhou.easyboot.common.excel.BaseExcel3;
+
+import lombok.Data;
+
+/**
+ * ${functionName}导出excel类 ${tableName}
+ * 
+ * @author ${author}
+ * @version 1.0
+ * date ${datetime}
+ */
+@Data
+@ContentRowHeight(20)
+@HeadRowHeight(25)
+@ColumnWidth(15)
+public class ${ClassName}Excel extends BaseExcel3 {
+    /** serialVersionUID */
+#foreach ($column in $columns)
+#if(!$column.isSuperColumn($column.javaField))
+    /** $column.columnComment */
+#if($column.list)
+#set($parentheseIndex=$column.columnComment.indexOf("（"))
+#if($parentheseIndex != -1)
+#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+#else
+#set($comment=$column.columnComment)
+#end
+#end
+#if($column.javaType == 'Date')
+    @DateTimeFormat(DATE_PATTERN)
+#end
+#if($column.javaField == 'status')
+    @ExcelProperty(value = {EXCEL_NAME, "", "$column.columnComment"}, converter = StatusConverter.class)
+#else
+    @ExcelProperty(value = {EXCEL_NAME, "", "$column.columnComment"})
+#end
+    private $column.javaType $column.javaField;
+
+#end
+#end
+}

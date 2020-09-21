@@ -1,6 +1,7 @@
 package com.github.zmzhou.easyboot.api.system.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
@@ -26,16 +27,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 /**
+ * 角色管理
  * @author zmzhou
- * @title RoleController
- * @Description 角色管理
- * @Date 2020/08/28 17:53
+ * @version 1.0
+ * date 2020/9/21 21:42
  */
 @Api(tags = {"角色管理"})
 @RestController
 @RequestMapping("/system/role")
 public class RoleController extends BaseController {
-	@Autowired
+	@Resource
 	private RoleService roleService;
 	
 	/**
@@ -43,7 +44,7 @@ public class RoleController extends BaseController {
 	 * @param params 查询参数
 	 * @return ApiResult<TableDataInfo>
 	 * @author zmzhou
-	 * @date 2020/08/28 17:54
+	 * date 2020/08/28 17:54
 	 */
 	@PostMapping(path = "list")
 	@ApiOperation(value = "获取角色列表")

@@ -13,7 +13,6 @@ import com.github.zmzhou.easyboot.framework.entity.BaseEntity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  * 代码生成业务表(CodeGenTable)实体类
@@ -23,7 +22,6 @@ import lombok.ToString;
  * @date 2020/9/16 23:38
  */
 @Data
-@ToString
 @NoArgsConstructor
 @Entity
 @Table(name = "CODE_GEN_TABLE")

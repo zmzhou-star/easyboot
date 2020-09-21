@@ -22,6 +22,7 @@ import lombok.Data;
 @Entity
 @Table(name = "SYS_ROLE")
 public class SysRole extends BaseEntity {
+	/** serialVersionUID */
 	private static final long serialVersionUID = -3304319243957836923L;
 	
 	/**

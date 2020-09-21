@@ -5,10 +5,6 @@ import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.github.zmzhou.easyboot.EasybootApplicationTests;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * The type Date utils test.
  *
@@ -23,6 +19,8 @@ class DateUtilsTest {
 	@Test
 	void getDate() {
 		String res = DateUtils.getDate();
+		Assertions.assertNotNull(res);
+		res = DateUtils.getTime();
 		Assertions.assertNotNull(res);
 	}
 

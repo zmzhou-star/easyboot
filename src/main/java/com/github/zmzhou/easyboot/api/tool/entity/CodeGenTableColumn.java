@@ -127,9 +127,19 @@ public class CodeGenTableColumn extends BaseEntity {
 	 * @return the boolean
 	 */
 	public boolean isSuperColumn() {
-		return StringUtils.equalsAnyIgnoreCase(this.javaField,
+		return isSuperColumn(this.javaField);
+	}
+
+	/**
+	 * JAVA字段名是不是超类字段
+	 * Is super column boolean.
+	 * @param javaField the java field
+	 * @return the boolean
+	 */
+	public boolean isSuperColumn(String javaField) {
+		return StringUtils.equalsAnyIgnoreCase(javaField,
 				// BaseEntity
-				"createBy", "createTime", "updateBy", "updateTime", "remark",
+				"id", "createBy", "createTime", "updateBy", "updateTime", "remark",
 				// TreeEntity
 				"parentName", "parentId", "orderNum", "ancestors");
 	}

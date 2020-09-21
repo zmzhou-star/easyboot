@@ -1,0 +1,24 @@
+package ${packageName}.vo;
+
+import com.github.zmzhou.easyboot.framework.vo.PageParams;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
+/**
+ * ${functionName}请求参数vo类
+ *
+ * @author ${author}
+ * @version 1.0
+ * date ${datetime}
+ */
+@Data
+@ApiModel(description = "${functionName}请求参数vo类")
+public class ${ClassName}Params extends PageParams {
+	/** serialVersionUID */
+
+	/** param描述 */
+	@ApiModelProperty(value = "param描述")
+	private String param;
+}

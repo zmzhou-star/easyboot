@@ -16,6 +16,8 @@ import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.utils.DateUtils;
 import com.github.zmzhou.easyboot.common.utils.EasyBootUtils;
 
+import lombok.Getter;
+
 /**
  * velocity代码生成使用模板工具类
  *
@@ -37,11 +39,6 @@ public final class VelocityUtils {
 	 * 项目空间路径
 	 */
 	private static final String PROJECT_PATH = "main/java";
-
-	/**
-	 * mybatis空间路径
-	 */
-	private static final String MYBATIS_PATH = "main/resources/mybatis";
 
 	/**
 	 * 设置模板变量信息
@@ -68,7 +65,7 @@ public final class VelocityUtils {
 		velocityContext.put("basePackage", getPackagePrefix(packageName));
 		velocityContext.put("packageName", packageName);
 		velocityContext.put("author", genTable.getFunctionAuthor());
-		velocityContext.put("datetime", DateUtils.getDate());
+		velocityContext.put("datetime", DateUtils.getTime());
 		velocityContext.put("pkColumn", genTable.getPkColumn());
 		velocityContext.put("importList", getImportList(genTable.getColumns()));
 		velocityContext.put("permissionPrefix", getPermissionPrefix(moduleName, businessName));
@@ -111,21 +108,8 @@ public final class VelocityUtils {
 	 * @return 模板列表 template list
 	 */
 	public static List<String> getTemplateList(String tplCategory) {
-		List<String> templates = new ArrayList<>();
-		templates.add("templates/java/entity.java.vm");
-		templates.add("templates/java/mapper.java.vm");
-		templates.add("templates/java/service.java.vm");
-		templates.add("templates/java/serviceImpl.java.vm");
-		templates.add("templates/java/controller.java.vm");
-		templates.add("templates/xml/mapper.xml.vm");
-		templates.add("templates/sql/sql.vm");
-		templates.add("templates/js/api.js.vm");
-		if (CodeGenConstants.TPL_CRUD.equals(tplCategory)) {
-			templates.add("templates/vue/index.vue.vm");
-		} else if (CodeGenConstants.TPL_TREE.equals(tplCategory)) {
-			templates.add("templates/vue/index-tree.vue.vm");
-		}
-		return templates;
+		// 枚举所有模板
+		return Templates.getVmLocations(tplCategory);
 	}
 
 	/**
@@ -149,29 +133,19 @@ public final class VelocityUtils {
 
 		String javaPath = PROJECT_PATH + Constants.SEPARATOR
 				+ StringUtils.replace(packageName, ".", Constants.SEPARATOR);
-		String mybatisPath = MYBATIS_PATH + Constants.SEPARATOR + moduleName;
 		String vuePath = "vue";
-
-		if (template.contains("entity.java.vm")) {
-			fileName = String.format("%s/entity/%s.java", javaPath, className);
-		} else if (template.contains("mapper.java.vm")) {
-			fileName = String.format("%s/mapper/%sMapper.java", javaPath, className);
-		} else if (template.contains("service.java.vm")) {
-			fileName = String.format("%s/service/I%sService.java", javaPath, className);
-		} else if (template.contains("serviceImpl.java.vm")) {
-			fileName = String.format("%s/service/impl/%sServiceImpl.java", javaPath, className);
-		} else if (template.contains("controller.java.vm")) {
-			fileName = String.format("%s/controller/%sController.java", javaPath, className);
-		} else if (template.contains("mapper.xml.vm")) {
-			fileName = String.format("%s/%sMapper.xml", mybatisPath, className);
-		} else if (template.contains("sql.vm")) {
-			fileName = businessName + "Menu.sql";
-		} else if (template.contains("api.js.vm")) {
-			fileName = String.format("%s/api/%s/%s.js", vuePath, moduleName, businessName);
-		} else if (template.contains("index.vue.vm")) {
-			fileName = String.format("%s/views/%s/%s/index.vue", vuePath, moduleName, businessName);
-		} else if (template.contains("index-tree.vue.vm")) {
-			fileName = String.format("%s/views/%s/%s/index.vue", vuePath, moduleName, businessName);
+		// 设置所有模板代码生成路径
+		if (template.contains(Templates.VM_MENU_SQL.getVm())) {
+			fileName = String.format(Templates.VM_MENU_SQL.getGenPath(), businessName);
+		} else if (template.contains(Templates.VM_API_JS.getVm())) {
+			fileName = String.format(Templates.VM_API_JS.getGenPath(), vuePath, moduleName, businessName);
+		} else if (template.contains(Templates.VM_VUE_INDEX.getVm())) {
+			fileName = String.format(Templates.VM_VUE_INDEX.getGenPath(), vuePath, moduleName, businessName);
+		} else if (template.contains(Templates.VM_VUE_INDEX_TREE.getVm())) {
+			fileName = String.format(Templates.VM_VUE_INDEX_TREE.getGenPath(), vuePath, moduleName, businessName);
+		} else {
+			// 剩下都是包含两个参数的
+			fileName = String.format(Templates.genPath(template), javaPath, className);
 		}
 		return fileName;
 	}
@@ -198,7 +172,6 @@ public final class VelocityUtils {
 		for (CodeGenTableColumn column : columns) {
 			if (!column.isSuperColumn() && CodeGenConstants.TYPE_DATE.equals(column.getJavaType())) {
 				importList.add("java.util.Date");
-				importList.add("com.fasterxml.jackson.annotation.JsonFormat");
 			} else if (!column.isSuperColumn() && CodeGenConstants.TYPE_BIGDECIMAL.equals(column.getJavaType())) {
 				importList.add("java.math.BigDecimal");
 			}
@@ -277,5 +250,111 @@ public final class VelocityUtils {
 			}
 		}
 		return num;
+	}
+
+	/**
+	 * 模板类对应路径枚举
+	 * @author zmzhou
+	 * @version 1.0
+	 * date 2020/9/21 22:34
+	 */
+	@Getter
+	public enum Templates {
+		/**
+		 * 实体类模板
+		 */
+		VM_ENTITY("templates/java/entity.java.vm", "%s/entity/%s.java"),
+		/**
+		 * excel导出类模板
+		 */
+		VM_EXCEL("templates/java/excel.java.vm", "%s/excel/%sExcel.java"),
+		/**
+		 * 请求参数模板
+		 */
+		VM_PARAMS("templates/java/params.java.vm", "%s/vo/%sParams.java"),
+		/**
+		 * vo类模板
+		 */
+		VM_VO("templates/java/vo.java.vm", "%s/vo/%sVo.java"),
+		/**
+		 * 数据访问层模板
+		 */
+		VM_DAO("templates/java/dao.java.vm", "%s/dao/%sDao.java"),
+		/**
+		 * 接口类模板
+		 */
+		VM_SERVICE("templates/java/service.java.vm", "%s/service/%sService.java"),
+		/**
+		 * 控制成模板
+		 */
+		VM_CONTROLLER("templates/java/controller.java.vm", "%s/controller/%sController.java"),
+		/**
+		 * 添加菜单sql模板
+		 */
+		VM_MENU_SQL("templates/sql/sql.vm", "%sMenu.sql"),
+		/**
+		 * js api模板
+		 */
+		VM_API_JS("templates/js/api.js.vm", "%s/api/%s/%s.js"),
+		/**
+		 * 单表（增删改查）vue页面模板
+		 */
+		VM_VUE_INDEX("templates/vue/index.vue.vm", "%s/views/%s/%s/index.vue"),
+		/**
+		 * 树表（增删改查）vue页面模板
+		 */
+		VM_VUE_INDEX_TREE("templates/vue/index-tree.vue.vm", "%s/views/%s/%s/index.vue");
+
+		/** vm模板路径 */
+		private final String vm;
+		/** 代码生成路径表达式 */
+		private final String genPath;
+
+		/**
+		 * 构造器
+		 * @param vm vm模板路径
+		 * @param genPath 代码生成路径表达式
+		 * @author zmzhou
+		 * date 2020/9/21 22:46
+		 */
+		Templates(String vm, String genPath) {
+			this.vm = vm;
+			this.genPath = genPath;
+		}
+
+		/**
+		 * 根据模板路径获取生成代码路径
+		 * Gen path string.
+		 * @param vm the vm
+		 * @return the string
+		 */
+		public static String genPath(String vm){
+			for (Templates t : Templates.values()){
+				if (t.getVm().equals(vm)) {
+					return t.getGenPath();
+				}
+			}
+			return "";
+		}
+
+		/**
+		 * 获取所有模板路径
+		 * Get vm locations list.
+		 * @param tplCategory the tpl category
+		 * @return the list
+		 */
+		public static List<String> getVmLocations(String tplCategory){
+			List<String> templates = new ArrayList<>();
+			for (Templates t : Templates.values()){
+				templates.add(t.getVm());
+			}
+			// 单表（增删改查）和树表（增删改查）二选一
+			if (CodeGenConstants.TPL_CRUD.equals(tplCategory)) {
+				templates.remove(VM_VUE_INDEX_TREE.getVm());
+			} else if (CodeGenConstants.TPL_TREE.equals(tplCategory)) {
+				templates.remove(VM_VUE_INDEX.getVm());
+			}
+			return templates;
+		}
 	}
 }

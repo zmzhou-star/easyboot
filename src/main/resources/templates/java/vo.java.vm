@@ -1,0 +1,32 @@
+package ${packageName}.vo;
+
+import org.springframework.beans.BeanUtils;
+
+import ${packageName}.entity.${ClassName};
+
+import io.swagger.annotations.ApiModel;
+import lombok.Data;
+
+/**
+ * ${functionName}vo类
+ *
+ * @author ${author}
+ * @version 1.0
+ * date ${datetime}
+ */
+@Data
+@ApiModel(description = "${functionName}vo类")
+public class ${ClassName}Vo extends ${ClassName} implements BaseVo {
+	/** serialVersionUID */
+	/**
+	 * vo转实体类.
+	 *
+	 * @return the ${ClassName} 实体类
+	 */
+	@Override
+	public ${ClassName} toEntity() {
+		${ClassName} entity = new ${ClassName}();
+		BeanUtils.copyProperties(this, entity);
+		return entity;
+	}
+}

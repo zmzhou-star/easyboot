@@ -1,0 +1,72 @@
+import request from '@/utils/request'
+
+/**
+ * 查询${functionName}列表
+ * @param {Object} query
+ * @returns {Object}
+ */
+export function list${BusinessName}(query) {
+  return request({
+    url: '/${moduleName}/${businessName}/list',
+    method: 'get',
+    params: query
+  })
+}
+/**
+ * 查询${functionName}详细信息
+ * @param {number} ${pkColumn.javaField}
+ * @returns {Object}
+ */
+export function get${BusinessName}(${pkColumn.javaField}) {
+  return request({
+    url: '/${moduleName}/${businessName}/' + ${pkColumn.javaField},
+    method: 'get'
+  })
+}
+/**
+ * 新增${functionName}
+ * @param {Object} data
+ * @returns {Object}
+ */
+export function add${BusinessName}(data) {
+  return request({
+    url: '/${moduleName}/${businessName}',
+    method: 'post',
+    data: data
+  })
+}
+/**
+ * 修改${functionName}
+ * @param {Object} data
+ * @returns {Object}
+ */
+export function update${BusinessName}(data) {
+  return request({
+    url: '/${moduleName}/${businessName}',
+    method: 'put',
+    data: data
+  })
+}
+/**
+ * 删除${functionName}
+ * @param {number} ${pkColumn.javaField}
+ * @returns {Object}
+ */
+export function del${BusinessName}(${pkColumn.javaField}) {
+  return request({
+    url: '/${moduleName}/${businessName}/' + ${pkColumn.javaField},
+    method: 'delete'
+  })
+}
+/**
+ * 导出${functionName}
+ * @param {Object} query
+ * @returns {Object}
+ */
+export function export${BusinessName}(query) {
+  return request({
+    url: '/${moduleName}/${businessName}/export',
+    method: 'get',
+    params: query
+  })
+}

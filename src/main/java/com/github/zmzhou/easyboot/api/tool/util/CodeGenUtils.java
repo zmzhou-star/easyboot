@@ -55,6 +55,7 @@ public final class CodeGenUtils {
 		column.setTableId(table.getId());
 		column.setCreateBy(table.getCreateBy());
 		column.setCreateTime(new Date());
+		column.setDictType("");
 		// 设置java字段名
 		column.setJavaField(EasyBootUtils.toCamelCase(columnName));
 

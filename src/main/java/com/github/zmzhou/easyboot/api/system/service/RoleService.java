@@ -43,10 +43,10 @@ import com.github.zmzhou.easyboot.framework.vo.OptionsVo;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- *  @title RoleService
- *  @description 描述
- *  @author zmzhou
- *  @date 2020/07/21 17:05
+ * 角色管理接口
+ * @author zmzhou
+ * @version 1.0
+ * date 2020/9/21 21:32
  */
 @Slf4j
 @Service

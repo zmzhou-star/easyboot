@@ -282,6 +282,8 @@ public class CodeGenTableService {
 			genTable.getColumns().forEach(column -> {
 				column.setUpdateBy(SecurityUtils.getUsername());
 				column.setUpdateTime(new Date());
+				// 数据字段类型非空
+				column.setDictType(StringUtils.trimToEmpty(column.getDictType()));
 			});
 			// 更新列信息
 			table.setColumns(tableColumnService.saveAll(genTable.getColumns()));
