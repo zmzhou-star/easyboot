@@ -104,7 +104,7 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="角色编号" prop="id" align="center" width="100" />
+      <el-table-column label="角色编号" prop="id" align="center" width="80" />
       <el-table-column label="角色名称" prop="roleName" align="center" :show-overflow-tooltip="true" width="150" />
       <el-table-column label="角色编码" prop="roleCode" align="center" :show-overflow-tooltip="true" width="150" sortable="custom" />
       <el-table-column label="显示顺序" prop="sortBy" align="center" width="100" sortable="custom" />
@@ -118,12 +118,12 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="150" sortable="custom">
+      <el-table-column label="创建时间" align="center" prop="createTime" width="160" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="150" sortable="custom">
+      <el-table-column label="更新时间" align="center" prop="updateTime" width="160" sortable="custom">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateTime) }}</span>
         </template>

@@ -105,7 +105,6 @@ public final class EasyBootUtils {
 	}
 
 
-
 	/**
 	 * Json string to map map.
 	 *
@@ -122,9 +121,14 @@ public final class EasyBootUtils {
 			String key = entry.getKey();
 			Object value = entry.getValue();
 			if (value instanceof JSONArray) {
-				List<Map<String, Object>> list = new ArrayList<>();
+				List<Object> list = new ArrayList<>();
 				for (Object obj : (JSONArray) value) {
-					list.add(jsonStringToMap(obj.toString()));
+					// 如果内层是JSONArray并且里面是JSONObject
+					if (obj instanceof JSONObject) {
+						list.add(jsonStringToMap(obj.toString()));
+					} else {
+						list.add(obj);
+					}
 				}
 				map.put(key, list);
 			} else if (value instanceof JSONObject) {

@@ -47,8 +47,10 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 		super(request);
 		//将参数表，赋予给当前的Map以便于持有request中的参数
 		Map<String, String[]> requestMap = request.getParameterMap();
-		this.params.putAll(requestMap);
-		this.modifyParameterValues();
+		if (!requestMap.isEmpty()){
+			this.params.putAll(requestMap);
+			this.modifyParameterValues();
+		}
 	}
 
 	/**
@@ -78,7 +80,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 	public String[] getParameterValues(String parameter) {
 		String[] values = super.getParameterValues(parameter);
 		if (values == null) {
-			return new String[0];
+			return null;
 		}
 		int length = values.length;
 		String[] escapeValues = new String[length];
@@ -99,7 +101,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 	public ServletInputStream getInputStream() throws IOException {
 		// 非json类型，直接返回
 		String header = super.getHeader(HttpHeaders.CONTENT_TYPE);
-		if (!header.toLowerCase().startsWith(MediaType.APPLICATION_JSON_VALUE)) {
+		if (null == header || !header.toLowerCase().startsWith(MediaType.APPLICATION_JSON_VALUE)) {
 			return super.getInputStream();
 		}
 		// 为空，直接返回
