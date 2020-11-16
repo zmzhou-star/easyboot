@@ -86,6 +86,19 @@ public class SimpleSpecificationBuilder<T> {
 	
 	/**
 	 * between
+	 * @param key 字段名
+	 * @param min 小数值
+	 * @param max 大数值
+	 * @return SimpleSpecificationBuilder
+	 * @author zmzhou
+	 * @date 2020/11/16 22:27
+	 */
+	public SimpleSpecificationBuilder<T> between(String key, Object min, Object max) {
+		return between("and", key, min, max);
+	}
+	
+	/**
+	 * between
 	 * @param join 连接符
 	 * @param key 字段名
 	 * @param min 小数值

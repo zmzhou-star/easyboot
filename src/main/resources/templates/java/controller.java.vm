@@ -29,7 +29,6 @@ import io.swagger.annotations.ApiParam;
 
 /**
  * ${functionName}Controller
- *
  * @author ${author}
  * @version 1.0
  * date ${datetime}
@@ -79,7 +78,7 @@ public class ${ClassName}Controller extends BaseController {
 	@ApiOperation(value = "新增${functionName}")
 	@PostMapping
 	public ApiResult<${ClassName}> save(@Validated @RequestBody ${ClassName}Vo vo) {
-		return ok(roleService.save(vo.toEntity()));
+		return ok(${className}Service.save(vo.toEntity()));
 	}
 
 	/**
@@ -92,12 +91,12 @@ public class ${ClassName}Controller extends BaseController {
 	@ApiOperation(value = "修改${functionName}")
 	@PutMapping
 	public ApiResult<${ClassName}> update(@Validated @RequestBody ${ClassName}Vo vo) {
-		return ok(roleService.update(vo.toEntity()));
+		return ok(${className}Service.update(vo.toEntity()));
 	}
 
 	/**
 	 * 删除${functionName}
-	 * @param roleIds ${functionName}id集合
+	 * @param ids ${functionName}id集合
 	 * @return 删除结果
 	 * @author ${author}
 	 * date ${datetime}

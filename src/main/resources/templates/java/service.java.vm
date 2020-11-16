@@ -45,7 +45,7 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
 	    }
 	    // 构造查询条件
 	    Specification<${ClassName}> spec = new SimpleSpecificationBuilder<${ClassName}>()
-			    .and( Constants.STATUS, Operator.EQUAL, params.getStatus())
+			    .and(Constants.STATUS, Operator.EQUAL, params.getStatus())
 			    .build();
 	    return dao.findAll(spec, page);
     }
@@ -53,7 +53,7 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
     /**
      * 根据id查询${functionName}
      * 
-     * @param ${functionName}id
+     * @param id ${functionName}id
      * @return ${ClassName}对象
      */
     public ${ClassName} findById(Long id) {
@@ -66,10 +66,10 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
     /**
      * 新增${functionName}
      * 
-     * @param ${className} ${functionName}
+     * @param entity ${functionName}
      * @return 结果
      */
-    public ${className} save(${className} entity) {
+    public ${ClassName} save(${ClassName} entity) {
 	    entity.setCreateTime(new Date());
 	    entity.setCreateBy(SecurityUtils.getUsername());
 	    return dao.saveAndFlush(entity);
@@ -78,10 +78,10 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
     /**
      * 修改${functionName}
      * 
-     * @param ${className} ${functionName}
+     * @param entity ${functionName}
      * @return 结果
      */
-    public SysUser update(${className} entity) {
+    public ${ClassName} update(${ClassName} entity) {
 	    entity.setUpdateTime(new Date());
 	    entity.setUpdateBy(SecurityUtils.getUsername());
 	    return dao.saveAndFlush(entity);
@@ -91,7 +91,6 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
      * 批量删除${functionName}
      * 
      * @param ${pkColumn.javaField}s 需要删除的${functionName}ID
-     * @return 结果
      */
     public void deleteByIds(Long[] ids) {
 	    for (Long id: ids) {
