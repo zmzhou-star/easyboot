@@ -3,15 +3,15 @@
 
  Source Server         : easyboot
  Source Server Type    : MySQL
- Source Server Version : 80018
+ Source Server Version : 80022
  Source Host           : localhost:3306
  Source Schema         : easyboot
 
  Target Server Type    : MySQL
- Target Server Version : 80018
+ Target Server Version : 80022
  File Encoding         : 65001
 
- Date: 12/11/2020 22:21:49
+ Date: 17/11/2020 23:00:56
 */
 
 SET NAMES utf8mb4;
@@ -22,7 +22,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS code_gen_table;
 CREATE TABLE code_gen_table  (
-  id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  id bigint NOT NULL AUTO_INCREMENT COMMENT '编号',
   table_name varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '表名称',
   table_comment varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '表描述',
   class_name varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '实体类名称',
@@ -40,15 +40,15 @@ CREATE TABLE code_gen_table  (
   remark varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (id) USING BTREE,
   UNIQUE INDEX UNI_TABLE_NAME(table_name) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '代码生成业务表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '代码生成业务表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for code_gen_table_column
 -- ----------------------------
 DROP TABLE IF EXISTS code_gen_table_column;
 CREATE TABLE code_gen_table_column  (
-  id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  table_id bigint(20) NOT NULL COMMENT '所属表编号',
+  id bigint NOT NULL AUTO_INCREMENT COMMENT '编号',
+  table_id bigint NOT NULL COMMENT '所属表编号',
   column_name varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '列名称',
   column_comment varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '列描述',
   column_type varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '列类型',
@@ -64,7 +64,7 @@ CREATE TABLE code_gen_table_column  (
   query_type varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'EQ' COMMENT '查询方式（等于、不等于、大于、小于、范围）',
   html_type varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '显示类型（文本框、文本域、下拉框、复选框、单选框、日期控件）',
   dict_type varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '字典类型',
-  sort_by int(11) NULL DEFAULT NULL COMMENT '排序',
+  sort_by int NULL DEFAULT NULL COMMENT '排序',
   create_by varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
   create_time datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   update_by varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
@@ -72,69 +72,100 @@ CREATE TABLE code_gen_table_column  (
   remark varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (id) USING BTREE,
   INDEX IDX_CGTC_TABLE_ID(table_id) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '代码生成业务表字段' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '代码生成业务表字段' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for sys_config
+-- ----------------------------
+DROP TABLE IF EXISTS sys_config;
+CREATE TABLE sys_config  (
+  id int NOT NULL AUTO_INCREMENT COMMENT '参数主键',
+  config_name varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '参数名称',
+  config_key varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '参数键名',
+  config_value varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '参数键值',
+  config_type char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'N' COMMENT '系统内置（Y是 N否）',
+  create_by varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
+  create_time datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  update_by varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
+  update_time datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  remark varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (id) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '参数配置表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of sys_config
+-- ----------------------------
+INSERT INTO sys_config VALUES (1, '主框架页-默认皮肤样式名称', 'sys.index.skinName', 'skin-blue', 'Y', 'admin', '2020-11-16 11:33:00', 'ry', '2018-03-16 11:33:00', '蓝色 skin-blue、绿色 skin-green、紫色 skin-purple、红色 skin-red、黄色 skin-yellow');
+INSERT INTO sys_config VALUES (2, '用户管理-账号初始密码', 'sys.user.initPassword', 'Zmzhou.1324', 'Y', 'admin', '2020-11-16 11:33:00', 'admin', '2020-11-17 20:43:05', '初始化密码 Zmzhou.1324');
+INSERT INTO sys_config VALUES (3, '主框架页-侧边栏主题', 'sys.index.sideTheme', 'theme-dark', 'Y', 'admin', '2020-11-16 11:33:00', 'admin', '2020-11-16 23:11:22', '深色主题theme-dark，浅色主题theme-light');
 
 -- ----------------------------
 -- Table structure for sys_dict
 -- ----------------------------
 DROP TABLE IF EXISTS sys_dict;
 CREATE TABLE sys_dict  (
-  id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '字典编码',
-  dict_sort int(4) NULL DEFAULT 0 COMMENT '字典排序',
+  id bigint NOT NULL AUTO_INCREMENT COMMENT '字典编码',
+  dict_sort int NULL DEFAULT 0 COMMENT '字典排序',
   dict_label varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '字典标签',
   dict_value varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '字典键值',
   dict_name varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '字典名称',
   dict_type varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '字典类型',
+  status char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '1' COMMENT '状态（1正常 0停用）',
   css_class varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '样式属性（其他样式扩展）',
   list_class varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '表格回显样式',
-  is_default char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT 'N' COMMENT '是否默认（Y是 N否）',
-  status char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '1' COMMENT '状态（1正常 0停用）',
+  remark varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   create_by varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '创建者',
   create_time datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   update_by varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '更新者',
   update_time datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '更新时间',
-  remark varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (id) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '数据字典表' ROW_FORMAT = DYNAMIC;
 
--- ----------------------------
--- Records of sys_dict
--- ----------------------------
-INSERT INTO sys_dict VALUES (1, 1, '男', '1', '性别', 'sys_user_sex', '', '', 'Y', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '性别男');
-INSERT INTO sys_dict VALUES (2, 2, '女', '0', '性别', 'sys_user_sex', '', '', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '性别女');
-INSERT INTO sys_dict VALUES (3, 3, '未知', '2', '性别', 'sys_user_sex', '', '', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '性别未知');
-INSERT INTO sys_dict VALUES (4, 1, '显示', '1', '菜单状态', 'sys_show_hide', '', 'primary', 'Y', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '显示菜单');
-INSERT INTO sys_dict VALUES (5, 2, '隐藏', '0', '菜单状态', 'sys_show_hide', '', 'danger', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '隐藏菜单');
-INSERT INTO sys_dict VALUES (6, 1, '正常', '1', '系统开关', 'sys_normal_disable', '', 'primary', 'Y', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '正常状态');
-INSERT INTO sys_dict VALUES (7, 2, '停用', '0', '系统开关', 'sys_normal_disable', '', 'danger', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '停用状态');
-INSERT INTO sys_dict VALUES (8, 1, '正常', '1', '任务状态', 'sys_job_status', '', 'primary', 'Y', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '正常状态');
-INSERT INTO sys_dict VALUES (9, 2, '暂停', '0', '任务状态', 'sys_job_status', '', 'danger', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '停用状态');
-INSERT INTO sys_dict VALUES (10, 1, '默认', 'DEFAULT', '任务分组', 'sys_job_group', '', '', 'Y', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '默认分组');
-INSERT INTO sys_dict VALUES (11, 2, '系统', 'SYSTEM', '任务分组', 'sys_job_group', '', '', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '系统分组');
-INSERT INTO sys_dict VALUES (12, 1, '是', 'Y', '是否', 'sys_yes_no', '', 'primary', 'Y', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '系统默认是');
-INSERT INTO sys_dict VALUES (13, 2, '否', 'N', '是否', 'sys_yes_no', '', 'danger', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '系统默认否');
-INSERT INTO sys_dict VALUES (14, 1, '通知', '1', '通知类型', 'sys_notice_type', '', 'warning', 'Y', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '通知');
-INSERT INTO sys_dict VALUES (15, 2, '公告', '2', '通知类型', 'sys_notice_type', '', 'success', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '公告');
-INSERT INTO sys_dict VALUES (16, 1, '正常', '1', '通知状态', 'sys_notice_status', '', 'primary', 'Y', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '正常状态');
-INSERT INTO sys_dict VALUES (17, 2, '关闭', '0', '通知状态', 'sys_notice_status', '', 'danger', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '关闭状态');
-INSERT INTO sys_dict VALUES (18, 1, '新增', '1', '操作类型', 'sys_oper_type', '', 'info', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '新增操作');
-INSERT INTO sys_dict VALUES (19, 2, '修改', '2', '操作类型', 'sys_oper_type', '', 'info', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '修改操作');
-INSERT INTO sys_dict VALUES (20, 3, '删除', '3', '操作类型', 'sys_oper_type', '', 'danger', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '删除操作');
-INSERT INTO sys_dict VALUES (21, 4, '授权', '4', '操作类型', 'sys_oper_type', '', 'primary', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '授权操作');
-INSERT INTO sys_dict VALUES (22, 5, '导出', '5', '操作类型', 'sys_oper_type', '', 'warning', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '导出操作');
-INSERT INTO sys_dict VALUES (23, 6, '导入', '6', '操作类型', 'sys_oper_type', '', 'warning', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '导入操作');
-INSERT INTO sys_dict VALUES (24, 7, '强退', '7', '操作类型', 'sys_oper_type', '', 'danger', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '强退操作');
-INSERT INTO sys_dict VALUES (25, 8, '生成代码', '8', '操作类型', 'sys_oper_type', '', 'warning', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '生成操作');
-INSERT INTO sys_dict VALUES (26, 9, '清空数据', '9', '操作类型', 'sys_oper_type', '', 'danger', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '清空操作');
-INSERT INTO sys_dict VALUES (27, 1, '成功', '1', '系统状态', 'sys_common_status', '', 'primary', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '正常状态');
-INSERT INTO sys_dict VALUES (28, 2, '失败', '0', '系统状态', 'sys_common_status', '', 'danger', 'N', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '停用状态');
+INSERT INTO sys_dict VALUES (1, 1, NULL, NULL, '性别', 'sys_user_sex', NULL, NULL, '1', 'admin', '2020-11-17 21:19:01', 'admin', '2020-11-17 21:41:55', '用户性别');
+INSERT INTO sys_dict VALUES (2, 2, NULL, NULL, '菜单状态', 'sys_show_hide', NULL, NULL, '1', 'admin', '2020-11-17 21:35:40', 'admin', '2020-11-17 21:46:47', '菜单状态');
+INSERT INTO sys_dict VALUES (3, 3, NULL, NULL, '系统开关', 'sys_normal_disable', NULL, NULL, '1', 'admin', '2020-11-17 22:48:57', NULL, NULL, '系统开关');
+INSERT INTO sys_dict VALUES (4, 4, NULL, NULL, '任务状态', 'sys_job_status', NULL, NULL, '1', 'admin', '2020-11-17 22:49:30', NULL, NULL, '任务状态');
+INSERT INTO sys_dict VALUES (5, 5, NULL, NULL, '任务分组', 'sys_job_group', NULL, NULL, '1', 'admin', '2020-11-17 22:49:43', NULL, NULL, '任务分组');
+INSERT INTO sys_dict VALUES (6, 6, NULL, NULL, '是否', 'sys_yes_no', NULL, NULL, '1', 'admin', '2020-11-17 22:49:53', NULL, NULL, '是否');
+INSERT INTO sys_dict VALUES (7, 7, NULL, NULL, '通知类型', 'sys_notice_type', NULL, NULL, '1', 'admin', '2020-11-17 22:50:10', NULL, NULL, '通知类型');
+INSERT INTO sys_dict VALUES (8, 8, NULL, NULL, '通知状态', 'sys_notice_status', NULL, NULL, '1', 'admin', '2020-11-17 22:50:32', NULL, NULL, '通知状态');
+INSERT INTO sys_dict VALUES (9, 9, NULL, NULL, '操作类型', 'sys_oper_type', NULL, NULL, '1', 'admin', '2020-11-17 22:51:22', NULL, NULL, '操作类型');
+INSERT INTO sys_dict VALUES (10, 10, NULL, NULL, '系统状态', 'sys_common_status', NULL, NULL, '1', 'admin', '2020-11-17 22:51:34', NULL, NULL, '系统状态');
+INSERT INTO sys_dict VALUES (11, 1, '男', '1', '性别', 'sys_user_sex', '', '', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '性别男');
+INSERT INTO sys_dict VALUES (12, 2, '女', '0', '性别', 'sys_user_sex', '', '', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '性别女');
+INSERT INTO sys_dict VALUES (13, 3, '未知', '2', '性别', 'sys_user_sex', '', '', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '性别未知');
+INSERT INTO sys_dict VALUES (14, 1, '显示', '1', '菜单状态', 'sys_show_hide', '', 'primary', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '显示菜单');
+INSERT INTO sys_dict VALUES (15, 2, '隐藏', '0', '菜单状态', 'sys_show_hide', '', 'danger', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '隐藏菜单');
+INSERT INTO sys_dict VALUES (16, 1, '正常', '1', '系统开关', 'sys_normal_disable', '', 'primary', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '正常状态');
+INSERT INTO sys_dict VALUES (17, 2, '停用', '0', '系统开关', 'sys_normal_disable', '', 'danger', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '停用状态');
+INSERT INTO sys_dict VALUES (18, 1, '正常', '1', '任务状态', 'sys_job_status', '', 'primary', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '正常状态');
+INSERT INTO sys_dict VALUES (19, 2, '暂停', '0', '任务状态', 'sys_job_status', '', 'danger', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '停用状态');
+INSERT INTO sys_dict VALUES (20, 1, '默认', 'DEFAULT', '任务分组', 'sys_job_group', '', '', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '默认分组');
+INSERT INTO sys_dict VALUES (21, 2, '系统', 'SYSTEM', '任务分组', 'sys_job_group', '', '', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '系统分组');
+INSERT INTO sys_dict VALUES (22, 1, '是', 'Y', '是否', 'sys_yes_no', '', 'primary', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '系统默认是');
+INSERT INTO sys_dict VALUES (23, 2, '否', 'N', '是否', 'sys_yes_no', '', 'danger', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '系统默认否');
+INSERT INTO sys_dict VALUES (24, 1, '通知', '1', '通知类型', 'sys_notice_type', '', 'warning', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '通知');
+INSERT INTO sys_dict VALUES (25, 2, '公告', '2', '通知类型', 'sys_notice_type', '', 'success', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '公告');
+INSERT INTO sys_dict VALUES (26, 1, '正常', '1', '通知状态', 'sys_notice_status', '', 'primary', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '正常状态');
+INSERT INTO sys_dict VALUES (27, 2, '关闭', '0', '通知状态', 'sys_notice_status', '', 'danger', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '关闭状态');
+INSERT INTO sys_dict VALUES (28, 1, '新增', '1', '操作类型', 'sys_oper_type', '', 'info', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '新增操作');
+INSERT INTO sys_dict VALUES (29, 2, '修改', '2', '操作类型', 'sys_oper_type', '', 'info', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '修改操作');
+INSERT INTO sys_dict VALUES (30, 3, '删除', '3', '操作类型', 'sys_oper_type', '', 'danger', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '删除操作');
+INSERT INTO sys_dict VALUES (31, 4, '授权', '4', '操作类型', 'sys_oper_type', '', 'primary', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '授权操作');
+INSERT INTO sys_dict VALUES (32, 5, '导出', '5', '操作类型', 'sys_oper_type', '', 'warning', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '导出操作');
+INSERT INTO sys_dict VALUES (33, 6, '导入', '6', '操作类型', 'sys_oper_type', '', 'warning', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '导入操作');
+INSERT INTO sys_dict VALUES (34, 7, '强退', '7', '操作类型', 'sys_oper_type', '', 'danger', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-11-17 22:58:27', '强退操作');
+INSERT INTO sys_dict VALUES (35, 8, '生成代码', '8', '操作类型', 'sys_oper_type', '', 'warning', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '生成操作');
+INSERT INTO sys_dict VALUES (36, 9, '清空数据', '9', '操作类型', 'sys_oper_type', '', 'danger', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '清空操作');
+INSERT INTO sys_dict VALUES (37, 1, '成功', '1', '系统状态', 'sys_common_status', '', 'primary', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '正常状态');
+INSERT INTO sys_dict VALUES (38, 2, '失败', '0', '系统状态', 'sys_common_status', '', 'danger', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '停用状态');
 
 -- ----------------------------
 -- Table structure for sys_log_login
 -- ----------------------------
 DROP TABLE IF EXISTS sys_log_login;
 CREATE TABLE sys_log_login  (
-  id bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  id bigint NOT NULL AUTO_INCREMENT COMMENT 'ID',
   user_name varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '用户账号',
   ip_addr varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '登录IP地址',
   login_location varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '登录地点',
@@ -145,14 +176,14 @@ CREATE TABLE sys_log_login  (
   msg varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '提示消息',
   login_time datetime(0) NULL DEFAULT NULL COMMENT '访问时间',
   PRIMARY KEY (id) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统登录日志记录' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '系统登录日志记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for sys_log_oper
 -- ----------------------------
 DROP TABLE IF EXISTS sys_log_oper;
 CREATE TABLE sys_log_oper  (
-  id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '日志主键',
+  id bigint NOT NULL AUTO_INCREMENT COMMENT '日志主键',
   title varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '模块标题',
   method varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '方法名称',
   method_desc varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '方法描述',
@@ -167,17 +198,17 @@ CREATE TABLE sys_log_oper  (
   error_msg varchar(2048) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '错误消息',
   oper_time datetime(0) NULL DEFAULT NULL COMMENT '操作时间',
   PRIMARY KEY (id) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 123 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 692 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '操作日志记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for sys_menu
 -- ----------------------------
 DROP TABLE IF EXISTS sys_menu;
 CREATE TABLE sys_menu  (
-  id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
+  id bigint NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
   menu_name varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '菜单名称',
-  parent_id bigint(20) NULL DEFAULT 0 COMMENT '父菜单ID',
-  sort_by int(4) NULL DEFAULT 0 COMMENT '显示顺序',
+  parent_id bigint NULL DEFAULT 0 COMMENT '父菜单ID',
+  sort_by int NULL DEFAULT 0 COMMENT '显示顺序',
   path varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '路由地址',
   component varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '组件路径',
   is_frame char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '0' COMMENT '是否为外链（1是 0否）',
@@ -201,14 +232,14 @@ INSERT INTO sys_menu VALUES (1, '系统管理', 0, 1, 'system', '', '0', 'M', '1
 INSERT INTO sys_menu VALUES (2, '系统监控', 0, 2, 'monitor', '', '0', 'M', '1', '1', '', 'monitor', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '系统监控目录');
 INSERT INTO sys_menu VALUES (3, '系统工具', 0, 3, 'tool', '', '0', 'M', '1', '1', '', 'tool', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '系统工具目录');
 INSERT INTO sys_menu VALUES (4, '友情链接', 0, 4, 'link', NULL, '0', 'M', '1', '1', '', 'link', 'admin', '2020-09-09 22:01:48', 'admin', '2020-09-09 23:36:52', '项目参考文档链接地址');
-INSERT INTO sys_menu VALUES (5, '若依官网', 4, 4, 'http://ruoyi.vip', '', '1', 'M', '1', '1', '', 'guide', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '若依官网地址');
+INSERT INTO sys_menu VALUES (5, '若依官网', 4, 4, 'https://vue.ruoyi.vip', '', '1', 'M', '1', '1', '', 'guide', 'admin', '2020-08-28 12:33:00', 'admin', '2020-11-16 20:36:07', '若依官网地址');
 INSERT INTO sys_menu VALUES (100, '用户管理', 1, 1, 'user', 'system/user/index', '0', 'C', '1', '1', 'system:user:list', 'user', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '用户管理菜单');
 INSERT INTO sys_menu VALUES (101, '角色管理', 1, 2, 'role', 'system/role/index', '0', 'C', '1', '1', 'system:role:list', 'peoples', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '角色管理菜单');
 INSERT INTO sys_menu VALUES (102, '菜单管理', 1, 3, 'menu', 'system/menu/index', '0', 'C', '1', '1', 'system:menu:list', 'tree-table', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '菜单管理菜单');
 INSERT INTO sys_menu VALUES (105, '字典管理', 1, 6, 'dict', 'system/dict/index', '0', 'C', '1', '1', 'system:dict:list', 'dict', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '字典管理菜单');
 INSERT INTO sys_menu VALUES (106, '参数设置', 1, 7, 'config', 'system/config/index', '0', 'C', '1', '1', 'system:config:list', 'edit', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '参数设置菜单');
 INSERT INTO sys_menu VALUES (107, '通知公告', 1, 8, 'notice', 'system/notice/index', '0', 'C', '1', '1', 'system:notice:list', 'message', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '通知公告菜单');
-INSERT INTO sys_menu VALUES (108, '日志管理', 2, 5, 'log', 'monitor/loginLog/index', '0', 'M', '1', '1', '', 'log', 'admin', '2020-08-28 12:33:00', 'admin', '2020-09-13 21:07:55', '日志管理菜单');
+INSERT INTO sys_menu VALUES (108, '日志管理', 2, 5, 'log', 'router', '0', 'M', '1', '1', '', 'log', 'admin', '2020-08-28 12:33:00', 'admin', '2020-11-17 20:40:41', '日志管理菜单');
 INSERT INTO sys_menu VALUES (109, '在线用户', 2, 1, 'online', 'monitor/online/index', '0', 'C', '1', '1', 'monitor:online:list', 'online', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '在线用户菜单');
 INSERT INTO sys_menu VALUES (110, '定时任务', 2, 2, 'job', 'monitor/job/index', '0', 'C', '1', '1', 'monitor:job:list', 'job', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '定时任务菜单');
 INSERT INTO sys_menu VALUES (111, '数据源监控', 2, 3, 'druid', 'monitor/druid/index', '0', 'C', '1', '1', 'monitor:druid:list', 'druid', 'admin', '2020-08-28 12:33:00', 'admin', '2020-09-11 21:40:43', '数据监控菜单');
@@ -277,10 +308,10 @@ INSERT INTO sys_menu VALUES (2005, 'vue文档地址', 4, 2, 'https://panjiachen.
 -- ----------------------------
 DROP TABLE IF EXISTS sys_role;
 CREATE TABLE sys_role  (
-  id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '角色ID',
+  id bigint NOT NULL AUTO_INCREMENT COMMENT '角色ID',
   role_code varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色权限编码',
   role_name varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '角色名称',
-  sort_by int(4) NOT NULL COMMENT '显示顺序',
+  sort_by int NOT NULL COMMENT '显示顺序',
   data_scope char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '1' COMMENT '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）',
   status char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '1' COMMENT '角色状态（1正常 0停用 2代表删除）',
   create_by varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '创建者',
@@ -296,9 +327,9 @@ CREATE TABLE sys_role  (
 -- Records of sys_role
 -- ----------------------------
 INSERT INTO sys_role VALUES (1, 'admin', '系统管理员', 1, '1', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-30 18:46:08', '管理员');
-INSERT INTO sys_role VALUES (2, 'super', '超级管理员', 2, NULL, '1', 'admin', '2020-08-30 00:14:10', 'admin', '2020-11-12 20:54:06', '超级管理员');
+INSERT INTO sys_role VALUES (2, 'super', '超级管理员', 2, NULL, '1', 'admin', '2020-08-30 00:14:10', 'admin', '2020-11-16 20:37:20', '超级管理员');
 INSERT INTO sys_role VALUES (3, 'common', '普通角色', 3, '2', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-11-12 20:53:49', '普通角色');
-INSERT INTO sys_role VALUES (4, 'develop', '开发人员', 4, NULL, '1', 'admin', '2020-08-29 22:05:57', 'admin', '2020-09-12 19:52:55', '开发人员');
+INSERT INTO sys_role VALUES (4, 'develop', '开发人员', 4, NULL, '1', 'admin', '2020-08-29 22:05:57', 'admin', '2020-11-16 20:37:34', '开发人员');
 INSERT INTO sys_role VALUES (5, 'test', '测试人员', 5, NULL, '1', 'admin', '2020-08-29 22:09:00', 'admin', '2020-09-14 22:19:40', '测试人员角色');
 
 -- ----------------------------
@@ -306,8 +337,8 @@ INSERT INTO sys_role VALUES (5, 'test', '测试人员', 5, NULL, '1', 'admin', '
 -- ----------------------------
 DROP TABLE IF EXISTS sys_role_menu;
 CREATE TABLE sys_role_menu  (
-  role_id bigint(20) NOT NULL COMMENT '角色ID',
-  menu_id bigint(20) NOT NULL COMMENT '菜单ID',
+  role_id bigint NOT NULL COMMENT '角色ID',
+  menu_id bigint NOT NULL COMMENT '菜单ID',
   PRIMARY KEY (role_id, menu_id) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '角色和菜单关联表' ROW_FORMAT = DYNAMIC;
 
@@ -325,7 +356,7 @@ INSERT INTO sys_role_menu VALUES (2, 5);
 -- ----------------------------
 DROP TABLE IF EXISTS sys_user;
 CREATE TABLE sys_user  (
-  id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  id bigint NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   user_name varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '用户账号',
   password varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '密码',
   avatar varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT '' COMMENT '头像地址',
@@ -350,7 +381,7 @@ CREATE TABLE sys_user  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO sys_user VALUES (1, 'admin', '$2a$10$sLhbu4HK5nc9MVYXWHP7iOURnk11KfaBiInYT1WiThZjGATirIkDm', '', '系统管理员', 'zmzhou8@gmail.com', '19866165166', '1', '1', '1', '120.238.217.67', '广东省湛江市 移通', '2020-11-12 21:34:32', 'admin', '2020-07-06 11:08:00', 'admin', '2020-11-09 21:42:46', '系统管理员');
+INSERT INTO sys_user VALUES (1, 'admin', '$2a$10$sLhbu4HK5nc9MVYXWHP7iOURnk11KfaBiInYT1WiThZjGATirIkDm', '', '系统管理员', 'zmzhou8@gmail.com', '19866165166', '1', '1', '1', '120.238.217.67', '广东省湛江市 移通', '2020-11-17 20:37:38', 'admin', '2020-07-06 11:08:00', 'admin', '2020-11-09 21:42:46', '系统管理员');
 INSERT INTO sys_user VALUES (2, 'super', '$2a$10$ZKteGTpx259K9pEyH.s.zuj35Ssz.MO85D6ccfFgVSQZ7IB0n.GKG', 'super/avatar.jpeg', '超级管理员', 'zmzhou8@gmail.com', '19866165166', '0', '1', '0', '14.28.155.78', '广东省深圳市 电信', '2020-09-14 20:48:27', 'admin', '2020-08-29 22:02:00', 'admin', '2020-11-12 21:02:35', '超级管理员');
 INSERT INTO sys_user VALUES (3, 'zmzhou', '$2a$10$zRIe6ECzh0TLvx9.MSYW7OmaO8C5yfAffoRxlWEiT/GP51SXqxbaW', 'zmzhou/avatar.jpeg', '小周', 'zmzhou8@qq.com', '19866165166', '1', '1', '0', '14.28.155.78', '广东省深圳市 电信', '2020-09-14 20:43:36', 'admin', '2020-07-07 10:28:00', 'admin', '2020-11-10 22:08:40', '开发者');
 
@@ -359,8 +390,8 @@ INSERT INTO sys_user VALUES (3, 'zmzhou', '$2a$10$zRIe6ECzh0TLvx9.MSYW7OmaO8C5yf
 -- ----------------------------
 DROP TABLE IF EXISTS sys_user_role;
 CREATE TABLE sys_user_role  (
-  user_id bigint(20) NOT NULL COMMENT '用户ID',
-  role_id bigint(20) NOT NULL COMMENT '角色ID',
+  user_id bigint NOT NULL COMMENT '用户ID',
+  role_id bigint NOT NULL COMMENT '角色ID',
   PRIMARY KEY (user_id, role_id) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '用户和角色关联表' ROW_FORMAT = DYNAMIC;
 

@@ -69,6 +69,19 @@ public class SysConfigController extends BaseController {
 	public ApiResult<SysConfig> findById(@PathVariable(value = "id", required = false) Long id) {
 		return ok(sysConfigService.findById(id));
 	}
+	
+	/**
+	 * 根据参数键名查询参数值 
+	 * @param configKey 参数键名
+	 * @return ApiResult<SysConfig>
+	 * @author zmzhou
+	 * @date 2020/11/17 11:16
+	 */
+	@ApiOperation(value = "根据参数键名查询参数值")
+	@GetMapping(value = "/configKey/{configKey}")
+	public ApiResult<String> getConfigKey(@PathVariable(value = "configKey") String configKey) {
+		return ok(sysConfigService.findByKey(configKey));
+	}
 
 	/**
 	 * 新增参数配置
@@ -81,7 +94,12 @@ public class SysConfigController extends BaseController {
 	@ApiOperation(value = "新增参数配置")
 	@PostMapping
 	public ApiResult<SysConfig> save(@Validated @RequestBody SysConfigVo vo) {
-		return ok(sysConfigService.save(vo.toEntity()));
+		ApiResult<SysConfig> result = new ApiResult<>();
+		if (sysConfigService.checkConfigKeyUnique(vo)) {
+			return result.error("新增参数配置'" + vo.getConfigKey() + "'失败，参数键名已存在");
+		}
+		result.setData(sysConfigService.save(vo.toEntity()));
+		return result;
 	}
 
 	/**
@@ -95,7 +113,12 @@ public class SysConfigController extends BaseController {
 	@ApiOperation(value = "修改参数配置")
 	@PutMapping
 	public ApiResult<SysConfig> update(@Validated @RequestBody SysConfigVo vo) {
-		return ok(sysConfigService.update(vo.toEntity()));
+		ApiResult<SysConfig> result = new ApiResult<>();
+		if (sysConfigService.checkConfigKeyUnique(vo)) {
+			return result.error("修改参数配置'" + vo.getConfigKey() + "'失败，参数键名已存在");
+		}
+		result.setData(sysConfigService.update(vo.toEntity()));
+		return result;
 	}
 
 	/**

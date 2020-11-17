@@ -23,13 +23,13 @@ public class SysConfigExcel extends BaseExcel3 {
     /** serialVersionUID */
     private static final long serialVersionUID = -784745088185377773L;
     /** 参数名称 */
-    @ColumnWidth(20)
+    @ColumnWidth(25)
     @ExcelProperty(value = {EXCEL_NAME, "", "参数名称"})
     private String configName;
 
     /** 参数键名 */
     @ExcelProperty(value = {EXCEL_NAME, "", "参数键名"})
-    @ColumnWidth(20)
+    @ColumnWidth(25)
     private String configKey;
 
     /** 参数键值 */

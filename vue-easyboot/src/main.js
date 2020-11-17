@@ -21,6 +21,7 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 import { getDicts } from '@/api/system/dict/data'
+import { getConfigKey } from "@/api/system/config";
 import Pagination from '@/components/Pagination'
 import { deepClone } from '@/utils'
 // 全局组件挂载
@@ -30,6 +31,7 @@ Vue.use(permission)
 import { parseTime, resetForm, addDateRange, selectDictLabel, download, handleTree } from '@/utils/easyboot'
 // 全局方法挂载
 Vue.prototype.getDicts = getDicts
+Vue.prototype.getConfigKey = getConfigKey
 Vue.prototype.parseTime = parseTime
 Vue.prototype.resetForm = resetForm
 Vue.prototype.addDateRange = addDateRange

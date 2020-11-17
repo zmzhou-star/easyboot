@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.github.zmzhou.easyboot.EasybootApplicationTests;
-import com.github.zmzhou.easyboot.common.Constants;
 
 /**
  * The type Security utils test.
@@ -13,7 +12,8 @@ import com.github.zmzhou.easyboot.common.Constants;
  * @version 1.0  date 2020/9/19 19:09
  */
 class SecurityUtilsTest extends EasybootApplicationTests {
-
+	/** DEFAULT_PD */
+	private static final String DEFAULT_PD = "Zmzhou.1324";
 	/**
 	 * Gets username.
 	 */
@@ -28,7 +28,7 @@ class SecurityUtilsTest extends EasybootApplicationTests {
 	 */
 	@Test
 	void encryptPassword() {
-		String res = SecurityUtils.encryptPassword(Constants.DEFAULT_PD);
+		String res = SecurityUtils.encryptPassword(DEFAULT_PD);
 		Assertions.assertNotNull(res);
 		res = SecurityUtils.encryptPassword(null);
 		Assertions.assertNotNull(res);
@@ -39,7 +39,7 @@ class SecurityUtilsTest extends EasybootApplicationTests {
 	 */
 	@Test
 	void matchesPassword() {
-		Assertions.assertTrue(SecurityUtils.matchesPassword(Constants.DEFAULT_PD,
+		Assertions.assertTrue(SecurityUtils.matchesPassword(DEFAULT_PD,
 				SecurityUtils.encryptPassword(null)));
 		Assertions.assertFalse(SecurityUtils.matchesPassword("abc", SecurityUtils.encryptPassword(null)));
 	}
@@ -58,7 +58,7 @@ class SecurityUtilsTest extends EasybootApplicationTests {
 	 */
 	@Test
 	void sha256Encrypt() {
-		String res = SecurityUtils.sha256Encrypt(Constants.DEFAULT_PD);
+		String res = SecurityUtils.sha256Encrypt(DEFAULT_PD);
 		Assertions.assertNotNull(res);
 	}
 }

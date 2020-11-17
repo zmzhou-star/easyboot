@@ -9,12 +9,11 @@ import com.github.zmzhou.easyboot.framework.entity.BaseEntity;
 import lombok.Data;
 
 /**
- * The type Sys dict.
+ * 数据字典实体类 sys_dict
  *
  * @author zmzhou
- * @title SysDict
- * @Description 描述
- * @Date 2020 /08/27 11:23
+ * @version 1.0
+ * date 2020-11-16 16:47:04
  */
 @Data
 @Entity
@@ -24,39 +23,23 @@ public class SysDict extends BaseEntity {
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = -8406166378325512379L;
-	/**
-	 * The Dict sort.
-	 */
-	private long dictSort;
-	/**
-	 * The Dict label.
-	 */
+	/** 字典排序 */
+	private Integer dictSort;
+	/** 字典标签 */
 	private String dictLabel;
-	/**
-	 * The Dict value.
-	 */
+	/** 字典键值 */
 	private String dictValue;
 	/** 字典名称 */
 	private String dictName;
-	/**
-	 * The Dict type.
-	 */
+	/** 字典类型 */
 	private String dictType;
-	/**
-	 * The Css class.
-	 */
-	private String cssClass;
-	/**
-	 * The List class.
-	 */
-	private String listClass;
-	/**
-	 * The Is default.
-	 */
-	private String isDefault;
-	/**
-	 * The Status.
-	 */
-	private String status;
 
+	/** 样式属性（其他样式扩展） */
+	private String cssClass;
+
+	/** 表格回显样式 */
+	private String listClass;
+
+	/** 状态（1正常 0停用） */
+	private String status;
 }

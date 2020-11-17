@@ -12,8 +12,6 @@ import java.nio.charset.StandardCharsets;
 public final class Constants {
     /** 系统默认编码 */
     public static final Charset CHARSETS = StandardCharsets.UTF_8;
-    /** 系统默认密码 */
-    public static final String DEFAULT_PD = "Zmzhou.123";
     /**
      * 验证码 redis key
      */
@@ -90,6 +88,9 @@ public final class Constants {
 	public static final String CREATE_TIME = "createTime";
     /** 文件下载缓冲区大小 */
     public static final int BUFFER_SIZE = 2 * 1024 * 1024;
+
+    /** 参数管理 cache key */
+    public static final String SYS_CONFIG_KEY = "sys_config:";
 
 	/**
      * 私有构造器

@@ -22,7 +22,7 @@ public interface SysDictDao extends JpaRepository<SysDict, Long>, JpaSpecificati
 	 * @author zmzhou
 	 * @date 2020/08/27 11:32
 	 */
-	@Query(value = "from SysDict where status = '1' and dictType = ?1 order by dictSort asc")
+	@Query(value="from SysDict where status = '1' and dictLabel is not null and dictType=?1 order by dictSort")
 	List<SysDict> selectDictDataByType(String dictType);
 
 	/**

@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
 import com.github.zmzhou.easyboot.framework.vo.PageParams;
 
@@ -29,7 +28,7 @@ public class EasybootApplicationTests {
     /** junit */
     protected static final String JUNIT = "junit";
     /** pd */
-    protected static final String PD = SecurityUtils.sha256Encrypt(Constants.DEFAULT_PD);
+    protected static final String PD = SecurityUtils.sha256Encrypt("Zmzhou.1324");
     /** 默认分页参数 */
     protected static PageParams params;
     static {

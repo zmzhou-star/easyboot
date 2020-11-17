@@ -4,15 +4,15 @@ import request from '@/utils/request'
 export function listData(query) {
   return request({
     url: '/system/dict/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 
 // 查询字典数据详细
-export function getData(dictCode) {
+export function getData(dictId) {
   return request({
-    url: '/system/dict/' + dictCode,
+    url: '/system/dict/' + dictId,
     method: 'get'
   })
 }
@@ -28,7 +28,7 @@ export function getDicts(dictType) {
 // 新增字典数据
 export function addData(data) {
   return request({
-    url: '/system/dict/data',
+    url: '/system/dict',
     method: 'post',
     data: data
   })
@@ -37,7 +37,7 @@ export function addData(data) {
 // 修改字典数据
 export function updateData(data) {
   return request({
-    url: '/system/dict/data',
+    url: '/system/dict',
     method: 'put',
     data: data
   })

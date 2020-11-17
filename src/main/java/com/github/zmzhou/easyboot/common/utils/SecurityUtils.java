@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
+import com.github.zmzhou.easyboot.framework.redis.RedisUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
 
 import lombok.extern.slf4j.Slf4j;
@@ -76,7 +77,8 @@ public final class SecurityUtils {
 		BCryptPasswordEncoder passwordEncoder = ServletUtils.getBean(BCryptPasswordEncoder.class);
 		// 默认密码
 		if (StringUtils.isBlank(password)){
-			return passwordEncoder.encode(Constants.DEFAULT_PD);
+			return passwordEncoder.encode(ServletUtils.getBean(RedisUtils.class)
+					.get(Constants.SYS_CONFIG_KEY + "sys.user.initPassword"));
 		}
 		return passwordEncoder.encode(password);
 	}

@@ -32,9 +32,9 @@
         >
           <el-option
             v-for="dict in statusOptions"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
+            :key="dict.dictValue"
+            :label="dict.dictLabel"
+            :value="dict.dictValue"
           />
         </el-select>
       </el-form-item>
@@ -168,9 +168,9 @@
               <el-select v-model="form.sex" placeholder="请选择">
                 <el-option
                   v-for="dict in sexOptions"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
+                  :key="dict.dictValue"
+                  :label="dict.dictLabel"
+                  :value="dict.dictValue"
                 />
               </el-select>
             </el-form-item>
@@ -193,9 +193,9 @@
               <el-radio-group v-model="form.status">
                 <el-radio
                   v-for="dict in statusOptions"
-                  :key="dict.value"
-                  :label="dict.value"
-                >{{ dict.label }}</el-radio>
+                  :key="dict.dictValue"
+                  :label="dict.dictValue"
+                >{{ dict.dictLabel }}</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
@@ -277,9 +277,9 @@ export default {
       dateRange: [],
       roleOptions: [],
       // 用户状态字典
-      statusOptions: [{ label: '正常', value: '1' }, { label: '停用', value: '0' }],
+      statusOptions: [],
       // 性别状态字典
-      sexOptions: [{ label: '男', value: '1' }, { label: '女', value: '0' }, { label: '未知', value: '2' }],
+      sexOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -292,6 +292,8 @@ export default {
       title: '',
       // 是否显示弹出层
       open: false,
+      // 默认密码
+      initPassword: undefined,
       // 表单参数
       form: {},
       defaultProps: {
@@ -349,6 +351,15 @@ export default {
   },
   created() {
     this.fetchData()
+    this.getDicts("sys_normal_disable").then(response => {
+      this.statusOptions = response;
+    });
+    this.getDicts("sys_user_sex").then(response => {
+      this.sexOptions = response;
+    });
+    this.getConfigKey("sys.user.initPassword").then(response => {
+      this.initPassword = response;
+    });
   },
   methods: {
     fetchData() {
@@ -424,7 +435,7 @@ export default {
       getOne().then(response => {
         this.open = true
         this.title = '添加用户'
-        this.form.password = ''
+        this.form.password = this.initPassword;
         this.roleOptions = response.roleList
       })
     },

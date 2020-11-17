@@ -50,7 +50,10 @@ public class SimpleSpecificationBuilder<T> {
 	 * @date 2020/07/08 10:27
 	 */
 	public SimpleSpecificationBuilder<T> add(String join, String key, Operator operator, Object value) {
-		if (null == value || StringUtils.isBlank(value.toString())) {
+		// 判断查询条件是否有效
+		boolean flag = !Operator.ISNULL.equals(operator) && !Operator.IS_NOTNULL.equals(operator)
+						&& (null == value || StringUtils.isBlank(value.toString()));
+		if (flag) {
 			return this;
 		}
 		SpecificationOperator so = new SpecificationOperator();

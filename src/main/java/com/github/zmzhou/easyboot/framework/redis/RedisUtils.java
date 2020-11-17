@@ -58,17 +58,29 @@ public final class RedisUtils {
 	
 	/**
 	 * 删除单个对象
-	 * @param key key
+	 * @param key 缓存键
+	 * @author zmzhou
+	 * @date 2020/11/17 11:43
 	 */
 	public void delete(String key) {
 		redisTemplate.delete(key);
 	}
 	
 	/**
-	 * 获得缓存的基本对象列表
+	 * 根据缓存键集合删除缓存集合 
+	 * @param keys 缓存键集合
+	 * @author zmzhou
+	 * @date 2020/11/17 11:43
+	 */
+	public void delete(Collection<String> keys) {
+		redisTemplate.delete(keys);
+	}
+	
+	/**
+	 * 获得缓存的缓存键集合列表
 	 *
 	 * @param pattern 字符串前缀
-	 * @return 对象列表
+	 * @return 缓存键集合列表
 	 */
 	public Collection<String> keys(String pattern) {
 		return redisTemplate.keys(pattern + "*");

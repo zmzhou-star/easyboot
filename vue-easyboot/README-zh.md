@@ -77,6 +77,16 @@ npm run lint
 npm run lint -- --fix
 
 npm audit fix
+
+# 切换到淘宝镜像
+npm config set registry http://registry.npm.taobao.org
+# 切换回原镜像
+npm config set registry https://registry.npmjs.org
+# 其他镜像地址查询
+# 安装nrm
+npm install nrm -g
+# 使用nrm查询镜像地址
+nrm ls
 ```
 
 更多信息请参考 [使用文档](https://panjiachen.github.io/vue-element-admin-site/zh/)

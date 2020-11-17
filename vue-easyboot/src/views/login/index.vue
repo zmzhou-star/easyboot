@@ -34,7 +34,7 @@
           auto-complete="on"
           @keyup.enter.native="handleLogin"
         />
-        <span class="show-pwd" @click="showPwd">
+        <span class="show-pwd" @mousedown="showPwd" @mouseup="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
@@ -152,6 +152,7 @@ export default {
             this.loading = false
           }).catch(() => {
             this.loading = false
+            this.loginForm.code = ''
             this.getCode()
           })
         } else {
