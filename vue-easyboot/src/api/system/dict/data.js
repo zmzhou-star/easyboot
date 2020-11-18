@@ -55,7 +55,7 @@ export function delData(dictCode) {
 export function exportData(query) {
   return request({
     url: '/system/dict/export',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }

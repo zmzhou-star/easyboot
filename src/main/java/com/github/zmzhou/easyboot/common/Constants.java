@@ -91,6 +91,8 @@ public final class Constants {
 
     /** 参数管理 cache key */
     public static final String SYS_CONFIG_KEY = "sys_config:";
+    /** 数据字典 cache key */
+	public static final String SYS_DICT_KEY = "sys_dict:";
 
 	/**
      * 私有构造器

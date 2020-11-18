@@ -146,7 +146,7 @@ public class SysConfigController extends BaseController {
 	 */
 	@PostMapping("/export")
 	@ApiOperation(value = "导出参数配置excel")
-	public ApiResult<String> export(@RequestBody(required = false) SysConfigParams params) throws InterruptedException {
+	public ApiResult<String> export(@RequestBody SysConfigParams params) throws InterruptedException {
 		return ok(sysConfigService.export(params));
 	}
 }

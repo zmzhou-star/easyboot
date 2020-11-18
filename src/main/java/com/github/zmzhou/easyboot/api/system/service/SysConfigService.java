@@ -100,7 +100,7 @@ public class SysConfigService extends BaseService<SysConfigParams> {
     /**
 	 * 根据参数键名查询参数值 
 	 * @param configKey 参数键名
-	 * @return ApiResult<SysConfig>
+	 * @return SysConfig
 	 * @author zmzhou
 	 * @date 2020/11/17 11:16
 	 */
