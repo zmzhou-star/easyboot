@@ -25,10 +25,10 @@
         <el-select v-model="queryParams.configType" placeholder="系统内置" clearable size="small">
           <el-option
             v-for="dict in typeOptions"
-            style="width: 100px"
             :key="dict.dictValue"
             :label="dict.dictLabel"
             :value="dict.dictValue"
+            style="width: 100px"
           />
         </el-select>
       </el-form-item>
@@ -91,7 +91,16 @@
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="configList" @selection-change="handleSelectionChange">
+    <el-table
+      v-loading="loading"
+      :data="configList"
+      element-loading-text="Loading"
+      stripe
+      height="485"
+      fit
+      highlight-current-row
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="参数主键" align="center" prop="id" width="80" />
       <el-table-column label="参数名称" align="center" prop="configName" :show-overflow-tooltip="true" />

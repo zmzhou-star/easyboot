@@ -2,6 +2,7 @@ package com.github.zmzhou.easyboot.api.system.controller;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
@@ -108,7 +109,16 @@ public class SysDictController extends BaseController {
 	@ApiOperation(value = "新增数据字典")
 	@PostMapping
 	public ApiResult<SysDict> save(@Validated @RequestBody SysDictVo vo) {
-		return ok(sysDictService.save(vo.toEntity()));
+		ApiResult<SysDict> result = new ApiResult<>();
+		if (sysDictService.checkUnique(vo)) {
+			String tips = vo.getDictType();
+			if (StringUtils.isNotBlank(vo.getDictLabel())){
+				tips = vo.getDictLabel();
+			}
+			return result.error("新增数据字典'" + tips + "'失败，字典已存在");
+		}
+		result.setData(sysDictService.save(vo.toEntity()));
+		return result;
 	}
 
 	/**
@@ -122,7 +132,16 @@ public class SysDictController extends BaseController {
 	@ApiOperation(value = "修改数据字典")
 	@PutMapping
 	public ApiResult<SysDict> update(@Validated @RequestBody SysDictVo vo) {
-		return ok(sysDictService.update(vo.toEntity()));
+		ApiResult<SysDict> result = new ApiResult<>();
+		if (sysDictService.checkUnique(vo)) {
+			String tips = vo.getDictType();
+			if (StringUtils.isNotBlank(vo.getDictLabel())){
+				tips = vo.getDictLabel();
+			}
+			return result.error("修改数据字典'" + tips + "'失败，字典已存在");
+		}
+		result.setData(sysDictService.update(vo.toEntity()));
+		return result;
 	}
 
 	/**
@@ -139,5 +158,18 @@ public class SysDictController extends BaseController {
 					 @ApiParam(name = "ids", value = "id数组", required = true) Long[] ids) {
 		sysDictService.deleteByIds(ids);
 		return new ApiResult<>();
+	}
+
+	/**
+	 * 导出excel
+	 * @param params 查询参数
+	 * @return ApiResult<String> excel文件名
+	 * @author zmzhou
+	 * date 2020-11-16 21:51:23
+	 */
+	@PostMapping({"/export", "/type/export"})
+	@ApiOperation(value = "导出数据字典excel")
+	public ApiResult<String> export(@RequestBody SysDictParams params) throws InterruptedException {
+		return ok(sysDictService.export(params));
 	}
 }

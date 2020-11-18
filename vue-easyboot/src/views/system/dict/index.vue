@@ -7,6 +7,7 @@
           placeholder="请输入字典名称"
           clearable
           size="small"
+          style="width: 150px"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
@@ -16,6 +17,7 @@
           placeholder="请输入字典类型"
           clearable
           size="small"
+          style="width: 150px"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
@@ -94,13 +96,22 @@
       </el-col>
     </el-row>
 
-    <el-table v-loading="loading" :data="typeList" @selection-change="handleSelectionChange">
+    <el-table
+      v-loading="loading"
+      :data="typeList"
+      element-loading-text="Loading"
+      stripe
+      height="485"
+      fit
+      highlight-current-row
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="字典编号" align="center" prop="id" width="80" />
       <el-table-column label="字典名称" align="center" prop="dictName" :show-overflow-tooltip="true" />
       <el-table-column label="字典类型" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
-          <router-link :to="'/dict/type/data/' + scope.row.id" class="link-type">
+          <router-link :to="'/system/dict/data/' + scope.row.id" class="link-type">
             <span>{{ scope.row.dictType }}</span>
           </router-link>
         </template>
@@ -330,7 +341,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const dictIds = row.id || this.ids
-      this.$confirm('是否确认删除字典编号为"' + dictIds + '"的数据项?', '警告', {
+      this.$confirm('是否确认删除字典编号为"' + dictIds + '"的数据项?', '操作警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -345,7 +356,7 @@ export default {
     handleExport() {
       const queryParams = this.queryParams
       queryParams.excelName = '字典管理'
-      this.$confirm('是否确认导出所有类型数据项?', '警告', {
+      this.$confirm('是否确认导出所有类型数据项?', '操作警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

@@ -341,7 +341,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const id = row.id || this.ids
-      this.$confirm('是否确认删除字典编码为"' + id + '"的数据项?', '警告', {
+      this.$confirm('是否确认删除字典编码为"' + id + '"的数据项?', '操作警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -355,8 +355,8 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams
-      queryParams.excelName = '字典管理'
-      this.$confirm('是否确认导出所有数据项?', '警告', {
+      queryParams.excelName = '字典管理数据'
+      this.$confirm('是否确认导出所有数据项?', '操作警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

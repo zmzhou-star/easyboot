@@ -315,7 +315,7 @@ export default {
         id: undefined,
         parentId: 0,
         menuName: undefined,
-        icon: undefined,
+        icon: '#',
         menuType: 'M',
         sortBy: 1,
         isFrame: '0',

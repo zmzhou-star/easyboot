@@ -47,8 +47,8 @@ export function delType(dictId) {
 export function exportType(query) {
   return request({
     url: '/system/dict/type/export',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 

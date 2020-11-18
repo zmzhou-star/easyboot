@@ -114,7 +114,7 @@
     >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="日志ID" align="center" prop="id" width="60" />
-      <el-table-column label="系统模块" align="center" prop="title" />
+      <el-table-column label="系统模块" align="center" prop="title" :show-overflow-tooltip="true" />
       <el-table-column label="请求描述" align="center" prop="methodDesc" width="150" :show-overflow-tooltip="true" />
       <el-table-column class-name="status-col" label="请求方式" width="110" prop="requestMethod" align="center">
         <template slot-scope="scope">
