@@ -101,7 +101,7 @@
       :data="typeList"
       element-loading-text="Loading"
       stripe
-      height="485"
+      height="465"
       fit
       highlight-current-row
       @selection-change="handleSelectionChange"

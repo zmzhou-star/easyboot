@@ -24,10 +24,7 @@
         <!--append为TRUE表示消息增加到指定文件中，false表示消息覆盖指定的文件内容，默认值是true -->
         <File name="log" fileName="${LOG_HOME}/log4j2.log" append="false">
             <PatternLayout pattern="${console_pattern}"/>
-            <Policies>
-                <TimeBasedTriggeringPolicy/>
-                <SizeBasedTriggeringPolicy size="50 MB"/>
-            </Policies>
+            <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
         </File>
 
         <!-- 打印出所有的error信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->
@@ -58,6 +55,7 @@
         <RollingFile name="infoRollingFile" fileName="${LOG_HOME}/info.log"
                      filePattern="${LOG_HOME}/$${date:yyyy-MM}/%d{yyyy-MM-dd}-info-%i.log.gz">
             <PatternLayout pattern="${pattern}"/>
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
                 <SizeBasedTriggeringPolicy size="100 MB"/>

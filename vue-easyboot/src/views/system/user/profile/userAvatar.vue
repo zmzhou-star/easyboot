@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-tooltip content="点击上传头像" effect="dark" placement="bottom">
-      <img :src="options.img" alt="用户头像" class="img-circle img-lg" @click="editCropper()">
-    </el-tooltip>
+    <div class="user-info-head" @click="editCropper()">
+      <img :src="options.img" title="点击上传头像" alt="头像找不到了" class="img-circle img-lg" />
+    </div>
     <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-row>
         <el-col :xs="24" :md="12" :style="{height: '350px'}">
@@ -145,3 +145,29 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+.user-info-head {
+  position: relative;
+  display: inline-block;
+  min-width: 130px;
+  min-height: 130px;
+}
+
+.user-info-head:hover:after {
+  content: '+';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  color: #eee;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 26px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  cursor: pointer;
+  line-height: 120px;
+  border-radius: 50%;
+}
+</style>

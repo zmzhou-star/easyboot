@@ -1,5 +1,6 @@
 package com.github.zmzhou.easyboot.api.common;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
@@ -8,15 +9,20 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
+import com.github.zmzhou.easyboot.common.utils.FileUploadUtils;
 import com.github.zmzhou.easyboot.common.utils.FileUtil;
+import com.github.zmzhou.easyboot.common.utils.ServletUtils;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.redis.RedisUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginBody;
@@ -30,10 +36,10 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 生成验证码
+ * CaptchaController
  * @author zmzhou
- * @title CaptchaController
- * @Description 生成验证码
- * @Date 2020/07/08 18:04
+ * @date 2020/07/08 18:04
  */
 @Slf4j
 @Api(tags = {"通用工具接口"})
@@ -99,9 +105,40 @@ public class CommonController extends BaseController {
 		log.info("生成验证码：{}", result);
 		return ok(body);
 	}
+	
+	/**
+	 * 通用文件上传 
+	 * @return 保存在服务器文件名称
+	 * @author zmzhou
+	 * @date 2020/11/19 15:37
+	 */
+	@PostMapping("upload")
+	public ApiResult<String> upload() {
+		ApiResult<String> result = new ApiResult<>();
+		HttpServletRequest request = ServletUtils.getRequest();
+		// 头像文件
+		FileItem fileItem = FileUploadUtils.getInstance().singleUpload(request);
+		// 上传文件路径
+		String uuid = IdUtil.simpleUUID();
+		String filePath = uploadPath + uuid;
+		// 判断文件夹路径是否存在，不存在则创建
+		FileUtil.existsAndMkdirs(filePath);
+		// 上传并返回新文件名称
+		String fileName = fileItem.getName();
+		try {
+			// 保存文件
+			FileUtils.copyInputStreamToFile(fileItem.getInputStream(), new File(filePath, fileName));
+			// 返回保存在服务器文件名称
+			result.setData(uuid + Constants.SEPARATOR + fileName);
+		} catch (IOException e) {
+			log.error("保存文件：{}异常", fileName, e);
+			throw new BaseException(HttpStatus.BAD_REQUEST.value(), "文件上传[0]失败", fileName);
+		}
+		return result;
+	}
 
 	/**
-	 * 通用下载请求
+	 * 通用文件下载
 	 *
 	 * @param fileName 文件名称
 	 * @param del 是否删除
@@ -111,7 +148,7 @@ public class CommonController extends BaseController {
 	public void download(@ApiParam(name = "文件名", value = "fileName") String fileName, String del,
                  HttpServletResponse response, HttpServletRequest request){
 		try {
-			if (FileUtil.isValidFilename(fileName)) {
+			if (FileUtil.isAnIllegalFileName(fileName)) {
 				throw new BaseException(HttpStatus.BAD_REQUEST.value(),
 						String.format("文件名称(%s)非法，不允许下载。 ", fileName));
 			}
@@ -150,7 +187,7 @@ public class CommonController extends BaseController {
 		// 文件相对路径
 		String url = request.getParameter("url");
 		try {
-			if (FileUtil.isValidFilename(url)) {
+			if (FileUtil.isAnIllegalFileName(url)) {
 				throw new BaseException(HttpStatus.BAD_REQUEST,
 						String.format("文件名称(%s)非法，不允许下载。 ", url));
 			}

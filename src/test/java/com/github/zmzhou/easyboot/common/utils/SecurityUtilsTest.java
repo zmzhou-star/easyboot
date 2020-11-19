@@ -12,8 +12,6 @@ import com.github.zmzhou.easyboot.EasybootApplicationTests;
  * @version 1.0  date 2020/9/19 19:09
  */
 class SecurityUtilsTest extends EasybootApplicationTests {
-	/** DEFAULT_PD */
-	private static final String DEFAULT_PD = "Zmzhou.1324";
 	/**
 	 * Gets username.
 	 */
@@ -28,9 +26,7 @@ class SecurityUtilsTest extends EasybootApplicationTests {
 	 */
 	@Test
 	void encryptPassword() {
-		String res = SecurityUtils.encryptPassword(DEFAULT_PD);
-		Assertions.assertNotNull(res);
-		res = SecurityUtils.encryptPassword(null);
+		String res = SecurityUtils.encryptPassword(null);
 		Assertions.assertNotNull(res);
 	}
 
@@ -39,7 +35,7 @@ class SecurityUtilsTest extends EasybootApplicationTests {
 	 */
 	@Test
 	void matchesPassword() {
-		Assertions.assertTrue(SecurityUtils.matchesPassword(DEFAULT_PD,
+		Assertions.assertTrue(SecurityUtils.matchesPassword("Zmzhou.1324",
 				SecurityUtils.encryptPassword(null)));
 		Assertions.assertFalse(SecurityUtils.matchesPassword("abc", SecurityUtils.encryptPassword(null)));
 	}
@@ -58,7 +54,7 @@ class SecurityUtilsTest extends EasybootApplicationTests {
 	 */
 	@Test
 	void sha256Encrypt() {
-		String res = SecurityUtils.sha256Encrypt(DEFAULT_PD);
+		String res = SecurityUtils.sha256Encrypt("abcd");
 		Assertions.assertNotNull(res);
 	}
 }

@@ -272,7 +272,7 @@ export default {
         dictLabel: undefined,
         dictValue: undefined,
         dictName: undefined,
-        dictSort: 1,
+        dictSort: this.total + 1,
         status: '1',
         remark: undefined
       }
