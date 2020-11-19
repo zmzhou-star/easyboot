@@ -97,7 +97,7 @@
       v-loading="loading"
       :data="roleList"
       stripe
-      height="485"
+      height="465"
       fit
       highlight-current-row
       @sort-change="sortChange"

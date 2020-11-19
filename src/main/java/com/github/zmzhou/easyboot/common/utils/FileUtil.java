@@ -34,7 +34,7 @@ public final class FileUtil {
     public static final String FILE_NAME_PATTERN = "[a-zA-Z0-9_/\\-\\.\\u4e00-\\u9fa5]+";
 
     /**
-     * @description 构造器
+     * 构造器
      * @author zmzhou
      * @date 2020/8/30 21:21
      */
@@ -42,13 +42,17 @@ public final class FileUtil {
     }
 
     /**
-     * 文件名称验证
+     * 验证文件名称是否合法
      * @param filename 文件名称
      * @return false:正常     true:非法
      * @author zmzhou
      * @date 2020/8/30 21:18
      */
-    public static boolean isValidFilename(String filename) {
+    public static boolean isAnIllegalFileName(String filename) {
+        // 禁止访问上级目录
+        if (StringUtils.contains(filename, "..")) {
+            return true;
+        }
         return !filename.matches(FILE_NAME_PATTERN);
     }
     /**
@@ -155,7 +159,7 @@ public final class FileUtil {
     }
 
     /**
-     * @description 判断文件夹路径是否存在，不存在则创建
+     * 判断文件夹路径是否存在，不存在则创建
      * @param path 文件夹路径
      * @author zmzhou
      * @date 2020/9/3 21:37
@@ -169,7 +173,7 @@ public final class FileUtil {
     }
 
     /**
-     * @description 判断文件是否存在
+     * 判断文件是否存在
      * @param filePath 文件路径
      * @return 文件是否存在
      * @author zmzhou
@@ -180,7 +184,7 @@ public final class FileUtil {
         return dir.exists();
     }
     /**
-     * @description  根据contentType获取文件后缀
+     * 根据contentType获取文件后缀
      * @param contentType contentType
      * @return  文件后缀
      * @author zmzhou

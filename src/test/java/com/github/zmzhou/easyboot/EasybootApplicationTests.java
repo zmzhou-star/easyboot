@@ -1,5 +1,11 @@
 package com.github.zmzhou.easyboot;
 
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+
+import org.apache.commons.codec.binary.Base64;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,9 +63,13 @@ public class EasybootApplicationTests {
      * Context loads.
      */
     @Test
-    void contextLoads() {
+    void contextLoads() throws NoSuchAlgorithmException {
         Assertions.assertNotNull(params);
         log.info("测试");
+        // 生成一个Base64唯一字符串
+        KeyGenerator keygen = KeyGenerator.getInstance("AES");
+        SecretKey desKey = keygen.generateKey();
+        log.info(Base64.encodeBase64URLSafeString(desKey.getEncoded()));
     }
 
 }

@@ -22,6 +22,11 @@ public final class Constants {
      */
     public static final String LOGIN_TOKEN_KEY = "login_tokens:";
 
+    /** 参数管理 cache key */
+    public static final String SYS_CONFIG_KEY = "sys_config:";
+    /** 数据字典 cache key */
+    public static final String SYS_DICT_KEY = "sys_dict:";
+
     /** 字符 0 */
     public static final String ZERO = "0";
     /** 字符 1 */
@@ -54,10 +59,6 @@ public final class Constants {
      */
     public static final String JWT_AUTHORITIES = "authorities";
 
-    /**
-     * 资源映射路径 前缀
-     */
-    public static final String RESOURCE_PREFIX = "/profile";
     /** 逗号 , */
     public static final String COMMA = ",";
     /** 点 . */
@@ -88,11 +89,6 @@ public final class Constants {
 	public static final String CREATE_TIME = "createTime";
     /** 文件下载缓冲区大小 */
     public static final int BUFFER_SIZE = 2 * 1024 * 1024;
-
-    /** 参数管理 cache key */
-    public static final String SYS_CONFIG_KEY = "sys_config:";
-    /** 数据字典 cache key */
-	public static final String SYS_DICT_KEY = "sys_dict:";
 
 	/**
      * 私有构造器

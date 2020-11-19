@@ -79,7 +79,7 @@
       :data="data.rows"
       element-loading-text="Loading"
       stripe
-      height="485"
+      height="465"
       fit
       highlight-current-row
       @sort-change="sortChange"

@@ -20,12 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class FileUtilTest {
 
     /**
-     * Is valid filename.
+     * Is An Illegal filename.
      */
     @Test
-    void isValidFilename() {
-        assertFalse(FileUtil.isValidFilename("admin/123.png"));
-        assertTrue(FileUtil.isValidFilename("admin/1#23.png"));
+    void isAnIllegalFileName() {
+        assertFalse(FileUtil.isAnIllegalFileName("admin/123.png"));
+        assertTrue(FileUtil.isAnIllegalFileName("admin/1#23.png"));
+        assertTrue(FileUtil.isAnIllegalFileName("../admin/1#23.png"));
     }
 
     /**

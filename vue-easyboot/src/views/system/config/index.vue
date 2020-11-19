@@ -7,7 +7,7 @@
           placeholder="请输入参数名称"
           clearable
           size="small"
-          style="width: 100px"
+          style="width: 150px"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
@@ -17,18 +17,17 @@
           placeholder="请输入参数键名"
           clearable
           size="small"
-          style="width: 100px"
+          style="width: 150px"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item label="系统内置" prop="configType">
-        <el-select v-model="queryParams.configType" placeholder="系统内置" clearable size="small">
+        <el-select v-model="queryParams.configType" placeholder="系统内置" clearable size="small" style="width: 130px">
           <el-option
             v-for="dict in typeOptions"
             :key="dict.dictValue"
             :label="dict.dictLabel"
             :value="dict.dictValue"
-            style="width: 100px"
           />
         </el-select>
       </el-form-item>
@@ -96,7 +95,7 @@
       :data="configList"
       element-loading-text="Loading"
       stripe
-      height="485"
+      height="465"
       fit
       highlight-current-row
       @selection-change="handleSelectionChange"

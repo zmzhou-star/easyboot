@@ -8,8 +8,8 @@ import request from '@/utils/request'
 export function list${BusinessName}(query) {
   return request({
     url: '/${moduleName}/${businessName}/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
 /**
