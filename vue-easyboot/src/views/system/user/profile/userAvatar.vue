@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="user-info-head" @click="editCropper()">
-      <img v-bind:src="options.img" title="点击上传头像" alt="头像找不到了" class="img-circle img-lg">
+      <img v-bind:src="options.img" title="点击上传头像" alt="头像找不到了" class="img-circle img-lg" />
     </div>
     <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
       <el-row>

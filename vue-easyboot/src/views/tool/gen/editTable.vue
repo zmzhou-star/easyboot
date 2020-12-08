@@ -19,7 +19,7 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="物理类型"
+            label="数据库类型"
             prop="columnType"
             min-width="10%"
             :show-overflow-tooltip="true"

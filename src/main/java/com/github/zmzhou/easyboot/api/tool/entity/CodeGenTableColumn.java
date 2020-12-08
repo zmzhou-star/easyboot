@@ -113,6 +113,47 @@ public class CodeGenTableColumn extends BaseEntity {
 	}
 
 	/**
+	 * 是否自增（1是）
+	 * @author zmzhou
+	 * @date 2020/12/8 16:27
+	 */
+	public boolean isIncrement(){
+		return StringUtils.isNotBlank(this.isIncrement) && StringUtils.equals(Constants.ONE, this.isIncrement);
+	}
+	/**
+	 * 是否必填（1是）
+	 * @author zmzhou
+	 * @date 2020/12/8 16:27
+	 */
+	public boolean isRequired(){
+		return StringUtils.isNotBlank(this.isRequired) && StringUtils.equals(Constants.ONE, this.isRequired);
+	}
+	/**
+	 * 是否编辑字段（1是）
+	 * @author zmzhou
+	 * @date 2020/12/8 16:27
+	 */
+	public boolean isEdit(){
+		return StringUtils.isNotBlank(this.isEdit) && StringUtils.equals(Constants.ONE, this.isEdit);
+	}
+	/**
+	 * 是否为插入字段（1是）
+	 * @author zmzhou
+	 * @date 2020/12/8 16:27
+	 */
+	public boolean isInsert(){
+		return StringUtils.isNotBlank(this.isInsert) && StringUtils.equals(Constants.ONE, this.isInsert);
+	}
+	/**
+	 * 是否查询字段（1是）
+	 * @author zmzhou
+	 * @date 2020/12/8 16:27
+	 */
+	public boolean isQuery(){
+		return StringUtils.isNotBlank(this.isQuery) && StringUtils.equals(Constants.ONE, this.isQuery);
+	}
+
+	/**
 	 * 是否列表字段（1：是）
 	 * Is list boolean.
 	 * @return the boolean

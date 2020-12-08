@@ -60,13 +60,13 @@ export function del${BusinessName}(${pkColumn.javaField}) {
 }
 /**
  * 导出${functionName}
- * @param {Object} query
+ * @param {Object} params
  * @returns {Object}
  */
-export function export${BusinessName}(query) {
+export function export${BusinessName}(params) {
   return request({
     url: '/${moduleName}/${businessName}/export',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: params
   })
 }
