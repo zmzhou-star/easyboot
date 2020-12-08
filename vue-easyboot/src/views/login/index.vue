@@ -47,14 +47,14 @@
           auto-complete="off"
           maxlength="4"
           placeholder="验证码"
-          style="width: 60%"
+          class="captcha"
           @keyup.enter.native="handleLogin"
         />
         <div class="login-code">
-          <img :src="codeUrl" @click="getCode">
+          <img :src="codeUrl" @click="getCode" alt="验证码">
         </div>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
+      <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">记住密码</el-checkbox>
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
       <div class="tips">
@@ -209,6 +209,12 @@ $cursor: #fff;
     background: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     color: #454545;
+  }
+  .captcha {
+    width: 60%;
+    input{
+      text-transform: uppercase;
+    }
   }
   .login-code {
       width: 31%;

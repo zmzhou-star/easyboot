@@ -104,8 +104,21 @@ public class ${ClassName}Controller extends BaseController {
 	@ApiOperation(value = "删除${functionName}")
 	@DeleteMapping("/{ids}")
 	public ApiResult<Integer> remove(@PathVariable("ids")
-				 @ApiParam(name = "ids" , value = "id数组" , required = true) Long[] ids) {
-			${className}Service.deleteByIds(ids);
+			 @ApiParam(name = "ids" , value = "id数组" , required = true) Long[] ids) {
+		${className}Service.deleteByIds(ids);
 		return new ApiResult<>();
+	}
+	
+	/**
+	 * 导出excel
+	 * @param params 查询参数
+	 * @return ApiResult<String> excel文件名
+	 * @author ${author}
+	 * date ${datetime}
+	 */
+	@PostMapping("/export")
+	@ApiOperation(value = "导出${functionName}excel")
+	public ApiResult<String> export(@RequestBody ${ClassName}Params params) throws InterruptedException {
+		return ok(${className}Service.export(params));
 	}
 }
