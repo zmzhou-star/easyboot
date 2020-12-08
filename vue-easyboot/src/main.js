@@ -21,7 +21,7 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 import { getDicts } from '@/api/system/dict/data'
-import { getConfigKey } from "@/api/system/config";
+import { getConfigKey } from '@/api/system/config'
 import Pagination from '@/components/Pagination'
 import { deepClone } from '@/utils'
 // 全局组件挂载

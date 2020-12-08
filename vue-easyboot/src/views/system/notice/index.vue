@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" label-width="68px">
+    <el-form ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
       <el-form-item label="公告标题" prop="noticeTitle">
         <el-input
           v-model="queryParams.noticeTitle"
@@ -50,31 +50,31 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
+          v-hasPermi="['system:notice:add']"
           type="primary"
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:notice:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
+          v-hasPermi="['system:notice:edit']"
           type="success"
           icon="el-icon-edit"
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['system:notice:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
+          v-hasPermi="['system:notice:remove']"
           type="danger"
           icon="el-icon-delete"
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:notice:remove']"
         >删除</el-button>
       </el-col>
     </el-row>
@@ -108,18 +108,18 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
+            v-hasPermi="['system:notice:edit']"
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:notice:edit']"
           >修改</el-button>
           <el-button
+            v-hasPermi="['system:notice:remove']"
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:notice:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -150,7 +150,7 @@
                   :key="dict.dictValue"
                   :label="dict.dictLabel"
                   :value="dict.dictValue"
-                ></el-option>
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -166,13 +166,13 @@
                   v-for="dict in statusOptions"
                   :key="dict.dictValue"
                   :label="dict.dictValue"
-                >{{dict.dictLabel}}</el-radio>
+                >{{ dict.dictLabel }}</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="内容">
-              <Editor v-model="form.noticeContent" :min-height="190"/>
+              <Editor v-model="form.noticeContent" :min-height="190" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -186,11 +186,11 @@
 </template>
 
 <script>
-import { listNotice, getNotice, delNotice, addNotice, updateNotice } from "@/api/system/notice";
-import Editor from '@/components/Editor';
+import { listNotice, getNotice, delNotice, addNotice, updateNotice } from '@/api/system/notice'
+import Editor from '@/components/Editor'
 
 export default {
-  name: "Notice",
+  name: 'Notice',
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -218,7 +218,7 @@ export default {
       // 公告表格数据
       noticeList: [],
       // 弹出层标题
-      title: "",
+      title: '',
       // 是否显示弹出层
       open: false,
       // 类型数据字典
@@ -239,45 +239,45 @@ export default {
       // 表单校验
       rules: {
         noticeTitle: [
-          { required: true, message: "公告标题不能为空", trigger: "blur" }
+          { required: true, message: '公告标题不能为空', trigger: 'blur' }
         ],
         noticeType: [
-          { required: true, message: "公告类型不能为空", trigger: "blur" }
+          { required: true, message: '公告类型不能为空', trigger: 'blur' }
         ]
       }
-    };
+    }
   },
   created() {
-    this.getList();
-    this.getDicts("sys_notice_status").then(response => {
-      this.statusOptions = response;
-    });
-    this.getDicts("sys_notice_type").then(response => {
-      this.typeOptions = response;
-    });
+    this.getList()
+    this.getDicts('sys_notice_status').then(response => {
+      this.statusOptions = response
+    })
+    this.getDicts('sys_notice_type').then(response => {
+      this.typeOptions = response
+    })
   },
   methods: {
     /** 查询公告列表 */
     getList() {
-      this.loading = true;
+      this.loading = true
       listNotice(this.queryParams).then(response => {
-        this.noticeList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+        this.noticeList = response.rows
+        this.total = response.total
+        this.loading = false
+      })
     },
     // 公告状态字典翻译
     statusFormat(row, column) {
-      return this.selectDictLabel(this.statusOptions, row.status);
+      return this.selectDictLabel(this.statusOptions, row.status)
     },
     // 公告状态字典翻译
     typeFormat(row, column) {
-      return this.selectDictLabel(this.typeOptions, row.noticeType);
+      return this.selectDictLabel(this.typeOptions, row.noticeType)
     },
     // 取消按钮
     cancel() {
-      this.open = false;
-      this.reset();
+      this.open = false
+      this.reset()
     },
     // 表单重置
     reset() {
@@ -286,80 +286,80 @@ export default {
         noticeTitle: undefined,
         noticeType: undefined,
         noticeContent: undefined,
-        status: "1"
-      };
-      this.resetForm("form");
+        status: '1'
+      }
+      this.resetForm('form')
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
+      this.queryParams.pageNum = 1
+      this.getList()
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
-      this.handleQuery();
+      this.resetForm('queryForm')
+      this.handleQuery()
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加公告";
+      this.reset()
+      this.open = true
+      this.title = '添加公告'
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.reset();
+      this.reset()
       const id = row.id || this.ids
       getNotice(id).then(response => {
-        this.form = response;
-        this.open = true;
-        this.title = "修改公告";
-      });
+        this.form = response
+        this.open = true
+        this.title = '修改公告'
+      })
     },
     /** 提交按钮 */
     submitForm: function() {
-      this.$refs["form"].validate(valid => {
+      this.$refs['form'].validate(valid => {
         if (valid) {
           if (this.form.id !== undefined) {
             updateNotice(this.form).then(response => {
               if (response && response.id > 0) {
-                this.msgSuccess("修改成功");
-                this.open = false;
-                this.getList();
+                this.msgSuccess('修改成功')
+                this.open = false
+                this.getList()
               }
-            });
+            })
           } else {
             addNotice(this.form).then(response => {
               if (response && response.id > 0) {
-                this.msgSuccess("新增成功");
-                this.open = false;
-                this.getList();
+                this.msgSuccess('新增成功')
+                this.open = false
+                this.getList()
               }
-            });
+            })
           }
         }
-      });
+      })
     },
     /** 删除按钮操作 */
     handleDelete(row) {
       const noticeIds = row.id || this.ids
-      this.$confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项?', "操作警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return delNotice(noticeIds);
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        }).catch(function() {});
+      this.$confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项?', '操作警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function() {
+        return delNotice(noticeIds)
+      }).then(() => {
+        this.getList()
+        this.msgSuccess('删除成功')
+      }).catch(function() {})
     }
   }
-};
+}
 </script>

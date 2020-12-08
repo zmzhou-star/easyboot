@@ -351,15 +351,15 @@ export default {
   },
   created() {
     this.fetchData()
-    this.getDicts("sys_normal_disable").then(response => {
-      this.statusOptions = response;
-    });
-    this.getDicts("sys_user_sex").then(response => {
-      this.sexOptions = response;
-    });
-    this.getConfigKey("sys.user.initPassword").then(response => {
-      this.initPassword = response;
-    });
+    this.getDicts('sys_normal_disable').then(response => {
+      this.statusOptions = response
+    })
+    this.getDicts('sys_user_sex').then(response => {
+      this.sexOptions = response
+    })
+    this.getConfigKey('sys.user.initPassword').then(response => {
+      this.initPassword = response
+    })
   },
   methods: {
     fetchData() {
@@ -435,7 +435,7 @@ export default {
       getOne().then(response => {
         this.open = true
         this.title = '添加用户'
-        this.form.password = this.initPassword;
+        this.form.password = this.initPassword
         this.roleOptions = response.roleList
       })
     },
