@@ -1,5 +1,6 @@
 package com.github.zmzhou.easyboot.api.monitor.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,7 +10,7 @@ import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
 /**
- * @description 服务器监控
+ * 服务器监控
  * @author zmzhou
  * @date 2020/07/02 20:35
  */
@@ -21,6 +22,7 @@ public class ServerController extends BaseController {
      * @author zmzhou
      * @date 2020/07/03 14:28
      */
+    @PreAuthorize("@ebpe.hasPermission('monitor:server:list')")
     @GetMapping("/getInfo")
     public ApiResult<ServerInfo> getInfo() {
         // 获取服务器信息

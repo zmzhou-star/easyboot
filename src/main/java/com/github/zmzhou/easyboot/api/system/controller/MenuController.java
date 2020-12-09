@@ -2,8 +2,10 @@ package com.github.zmzhou.easyboot.api.system.controller;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,9 +42,9 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/system/menu")
 public class MenuController extends BaseController {
-	@Autowired
+	@Resource
 	private MenuService menuService;
-	@Autowired
+	@Resource
 	private TokenService tokenService;
 	
 	/**
@@ -53,6 +55,7 @@ public class MenuController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/08/27 11:42
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:menu:list')")
 	@PostMapping(path = "list")
 	@ApiOperation(value = "获取菜单列表")
 	public ApiResult<List<SysMenu>> list(@RequestBody(required = false) SysMenuParams params) {
@@ -67,6 +70,7 @@ public class MenuController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/8 22:59
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:menu:query')")
 	@GetMapping(value = {"getOne", "getOne/{id}"})
 	@ApiOperation(value = "根据菜单id获取详细信息")
 	public ApiResult<SysMenu> getOne(@PathVariable(value = "id", required = false) Long id) {
@@ -119,6 +123,7 @@ public class MenuController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/8 23:23
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:menu:add')")
 	@PostMapping
 	@ApiOperation(value = "新增菜单")
 	public ApiResult<SysMenu> add(@Validated @RequestBody SysMenuVo menuVo) {
@@ -142,6 +147,7 @@ public class MenuController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/9 22:06
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:menu:edit')")
 	@PutMapping
 	@ApiOperation(value = "修改菜单信息")
 	public ApiResult<SysMenu> update(@Validated @RequestBody SysMenuVo menuVo) {
@@ -165,6 +171,7 @@ public class MenuController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/9 22:13
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:menu:remove')")
 	@DeleteMapping("/{menuId}")
 	@ApiOperation(value = "删除菜单")
 	public ApiResult<Integer> remove(@PathVariable("menuId") Long menuId) {

@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,6 +48,7 @@ public class ${ClassName}Controller extends BaseController {
 	 * @author ${author}
 	 * date ${datetime}
 	 */
+	@PreAuthorize("@ebpe.hasPermission('${moduleName}:${businessName}:list')")
 	@ApiOperation(value = "查询${functionName}列表")
 	@PostMapping(path = "list")
 	public ApiResult<TableDataInfo> list(@RequestBody(required = false) ${ClassName}Params params) {
@@ -62,6 +64,7 @@ public class ${ClassName}Controller extends BaseController {
 	 * @author ${author}
 	 * date ${datetime}
 	 */
+	@PreAuthorize("@ebpe.hasPermission('${moduleName}:${businessName}:query')")
 	@ApiOperation(value = "根据id获取${functionName}详细信息")
 	@GetMapping(value = "/{id}")
 	public ApiResult<${ClassName}> findById(@PathVariable(value = "id" , required = false) Long id) {
@@ -75,6 +78,7 @@ public class ${ClassName}Controller extends BaseController {
 	 * @author ${author}
 	 * date ${datetime}
 	 */
+	@PreAuthorize("@ebpe.hasPermission('${moduleName}:${businessName}:add')")
 	@ApiOperation(value = "新增${functionName}")
 	@PostMapping
 	public ApiResult<${ClassName}> save(@Validated @RequestBody ${ClassName}Vo vo) {
@@ -88,6 +92,7 @@ public class ${ClassName}Controller extends BaseController {
 	 * @author ${author}
 	 * date ${datetime}
 	 */
+	@PreAuthorize("@ebpe.hasPermission('${moduleName}:${businessName}:edit')")
 	@ApiOperation(value = "修改${functionName}")
 	@PutMapping
 	public ApiResult<${ClassName}> update(@Validated @RequestBody ${ClassName}Vo vo) {
@@ -101,6 +106,7 @@ public class ${ClassName}Controller extends BaseController {
 	 * @author ${author}
 	 * date ${datetime}
 	 */
+	@PreAuthorize("@ebpe.hasPermission('${moduleName}:${businessName}:remove')")
 	@ApiOperation(value = "删除${functionName}")
 	@DeleteMapping("/{ids}")
 	public ApiResult<Integer> remove(@PathVariable("ids")
@@ -116,6 +122,7 @@ public class ${ClassName}Controller extends BaseController {
 	 * @author ${author}
 	 * date ${datetime}
 	 */
+	@PreAuthorize("@ebpe.hasPermission('${moduleName}:${businessName}:export')")
 	@PostMapping("/export")
 	@ApiOperation(value = "导出${functionName}excel")
 	public ApiResult<String> export(@RequestBody ${ClassName}Params params) throws InterruptedException {

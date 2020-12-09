@@ -57,8 +57,8 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
      * 
      * @param id ${functionName}id
      * @return ${ClassName}对象
-	 * @author ${author}
-	 * date ${datetime}
+     * @author ${author}
+     * date ${datetime}
      */
     public ${ClassName} findById(Long id) {
 	    if (null == id) {
@@ -72,8 +72,8 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
      * 
      * @param entity ${functionName}
      * @return ${ClassName} 新增结果
-	 * @author ${author}
-	 * date ${datetime}
+     * @author ${author}
+     * date ${datetime}
      */
     public ${ClassName} save(${ClassName} entity) {
 	    entity.setCreateTime(new Date());
@@ -86,8 +86,8 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
      * 
      * @param entity ${functionName}
      * @return ${ClassName} 修改结果
-	 * @author ${author}
-	 * date ${datetime}
+     * @author ${author}
+     * date ${datetime}
      */
     public ${ClassName} update(${ClassName} entity) {
 	    entity.setUpdateTime(new Date());
@@ -99,8 +99,8 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
      * 批量删除${functionName}
      * 
      * @param ${pkColumn.javaField}s 需要删除的${functionName}ID
-	 * @author ${author}
-	 * date ${datetime}
+     * @author ${author}
+     * date ${datetime}
      */
     public void deleteByIds(Long[] ids) {
 	    for (Long id: ids) {
@@ -109,17 +109,17 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
 	    }
     }
 
-	/**
+    /**
      * 导出excel
      *
      * @param params 查询参数
      * @return excel文件路径名
      * @throws InterruptedException 异常信息
-	 * @author ${author}
-	 * date ${datetime}
+     * @author ${author}
+     * date ${datetime}
      */
-	@Override
-	public String export(${ClassName}Params params) throws InterruptedException {
+    @Override
+    public String export(${ClassName}Params params) throws InterruptedException {
 		Page<${ClassName}> list = findAll(params, getExcelPageable(params));
 		List<BaseExcel> excelList = new ArrayList<>();
 		// 判断是字典类型还是字典数据导出

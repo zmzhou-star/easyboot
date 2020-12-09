@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -120,6 +121,23 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 		String uri = ServletUtils.getRequest().getRequestURI();
 		log.error(e.getMessage() + " {}", uri, e);
 		String message = e.getAllErrors().get(0).getDefaultMessage();
+		// 记录操作失败日志
+		saveFailOperLog(e, message);
+		return new ApiResult<>().error(message);
+	}
+	
+	/**
+	 * 接口访问权限异常 
+	 * @param e AccessDeniedException
+	 * @return ApiResult<Object>
+	 * @author zmzhou
+	 * @date 2020/12/9 15:13
+	 */
+	@ExceptionHandler(AccessDeniedException.class)
+	public ApiResult<Object> accessDeniedExceptionHandler(AccessDeniedException e) {
+		String uri = ServletUtils.getRequest().getRequestURI();
+		String message = e.getMessage();
+		log.error("[accessDeniedExceptionHandler] {} Catch an exception:", uri, e);
 		// 记录操作失败日志
 		saveFailOperLog(e, message);
 		return new ApiResult<>().error(message);

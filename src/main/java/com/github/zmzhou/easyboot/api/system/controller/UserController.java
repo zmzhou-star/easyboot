@@ -10,6 +10,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,6 +67,7 @@ public class UserController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/07/08 11:50
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:user:query')")
 	@GetMapping(value = {"getOne", "getOne/{id}"})
 	@ApiOperation(value = "根据id获取用户信息")
 	public ApiResult<SysUserVo> getUser(@PathVariable(value = "id", required = false)
@@ -87,6 +89,7 @@ public class UserController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/07/02 18:53
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:user:list') or @ebpe.hasRole('admin')")
 	@PostMapping(path = "list")
 	@ApiOperation(value = "获取用户列表")
 	public ApiResult<TableDataInfo> list(@RequestBody SysUserParams params) {
@@ -101,6 +104,7 @@ public class UserController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/8/30 21:50
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:user:export')")
 	@PostMapping("/export")
 	@ApiOperation(value = "导出用户excel")
 	public ApiResult<String> export(@RequestBody(required = false) SysUserParams params) throws InterruptedException {
@@ -125,6 +129,7 @@ public class UserController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/6 13:54
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:user:import')")
 	@PostMapping("/importExcel")
 	@ApiOperation(value = "导入用户excel")
 	public ApiResult<String> importExcel(boolean isUpdate) throws IOException {
@@ -142,6 +147,7 @@ public class UserController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/07/02 18:52
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:user:add')")
 	@PostMapping(path = "save")
 	@ApiOperation(value = "保存用户")
 	public ApiResult<SysUser> save(@Validated @RequestBody SysUserVo user) {
@@ -163,6 +169,7 @@ public class UserController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/07/02 18:52
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:user:edit')")
 	@PutMapping(path = "update")
 	@ApiOperation(value = "修改用户信息")
 	public ApiResult<SysUser> update(@Validated @RequestBody SysUserVo user) {
@@ -182,6 +189,7 @@ public class UserController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/07/07 14:02
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:user:changeStatus')")
 	@PutMapping("/changeStatus")
 	@ApiOperation(value = "根据id修改用户状态")
 	public ApiResult<Integer> changeStatus(@RequestBody Params params) {
@@ -194,6 +202,7 @@ public class UserController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/07/02 18:51
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:user:remove')")
 	@DeleteMapping("delete/{ids}")
 	@ApiOperation(value = "删除用户")
 	public ApiResult<Object> delete(@PathVariable("ids")
@@ -208,6 +217,7 @@ public class UserController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/07/02 18:51
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:user:resetPwd')")
 	@PutMapping("resetPwd")
 	@ApiOperation(value = "修改密码")
 	public ApiResult<SysUser> resetPwd(@ApiParam(name = "id", value = "用户ID", required = true) Long id,

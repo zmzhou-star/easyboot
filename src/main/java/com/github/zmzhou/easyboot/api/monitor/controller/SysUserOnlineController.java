@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +46,7 @@ public class SysUserOnlineController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/12 17:29
 	 */
+	@PreAuthorize("@ebpe.hasPermission('monitor:online:list')")
 	@ApiOperation(value = "获取在线用户列表")
 	@GetMapping("/list")
 	public ApiResult<List<SysUserOnlineVo>> list(@ApiParam(name = "userName", value = "用户名") String userName,
@@ -60,6 +62,7 @@ public class SysUserOnlineController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/12 18:06
 	 */
+	@PreAuthorize("@ebpe.hasPermission('monitor:online:forceLogout')")
 	@ApiOperation(value = "强退用户")
 	@DeleteMapping("/{tokenId}")
 	public ApiResult<String> forceLogout(@ApiParam(name = "tokenId", value = "tokenId", required = true)

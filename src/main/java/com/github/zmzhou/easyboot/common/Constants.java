@@ -4,10 +4,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
+ *  通用常量信息
  *  @title Constants
- *  @Description 通用常量信息
  *  @author zmzhou
- *  @Date 2020/07/03 15:24
+ *  Date 2020/07/03 15:24
  */
 public final class Constants {
     /** 系统默认编码 */
@@ -89,6 +89,9 @@ public final class Constants {
 	public static final String CREATE_TIME = "createTime";
     /** 文件下载缓冲区大小 */
     public static final int BUFFER_SIZE = 2 * 1024 * 1024;
+    
+    /** 所有权限标识 */
+    public static final String ALL_PERMISSION = "*:*:*";
 
 	/**
      * 私有构造器

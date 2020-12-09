@@ -63,7 +63,7 @@ public class MenuService {
 		Set<String> permsSet = new HashSet<>();
 		// 管理员拥有所有权限
 		if (user.isAdmin()) {
-			permsSet.add("*:*:*");
+			permsSet.add(Constants.ALL_PERMISSION);
 		} else {
 			List<String> perms = menuDao.findMenuPermission(user.getId());
 			for (String perm : perms) {

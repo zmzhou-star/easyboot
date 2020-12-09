@@ -1,4 +1,4 @@
-package com.github.zmzhou.easyboot.api.system.vo;
+package com.github.zmzhou.easyboot.framework.vo;
 
 import java.io.Serializable;
 

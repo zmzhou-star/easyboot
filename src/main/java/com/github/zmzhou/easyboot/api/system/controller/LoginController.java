@@ -15,7 +15,6 @@ import com.github.zmzhou.easyboot.api.system.entity.SysMenu;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.api.system.service.LoginService;
 import com.github.zmzhou.easyboot.api.system.service.MenuService;
-import com.github.zmzhou.easyboot.api.system.service.RoleService;
 import com.github.zmzhou.easyboot.api.system.vo.RouterVo;
 import com.github.zmzhou.easyboot.api.system.vo.UserInfo;
 import com.github.zmzhou.easyboot.common.Constants;
@@ -44,8 +43,6 @@ public class LoginController extends BaseController {
 	private LoginService loginService;
 	@Resource
 	private MenuService menuService;
-	@Resource
-	private RoleService roleService;
 	
 	/**
 	 * 用户登录
@@ -76,8 +73,8 @@ public class LoginController extends BaseController {
 		// 用户信息、角色、菜单权限信息
 		UserInfo userInfo = UserInfo.builder()
 				.user(user)
-				.roles(roleService.getRolePermission(user))
-				.permissions(menuService.getMenuPermission(user))
+				.roles(loginUser.getRoles())
+				.permissions(loginUser.getPermissions())
 				.build();
 		return ok(userInfo);
 	}

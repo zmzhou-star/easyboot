@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,6 +77,7 @@ public class SysDictController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-16 16:47:04
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:dict:list')")
 	@ApiOperation(value = "查询数据字典列表")
 	@PostMapping(path = {"list", "type/list"})
 	public ApiResult<TableDataInfo> list(@RequestBody(required = false) SysDictParams params) {
@@ -106,6 +108,7 @@ public class SysDictController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-16 16:47:04
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:dict:add')")
 	@ApiOperation(value = "新增数据字典")
 	@PostMapping
 	public ApiResult<SysDict> save(@Validated @RequestBody SysDictVo vo) {
@@ -129,6 +132,7 @@ public class SysDictController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-16 16:47:04
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:dict:edit')")
 	@ApiOperation(value = "修改数据字典")
 	@PutMapping
 	public ApiResult<SysDict> update(@Validated @RequestBody SysDictVo vo) {
@@ -152,6 +156,7 @@ public class SysDictController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-16 16:47:04
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:dict:remove')")
 	@ApiOperation(value = "删除数据字典")
 	@DeleteMapping("/{ids}")
 	public ApiResult<Integer> remove(@PathVariable("ids")
@@ -167,6 +172,7 @@ public class SysDictController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-16 21:51:23
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:dict:export')")
 	@PostMapping({"/export", "/type/export"})
 	@ApiOperation(value = "导出数据字典excel")
 	public ApiResult<String> export(@RequestBody SysDictParams params) throws InterruptedException {

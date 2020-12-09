@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +49,7 @@ public class SysNoticeController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-19 14:15:47
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:notice:list')")
 	@ApiOperation(value = "查询通知公告信息列表")
 	@PostMapping(path = "list")
 	public ApiResult<TableDataInfo> list(@RequestBody(required = false) SysNoticeParams params) {
@@ -64,6 +66,7 @@ public class SysNoticeController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-19 14:15:47
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:notice:query')")
 	@ApiOperation(value = "根据id获取通知公告信息详细信息")
 	@GetMapping(value = "/{id}")
 	public ApiResult<SysNotice> findById(@PathVariable(value = "id", required = false) Long id) {
@@ -78,6 +81,7 @@ public class SysNoticeController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-19 14:15:47
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:notice:add')")
 	@ApiOperation(value = "新增通知公告信息")
 	@PostMapping
 	public ApiResult<SysNotice> save(@Validated @RequestBody SysNoticeVo vo) {
@@ -92,6 +96,7 @@ public class SysNoticeController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-19 14:15:47
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:notice:edit')")
 	@ApiOperation(value = "修改通知公告信息")
 	@PutMapping
 	public ApiResult<SysNotice> update(@Validated @RequestBody SysNoticeVo vo) {
@@ -106,6 +111,7 @@ public class SysNoticeController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-19 14:15:47
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:notice:remove')")
 	@ApiOperation(value = "删除通知公告信息")
 	@DeleteMapping("/{ids}")
 	public ApiResult<Integer> remove(@PathVariable("ids")

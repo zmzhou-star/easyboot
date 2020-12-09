@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -85,6 +86,7 @@ public class SysUserProfileController extends BaseController {
 	 * @date 2020/9/5 22:25
 	 */
 	@PutMapping
+	@PreAuthorize("principal.username.equals(#user.username)")
 	@ApiOperation(value = "修改用户个人信息")
 	public ApiResult<SysUser> update(@Validated @RequestBody SysUserVo user) {
 		ApiResult<SysUser> result = new ApiResult<>();
@@ -117,10 +119,10 @@ public class SysUserProfileController extends BaseController {
 		SysUser sysUser = loginUser.getUser();
 		String password = loginUser.getPassword();
 		if (!SecurityUtils.matchesPassword(oldPassword, password)) {
-			throw new BaseException(ErrorCode.PASSWD_ERROR, "修改密码失败，原密码错误");
+			throw new BaseException(ErrorCode.PASSWD_ERROR.getCode(), "修改密码失败，原密码错误");
 		}
 		if (SecurityUtils.matchesPassword(newPassword, password)) {
-			throw new BaseException(ErrorCode.PASSWD_ERROR, "新密码不能与原密码相同");
+			throw new BaseException(ErrorCode.PASSWD_ERROR.getCode(), "新密码不能与原密码相同");
 		}
 		sysUser = userService.resetPwd(sysUser.getId(), newPassword);
 		// 更新缓存信息

@@ -58,7 +58,7 @@ public class EasyWebMvcConfigurer implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .maxAge(1800)
                 // 设置允许跨域请求的域名
-                .allowedOrigins("*");
+                .allowedOriginPatterns("*");
     }
 
     /**

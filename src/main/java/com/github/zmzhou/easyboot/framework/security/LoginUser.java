@@ -36,7 +36,10 @@ public class LoginUser extends SysUserOnlineVo implements UserDetails {
 	 * 权限列表
 	 */
 	private Set<String> permissions;
-	
+	/**
+	 * 用户角色列表
+	 */
+	private Set<String> roles;
 	/**
 	 * 用户信息
 	 */
@@ -56,10 +59,12 @@ public class LoginUser extends SysUserOnlineVo implements UserDetails {
 	 *
 	 * @param user        the user
 	 * @param permissions the permissions
+	 * @param roles the roles
 	 */
-	public LoginUser(SysUser user, Set<String> permissions) {
+	public LoginUser(SysUser user, Set<String> permissions, Set<String> roles) {
 		this.user = user;
 		this.permissions = permissions;
+		this.roles = roles;
 	}
 
 	/**

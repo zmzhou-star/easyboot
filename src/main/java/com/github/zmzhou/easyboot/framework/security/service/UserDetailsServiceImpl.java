@@ -1,5 +1,7 @@
 package com.github.zmzhou.easyboot.framework.security.service;
 
+import java.util.Set;
+
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.api.system.service.MenuService;
+import com.github.zmzhou.easyboot.api.system.service.RoleService;
 import com.github.zmzhou.easyboot.api.system.service.UserService;
 import com.github.zmzhou.easyboot.common.ErrorCode;
 import com.github.zmzhou.easyboot.common.enums.UserStatus;
@@ -31,6 +34,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Resource
 	private MenuService menuService;
+	@Resource
+	private RoleService roleService;
+
 	/**
 	 * 用户登录验证
 	 * @param username 用户名
@@ -53,7 +59,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			log.info("登录用户：{} 已被停用.", username);
 			throw new BaseException(ErrorCode.USER_DISABLE, username);
 		}
-		return new LoginUser(user, menuService.getMenuPermission(user));
+		// 用户角色列表
+		Set<String> roles = roleService.getRolePermission(user);
+		if (roles.isEmpty()) {
+			throw new BaseException(ErrorCode.USER_HAS_NO_ROLE, username);
+		}
+		// 用户菜单权限列表
+		Set<String> permissions = menuService.getMenuPermission(user);
+		if (roles.isEmpty()) {
+			throw new BaseException(ErrorCode.USER_HAS_NO_PERMISSIONS, username);
+		}
+		return new LoginUser(user, permissions, roles);
 	}
 	
 }

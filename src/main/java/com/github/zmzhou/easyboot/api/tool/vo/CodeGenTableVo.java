@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 
-import com.github.zmzhou.easyboot.api.system.vo.BaseVo;
+import com.github.zmzhou.easyboot.framework.vo.BaseVo;
 import com.github.zmzhou.easyboot.api.tool.entity.CodeGenTable;
 import com.github.zmzhou.easyboot.framework.entity.BaseEntity;
 

@@ -5,6 +5,7 @@ import java.util.Set;
 import org.springframework.beans.BeanUtils;
 
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
+import com.github.zmzhou.easyboot.framework.vo.BaseVo;
 import com.github.zmzhou.easyboot.framework.vo.OptionsVo;
 
 import io.swagger.annotations.ApiModel;

@@ -113,11 +113,11 @@ public class CommonController extends BaseController {
 	 * @date 2020/11/19 15:37
 	 */
 	@PostMapping("upload")
+	@ApiOperation(value = "上传文件")
 	public ApiResult<String> upload() {
 		ApiResult<String> result = new ApiResult<>();
-		HttpServletRequest request = ServletUtils.getRequest();
 		// 头像文件
-		FileItem fileItem = FileUploadUtils.getInstance().singleUpload(request);
+		FileItem fileItem = FileUploadUtils.getInstance().singleUpload(ServletUtils.getRequest());
 		// 上传文件路径
 		String uuid = IdUtil.simpleUUID();
 		String filePath = uploadPath + uuid;
