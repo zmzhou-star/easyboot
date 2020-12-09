@@ -3,6 +3,7 @@ package com.github.zmzhou.easyboot.api.system.vo;
 import org.springframework.beans.BeanUtils;
 
 import com.github.zmzhou.easyboot.api.system.entity.SysDict;
+import com.github.zmzhou.easyboot.framework.vo.BaseVo;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
