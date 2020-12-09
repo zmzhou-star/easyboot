@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,6 +49,7 @@ public class SysLoginLogController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/13 21:09
 	 */
+	@PreAuthorize("@ebpe.hasPermission('monitor:loginLog:list')")
 	@PostMapping(path = "list")
 	@ApiOperation(value = "获取登录日志记录列表")
 	public ApiResult<TableDataInfo> list(@RequestBody SysLoginLogParams params) {
@@ -63,6 +65,7 @@ public class SysLoginLogController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/13 21:37
 	 */
+	@PreAuthorize("@ebpe.hasPermission('monitor:loginLog:remove')")
 	@DeleteMapping("/{ids}")
 	@ApiOperation(value = "删除登录日志")
 	public ApiResult<Object> delete(@PathVariable("ids")
@@ -77,6 +80,7 @@ public class SysLoginLogController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/13 21:38
 	 */
+	@PreAuthorize("@ebpe.hasPermission('monitor:loginLog:remove')")
 	@DeleteMapping("/clean")
 	@ApiOperation(value = "清空登录日志")
 	public ApiResult<Object> clean() {
@@ -91,6 +95,7 @@ public class SysLoginLogController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/13 21:38
 	 */
+	@PreAuthorize("@ebpe.hasPermission('monitor:loginLog:export')")
 	@PostMapping("/export")
 	@ApiOperation(value = "导出登录日志excel")
 	public ApiResult<String> export(@RequestBody(required = false) SysLoginLogParams params)

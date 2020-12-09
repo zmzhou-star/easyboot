@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +47,7 @@ public class RoleController extends BaseController {
 	 * @author zmzhou
 	 * date 2020/08/28 17:54
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:role:list')")
 	@PostMapping(path = "list")
 	@ApiOperation(value = "获取角色列表")
 	public ApiResult<TableDataInfo> list(@RequestBody(required = false) SysRoleParams params) {
@@ -60,6 +62,7 @@ public class RoleController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/8/30 21:50
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:role:export')")
 	@PostMapping("/export")
 	@ApiOperation(value = "导出角色excel")
 	public ApiResult<String> export(@RequestBody(required = false) SysRoleParams params) throws InterruptedException {
@@ -73,6 +76,7 @@ public class RoleController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/08/28 18:57
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:role:query')")
 	@GetMapping(value = {"getOne", "getOne/{id}"})
 	@ApiOperation(value = "根据id获取角色信息")
 	public ApiResult<SysRole> getOne(@PathVariable(value = "id", required = false) Long id) {
@@ -86,6 +90,7 @@ public class RoleController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/07/07 14:02
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:role:changeStatus')")
 	@PutMapping("/changeStatus")
 	@ApiOperation(value = "根据id修改角色状态")
 	public ApiResult<Integer> changeStatus(@RequestBody(required = false) Params params) {
@@ -99,6 +104,7 @@ public class RoleController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/08/29 18:34
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:role:add')")
 	@PostMapping
 	@ApiOperation(value = "新增角色")
 	public ApiResult<SysRole> add(@Validated @RequestBody SysRoleVo role) {
@@ -120,6 +126,7 @@ public class RoleController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/08/29 18:38
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:role:edit')")
 	@PutMapping
 	@ApiOperation(value = "修改角色信息")
 	public ApiResult<Integer> update(@Validated @RequestBody SysRoleVo role) {
@@ -142,6 +149,7 @@ public class RoleController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/08/29 18:36
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:role:remove')")
 	@DeleteMapping("/{roleIds}")
 	@ApiOperation(value = "删除角色")
 	public ApiResult<Integer> remove(@PathVariable Long[] roleIds) {

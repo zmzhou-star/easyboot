@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,6 +50,7 @@ public class SysOperLogController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/15 21:03
 	 */
+	@PreAuthorize("@ebpe.hasPermission('monitor:operLog:list')")
 	@PostMapping(path = "list")
 	@ApiOperation(value = "获取操作日志记录列表")
 	public ApiResult<TableDataInfo> list(@RequestBody SysOperLogParams params) {
@@ -65,10 +67,11 @@ public class SysOperLogController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/15 21:03
 	 */
+	@PreAuthorize("@ebpe.hasPermission('monitor:operLog:remove')")
 	@DeleteMapping("/{ids}")
 	@ApiOperation(value = "删除操作日志")
 	public ApiResult<Object> delete(@PathVariable("ids")
-	                                @ApiParam(name = "ids", value = "id数组", required = true) Long[] ids) {
+				@ApiParam(name = "ids", value = "id数组", required = true) Long[] ids) {
 		operLogService.delete(ids);
 		return new ApiResult<>();
 	}
@@ -80,6 +83,7 @@ public class SysOperLogController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/15 21:03
 	 */
+	@PreAuthorize("@ebpe.hasPermission('monitor:operLog:remove')")
 	@DeleteMapping("/clean")
 	@ApiOperation(value = "清空操作日志")
 	public ApiResult<Object> clean() {
@@ -95,6 +99,7 @@ public class SysOperLogController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/15 21:03
 	 */
+	@PreAuthorize("@ebpe.hasPermission('monitor:operLog:export')")
 	@PostMapping("/export")
 	@ApiOperation(value = "导出操作日志excel")
 	public ApiResult<String> export(@Validated @RequestBody(required = false) SysOperLogParams params)

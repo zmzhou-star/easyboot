@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +49,7 @@ public class SysConfigController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-16 21:51:23
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:config:list')")
 	@ApiOperation(value = "查询参数配置列表")
 	@PostMapping(path = "list")
 	public ApiResult<TableDataInfo> list(@RequestBody(required = false) SysConfigParams params) {
@@ -64,6 +66,7 @@ public class SysConfigController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-16 21:51:23
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:config:query')")
 	@ApiOperation(value = "根据id获取参数配置详细信息")
 	@GetMapping(value = "/{id}")
 	public ApiResult<SysConfig> findById(@PathVariable(value = "id", required = false) Long id) {
@@ -91,6 +94,7 @@ public class SysConfigController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-16 21:51:23
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:config:add')")
 	@ApiOperation(value = "新增参数配置")
 	@PostMapping
 	public ApiResult<SysConfig> save(@Validated @RequestBody SysConfigVo vo) {
@@ -110,6 +114,7 @@ public class SysConfigController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-16 21:51:23
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:config:edit')")
 	@ApiOperation(value = "修改参数配置")
 	@PutMapping
 	public ApiResult<SysConfig> update(@Validated @RequestBody SysConfigVo vo) {
@@ -129,6 +134,7 @@ public class SysConfigController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-16 21:51:23
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:config:remove')")
 	@ApiOperation(value = "删除参数配置")
 	@DeleteMapping("/{ids}")
 	public ApiResult<Integer> remove(@PathVariable("ids")
@@ -144,6 +150,7 @@ public class SysConfigController extends BaseController {
 	 * @author zmzhou
 	 * date 2020-11-16 21:51:23
 	 */
+	@PreAuthorize("@ebpe.hasPermission('system:config:export')")
 	@PostMapping("/export")
 	@ApiOperation(value = "导出参数配置excel")
 	public ApiResult<String> export(@RequestBody SysConfigParams params) throws InterruptedException {

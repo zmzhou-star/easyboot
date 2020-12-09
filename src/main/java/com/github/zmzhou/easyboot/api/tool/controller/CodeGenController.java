@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,6 +58,7 @@ public class CodeGenController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/16 23:08
 	 */
+	@PreAuthorize("@ebpe.hasPermission('tool:gen:list')")
 	@GetMapping(path = "list")
 	@ApiOperation(value = "获取代码生成列表")
 	public ApiResult<TableDataInfo> list(CodeGenTableParams params) {
@@ -73,6 +75,7 @@ public class CodeGenController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/17 20:28
 	 */
+	@PreAuthorize("@ebpe.hasPermission('tool:gen:list')")
 	@GetMapping("/dbTable/list")
 	@ApiOperation(value = "查询数据库表列表")
 	public ApiResult<List<CodeGenTable>> dbTableList(@ApiParam(name = "tableName", value = "表名称") String tableName,
@@ -88,6 +91,7 @@ public class CodeGenController extends BaseController {
 	 * @author zmzhou
 	 * date 2020/9/18 21:36
 	 */
+	@PreAuthorize("@ebpe.hasPermission('tool:gen:import')")
 	@PostMapping("/importTable")
 	@ApiOperation(value = "导入生成代码的表结构保存")
 	public ApiResult<Object> importTable(@ApiParam(name = "tables", value = "表名数组", required = true) String tables) {
@@ -100,6 +104,7 @@ public class CodeGenController extends BaseController {
 	 * @author zmzhou
 	 * @date 2020/9/16 23:08
 	 */
+	@PreAuthorize("@ebpe.hasPermission('tool:gen:remove')")
 	@DeleteMapping("{ids}")
 	@ApiOperation(value = "删除代码生成数据")
 	public ApiResult<Object> delete(@PathVariable("ids")
@@ -114,6 +119,7 @@ public class CodeGenController extends BaseController {
 	 * @param id the id
 	 * @return the one
 	 */
+	@PreAuthorize("@ebpe.hasPermission('tool:gen:query')")
 	@ApiOperation(value = "根据id查询代码生成信息")
 	@GetMapping(value = "/{id}")
 	public ApiResult<CodeGenTable> findById(@PathVariable("id")
@@ -127,6 +133,7 @@ public class CodeGenController extends BaseController {
 	 * @param genTable the gen table
 	 * @return the api result
 	 */
+	@PreAuthorize("@ebpe.hasPermission('tool:gen:edit')")
 	@ApiOperation(value = "修改代码生成信息")
 	@PutMapping
 	public ApiResult<CodeGenTable> update(@Validated @RequestBody CodeGenTableVo genTable) {
@@ -139,6 +146,7 @@ public class CodeGenController extends BaseController {
 	 * @param id the id
 	 * @return the api result
 	 */
+	@PreAuthorize("@ebpe.hasPermission('tool:gen:preview')")
 	@ApiOperation(value = "预览生成的代码")
 	@GetMapping("/preview/{id}")
 	public ApiResult<Map<String, String>> preview(@PathVariable("id") Long id) {
@@ -153,6 +161,7 @@ public class CodeGenController extends BaseController {
 	 * @param request  the request
 	 * @throws IOException the io exception
 	 */
+	@PreAuthorize("@ebpe.hasPermission('tool:gen:code')")
 	@NoPrintLog
 	@ApiOperation(value = "批量生成代码")
 	@GetMapping("/batchGenCode")

@@ -30,7 +30,11 @@ public enum ErrorCode {
 	/** 没有数据 */
 	NO_DATA(1009, "没有数据"),
 	/** 没有识别到文件 */
-	NO_FILE(1010, "没有识别到文件")
+	NO_FILE(1010, "没有识别到文件"),
+	/** 用户[0]无角色 */
+	USER_HAS_NO_ROLE(1011, "用户[0]无角色"),
+	/** 用户[0]无权限 */
+	USER_HAS_NO_PERMISSIONS(1012, "用户[0]无权限")
 	;
 	/** 错误码 */
 	private final int code;

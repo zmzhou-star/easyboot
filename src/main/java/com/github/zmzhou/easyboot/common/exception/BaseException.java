@@ -93,19 +93,6 @@ public class BaseException extends RuntimeException {
 	/**
 	 * Instantiates a new Base exception.
 	 *
-	 * @param errorCode the error code
-	 * @param errMsg    the err msg
-	 * @param params    the params
-	 */
-	public BaseException(ErrorCode errorCode, String errMsg, Object... params) {
-		this.code = errorCode.getCode();
-		this.errMsg = errMsg;
-		this.params = params;
-	}
-
-	/**
-	 * Instantiates a new Base exception.
-	 *
 	 * @param code   the code
 	 * @param errMsg the err msg
 	 * @param params the params
