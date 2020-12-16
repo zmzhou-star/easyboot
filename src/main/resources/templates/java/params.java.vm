@@ -16,9 +16,21 @@ import lombok.Data;
 @Data
 @ApiModel(description = "${functionName}请求参数vo类")
 public class ${ClassName}Params extends PageParams {
-	/** serialVersionUID */
+    /** serialVersionUID */
+#foreach ($column in $columns)
+#if($column.query)
+	#if($column.list)
+		#set($parentheseIndex=$column.columnComment.indexOf("（"))
+		#if($parentheseIndex != -1)
+			#set($comment=$column.columnComment.substring(0, $parentheseIndex))
+		#else
+			#set($comment=$column.columnComment)
+		#end
+	#end
 
-	/** param描述 */
-	@ApiModelProperty(value = "param描述")
-	private String param;
+    /** $comment */
+    @ApiModelProperty(value = "$comment")
+    private $column.javaType $column.javaField;
+#end
+#end
 }

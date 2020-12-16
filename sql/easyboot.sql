@@ -429,4 +429,24 @@ CREATE TABLE sys_notice  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '通知公告信息表' ROW_FORMAT = Dynamic;
 
 
+DROP TABLE IF EXISTS sys_task;
+CREATE TABLE sys_task (
+    id bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+    job_name varchar(128) NOT NULL DEFAULT NULL COMMENT '任务名称',
+    job_group varchar(32) NOT NULL DEFAULT 'DEFAULT' COMMENT '任务分组',
+    bean_name varchar(128) NOT NULL DEFAULT NULL COMMENT '任务执行时调用哪个类',
+    method_name varchar(32) NOT NULL DEFAULT NULL COMMENT '类的方法名',
+    method_params varchar(64) DEFAULT NULL COMMENT '类的方法参数',
+    cron_expression varchar(64) NOT NULL DEFAULT NULL COMMENT 'cron表达式',
+    misfire_policy char(1) default '3' comment '计划执行错误策略（1立即执行 2执行一次 3放弃执行）',
+    concurrent  char(1) default '0' comment '是否并发执行（1允许 0禁止）',
+    status char(1) NOT NULL DEFAULT '1' COMMENT '任务状态（1正常 0关闭）',
+    create_by varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '创建者',
+    create_time datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+    update_by varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '更新者',
+    update_time datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+    remark varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
+    PRIMARY KEY (id)
+)COMMENT = '定时任务表';
+
 SET FOREIGN_KEY_CHECKS = 1;

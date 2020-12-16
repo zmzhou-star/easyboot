@@ -15,11 +15,10 @@ export function login(username, password, code, uuid) {
   })
 }
 // 获取用户详细信息
-export function getInfo(token) {
+export function getInfo() {
   return request({
     url: '/getUserInfo',
     method: 'get'
-    // params: { token }
   })
 }
 // 退出

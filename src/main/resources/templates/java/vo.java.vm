@@ -3,6 +3,7 @@ package ${packageName}.vo;
 import org.springframework.beans.BeanUtils;
 
 import ${packageName}.entity.${ClassName};
+import com.github.zmzhou.easyboot.framework.vo.BaseVo;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;

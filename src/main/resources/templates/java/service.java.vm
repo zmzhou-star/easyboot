@@ -1,6 +1,8 @@
 package ${packageName}.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -16,7 +18,16 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ${packageName}.dao.${ClassName}Dao;
 import ${packageName}.entity.${ClassName};
+import ${packageName}.entity.${ClassName}Excel;
+import ${packageName}.entity.${ClassName}Params;
+import com.github.zmzhou.easyboot.api.system.service.BaseService;
+import com.github.zmzhou.easyboot.common.Constants;
+import com.github.zmzhou.easyboot.common.excel.BaseExcel;
+import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
+import com.github.zmzhou.easyboot.framework.specification.Operator;
+import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
 
 /**
  * ${functionName}Service接口

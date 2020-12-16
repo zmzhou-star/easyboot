@@ -23,9 +23,12 @@ import '@/permission' // permission control
 import { getDicts } from '@/api/system/dict/data'
 import { getConfigKey } from '@/api/system/config'
 import Pagination from '@/components/Pagination'
+// 自定义表格工具扩展
+import RightToolbar from '@/components/RightToolbar'
 import { deepClone } from '@/utils'
 // 全局组件挂载
 Vue.component('Pagination', Pagination)
+Vue.component('RightToolbar', RightToolbar)
 Vue.use(permission)
 
 import { parseTime, resetForm, addDateRange, selectDictLabel, download, handleTree } from '@/utils/easyboot'
