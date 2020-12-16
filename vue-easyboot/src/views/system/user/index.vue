@@ -121,7 +121,7 @@
       <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button v-hasPermi="['system:user:edit']" size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)">修改</el-button>
-          <el-button v-hasPermi="['system:user:remove']" v-if="scope.row.id !== 1" size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button v-if="scope.row.id !== 1" v-hasPermi="['system:user:remove']" size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
           <el-button v-hasPermi="['system:user:resetPwd']" size="mini" type="text" icon="el-icon-key" @click="handleResetPwd(scope.row)">重置</el-button>
         </template>
       </el-table-column>

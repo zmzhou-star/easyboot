@@ -1,7 +1,6 @@
 package com.github.zmzhou.easyboot.api.system.service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +23,9 @@ import com.github.zmzhou.easyboot.api.system.entity.SysConfig;
 import com.github.zmzhou.easyboot.api.system.excel.SysConfigExcel;
 import com.github.zmzhou.easyboot.api.system.vo.SysConfigParams;
 import com.github.zmzhou.easyboot.common.Constants;
+import com.github.zmzhou.easyboot.common.ErrorCode;
 import com.github.zmzhou.easyboot.common.excel.BaseExcel;
+import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
 import com.github.zmzhou.easyboot.framework.redis.RedisUtils;
 import com.github.zmzhou.easyboot.framework.specification.Operator;
@@ -183,12 +184,16 @@ public class SysConfigService extends BaseService<SysConfigParams> {
      * @param ids 需要删除的参数配置ID
      */
     public void deleteByIds(Long[] ids) {
-    	// 清空缓存数据
-		Collection<String> keys = redisUtils.keys(Constants.SYS_CONFIG_KEY);
-		redisUtils.delete(keys);
 	    for (Long id: ids) {
+	    	// 判断是否系统内置参数
+	    	SysConfig config = findById(id);
+	    	if (Constants.YES.equals(config.getConfigType())){
+	    		throw new BaseException(ErrorCode.PARAM_ERROR.getCode(), "系统内置参数[0]不能删除", config.getConfigType());
+			}
 		    // 根据用户id删除数据
 		    dao.deleteById(id);
+			// 清空缓存数据
+			redisUtils.delete(getCacheKey(config.getConfigKey()));
 	    }
     }
 

@@ -31,6 +31,8 @@ public final class Constants {
     public static final String ZERO = "0";
     /** 字符 1 */
     public static final String ONE = "1";
+    /** 是 */
+    public static final String YES = "Y";
     /** 数字 3 */
     public static final int INT_THREE = 3;
     /** http请求  */

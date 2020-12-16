@@ -1,23 +1,33 @@
 import request from '@/utils/request'
 
-// 查询定时任务调度列表
+/**
+ * 查询定时任务列表
+ * @param {Object} query
+ * @returns {Object}
+ */
 export function listJob(query) {
   return request({
     url: '/monitor/job/list',
-    method: 'get',
-    params: query
+    method: 'post',
+    data: query
   })
 }
-
-// 查询定时任务调度详细
-export function getJob(jobId) {
+/**
+ * 查询定时任务详细信息
+ * @param {number} id
+ * @returns {Object}
+ */
+export function getJob(id) {
   return request({
-    url: '/monitor/job/' + jobId,
+    url: '/monitor/job/' + id,
     method: 'get'
   })
 }
-
-// 新增定时任务调度
+/**
+ * 新增定时任务
+ * @param {Object} data
+ * @returns {Object}
+ */
 export function addJob(data) {
   return request({
     url: '/monitor/job',
@@ -25,8 +35,11 @@ export function addJob(data) {
     data: data
   })
 }
-
-// 修改定时任务调度
+/**
+ * 修改定时任务
+ * @param {Object} data
+ * @returns {Object}
+ */
 export function updateJob(data) {
   return request({
     url: '/monitor/job',
@@ -34,28 +47,27 @@ export function updateJob(data) {
     data: data
   })
 }
-
-// 删除定时任务调度
-export function delJob(jobId) {
+/**
+ * 删除定时任务
+ * @param {number} id
+ * @returns {Object}
+ */
+export function delJob(id) {
   return request({
-    url: '/monitor/job/' + jobId,
+    url: '/monitor/job/' + id,
     method: 'delete'
   })
 }
 
-// 导出定时任务调度
-export function exportJob(query) {
-  return request({
-    url: '/monitor/job/export',
-    method: 'get',
-    params: query
-  })
-}
-
-// 任务状态修改
-export function changeJobStatus(jobId, status) {
+/**
+ * 任务状态修改
+ * @param {Number} id id
+ * @param {String} status 任务状态
+ * @returns {AxiosPromise}
+ */
+export function changeJobStatus(id, status) {
   const data = {
-    jobId,
+    id,
     status
   }
   return request({
@@ -65,12 +77,13 @@ export function changeJobStatus(jobId, status) {
   })
 }
 
-// 定时任务立即执行一次
-export function runJob(jobId, jobGroup) {
-  const data = {
-    jobId,
-    jobGroup
-  }
+/**
+ * 定时任务立即执行一次
+ * @param {Number} id id
+ * @returns {AxiosPromise}
+ */
+export function runJob(id) {
+  const data = { id }
   return request({
     url: '/monitor/job/run',
     method: 'put',

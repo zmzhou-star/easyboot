@@ -51,7 +51,7 @@
           @keyup.enter.native="handleLogin"
         />
         <div class="login-code">
-          <img :src="codeUrl" @click="getCode" alt="验证码">
+          <img :src="codeUrl" alt="验证码" @click="getCode">
         </div>
       </el-form-item>
       <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">记住密码</el-checkbox>

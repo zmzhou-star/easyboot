@@ -1,10 +1,14 @@
 package com.github.zmzhou.easyboot.framework.security;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -193,6 +197,9 @@ public class LoginUser extends SysUserOnlineVo implements UserDetails {
 	 */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.emptyList();
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		Optional.ofNullable(roles).orElse(new HashSet<>()).forEach(role -> 
+				authorities.add(new SimpleGrantedAuthority(role)));
+		return authorities;
 	}
 }

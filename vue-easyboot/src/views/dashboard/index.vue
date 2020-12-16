@@ -13,6 +13,14 @@ export default {
     ...mapGetters([
       'name'
     ])
+  },
+  created() {
+    this.getConfigKey('sys.index.skin').then(res => {
+      this.$store.dispatch('settings/changeSetting', {
+        key: 'theme',
+        value: res
+      })
+    })
   }
 }
 </script>
