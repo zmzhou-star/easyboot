@@ -27,7 +27,7 @@ import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.excel.BaseExcel;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
-import com.github.zmzhou.easyboot.common.utils.ServletUtils;
+import com.github.zmzhou.easyboot.common.utils.SpringUtils;
 import com.github.zmzhou.easyboot.framework.redis.RedisUtils;
 import com.github.zmzhou.easyboot.framework.specification.Operator;
 import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
@@ -129,7 +129,7 @@ public class SysDictService extends BaseService<SysDictParams> {
 				.and("dictType", Operator.LIKE, params.getDictType())
 				.between(Constants.CREATE_TIME, params.getBeginTime(), params.getEndTime());
 		// 查询字典类型
-		String uri = ServletUtils.getRequest().getRequestURI();
+		String uri = SpringUtils.getRequest().getRequestURI();
 		if (uri.endsWith(TYPE_LIST) || uri.endsWith(TYPE_EXPORT)){
 			spec.and(DICT_LABEL, Operator.ISNULL, null);
 		} else {
@@ -253,7 +253,7 @@ public class SysDictService extends BaseService<SysDictParams> {
 		List<BaseExcel> excelList = new ArrayList<>();
 		// 判断是字典类型还是字典数据导出
 		Class<? extends BaseExcel> clazz = SysDictExcel.class;
-		if (ServletUtils.getRequest().getRequestURI().endsWith(TYPE_EXPORT)){
+		if (SpringUtils.getRequest().getRequestURI().endsWith(TYPE_EXPORT)){
 			clazz = SysDictTypeExcel.class;
 		}
 		// 判断是否还有下一页数据

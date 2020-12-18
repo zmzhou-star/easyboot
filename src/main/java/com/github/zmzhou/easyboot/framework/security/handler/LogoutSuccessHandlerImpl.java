@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.github.zmzhou.easyboot.common.utils.ServletUtils;
+import com.github.zmzhou.easyboot.common.utils.SpringUtils;
 import com.github.zmzhou.easyboot.framework.security.service.TokenService;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.api.system.service.UserService;
@@ -51,6 +51,6 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 			// 删除用户缓存记录
 			tokenService.delLoginUser(loginUser.getToken());
 		}
-		ServletUtils.response(response, new ApiResult<>().info("退出成功"));
+		SpringUtils.response(response, new ApiResult<>().info("退出成功"));
 	}
 }

@@ -22,7 +22,7 @@ import com.github.zmzhou.easyboot.api.system.service.MenuService;
 import com.github.zmzhou.easyboot.api.system.vo.SysMenuParams;
 import com.github.zmzhou.easyboot.api.system.vo.SysMenuVo;
 import com.github.zmzhou.easyboot.common.Constants;
-import com.github.zmzhou.easyboot.common.utils.ServletUtils;
+import com.github.zmzhou.easyboot.common.utils.SpringUtils;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
 import com.github.zmzhou.easyboot.framework.security.service.TokenService;
@@ -87,7 +87,7 @@ public class MenuController extends BaseController {
 	@GetMapping("/treeSelect")
 	@ApiOperation(value = "获取菜单下拉树列表")
 	public ApiResult<List<TreeSelect>> treeSelect(SysMenuVo menu) {
-		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+		LoginUser loginUser = tokenService.getLoginUser(SpringUtils.getRequest());
 		// 当前登录用户id
 		Long userId = loginUser.getUser().getId();
 		List<SysMenu> menus = menuService.selectMenuList(menu.toEntity(), userId);
@@ -104,7 +104,7 @@ public class MenuController extends BaseController {
 	@GetMapping(value = "/roleMenuTreeSelect/{roleId}")
 	@ApiOperation(value = "加载对应角色菜单列表树")
 	public ApiResult<JSONObject> roleMenuTreeSelect(@PathVariable("roleId") Long roleId) {
-		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+		LoginUser loginUser = tokenService.getLoginUser(SpringUtils.getRequest());
 		// 根据用户查询系统菜单列表
 		List<SysMenu> menus = menuService.selectMenuList(loginUser.getUser().getId());
 		JSONObject res = new JSONObject();

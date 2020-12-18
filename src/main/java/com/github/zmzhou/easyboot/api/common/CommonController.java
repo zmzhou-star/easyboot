@@ -22,7 +22,7 @@ import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.common.utils.FileUploadUtils;
 import com.github.zmzhou.easyboot.common.utils.FileUtil;
-import com.github.zmzhou.easyboot.common.utils.ServletUtils;
+import com.github.zmzhou.easyboot.common.utils.SpringUtils;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.redis.RedisUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginBody;
@@ -117,7 +117,7 @@ public class CommonController extends BaseController {
 	public ApiResult<String> upload() {
 		ApiResult<String> result = new ApiResult<>();
 		// 头像文件
-		FileItem fileItem = FileUploadUtils.getInstance().singleUpload(ServletUtils.getRequest());
+		FileItem fileItem = FileUploadUtils.getInstance().singleUpload(SpringUtils.getRequest());
 		// 上传文件路径
 		String uuid = IdUtil.simpleUUID();
 		String filePath = uploadPath + uuid;

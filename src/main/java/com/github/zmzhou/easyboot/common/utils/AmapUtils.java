@@ -35,7 +35,7 @@ public class AmapUtils {
 	 * @return the amap utils
 	 */
 	public static AmapUtils getInstance(){
-		return ServletUtils.getBean(AmapUtils.class);
+		return SpringUtils.getBean(AmapUtils.class);
 	}
 
 	/**

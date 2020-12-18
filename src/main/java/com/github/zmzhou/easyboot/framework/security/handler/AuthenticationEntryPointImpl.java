@@ -11,7 +11,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import com.github.zmzhou.easyboot.common.utils.ServletUtils;
+import com.github.zmzhou.easyboot.common.utils.SpringUtils;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +49,6 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint, S
 			code = 50014;
 			msg = "token已失效，请重新登录！";
 		}
-		ServletUtils.response(response, new ApiResult<>().error(code, msg));
+		SpringUtils.response(response, new ApiResult<>().error(code, msg));
 	}
 }

@@ -45,8 +45,8 @@ public class EasyScheduler {
 	 * @author zmzhou
 	 * @date 2020/8/30 12:52
 	 */
-	@Scheduled(cron = "0/30 * * * * ?")
 	public void heartbeat() {
+		//	@Scheduled(cron = "0/30 * * * * ?")
 		log.info("心跳:{}", LocalDateTime.now());
 	}
 
@@ -82,5 +82,15 @@ public class EasyScheduler {
 	public void deleteTempFile() {
 		log.info("删除目录：[{}]下的临时文件开始...", downloadPath);
 		FileUtil.deleteFile(downloadPath, false);
+	}
+	
+	/**
+	 * 执行有参定时任务 
+	 * @param params params
+	 * @author zmzhou
+	 * @date 2020/12/18 18:57
+	 */
+	public void taskWithParams(String params) {
+		log.info("执行有参定时任务：{}", params);
 	}
 }

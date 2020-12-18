@@ -67,6 +67,15 @@
           @click="handleDelete"
         >删除</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          v-hasPermi="['monitor:job:log']"
+          type="info"
+          icon="el-icon-s-operation"
+          size="mini"
+          @click="handleJobLog"
+        >日志</el-button>
+      </el-col>
       <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
     </el-row>
 
@@ -89,7 +98,7 @@
       </el-table-column>
       <el-table-column label="任务名称" align="center" prop="jobName" :show-overflow-tooltip="true" />
       <el-table-column label="任务分组" align="center" prop="jobGroup" sortable="custom" :formatter="jobGroupFormat" />
-      <el-table-column label="bean名字" align="center" prop="beanName" sortable="custom" />
+      <el-table-column label="bean名字" align="center" prop="beanName" sortable="custom" :show-overflow-tooltip="true" />
       <el-table-column label="类的方法名" align="center" prop="methodName" sortable="custom" :show-overflow-tooltip="true" />
       <el-table-column label="类的方法参数" align="center" prop="methodParams" :show-overflow-tooltip="true" />
       <el-table-column label="cron表达式" align="center" prop="cronExpression" />
@@ -98,11 +107,11 @@
           <el-switch v-model="scope.row.status" inactive-value="0" active-value="1" @change="handleStatusChange(scope.row)" />
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" />
+      <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" min-width="100">
         <template slot-scope="scope">
           <el-button
-            v-hasPermi="['monitor:job:runJob']"
+            v-hasPermi="['monitor:job:run']"
             size="mini"
             type="text"
             icon="el-icon-caret-right"
@@ -329,6 +338,10 @@ export default {
       }
       this.resetForm('form')
     },
+    /** 跳转到定时任务日志列表 */
+    handleJobLog() {
+      this.$router.push('/monitor/job/log')
+    },
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1
@@ -409,7 +422,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function() {
-        return runJob(row.id, row.jobGroup)
+        return runJob(row.id)
       }).then(() => {
         this.msgSuccess('执行成功')
       })

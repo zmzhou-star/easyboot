@@ -30,7 +30,7 @@ import com.github.zmzhou.easyboot.api.system.vo.SysUserVo;
 import com.github.zmzhou.easyboot.common.ErrorCode;
 import com.github.zmzhou.easyboot.common.excel.ExcelUtils;
 import com.github.zmzhou.easyboot.common.utils.FileUploadUtils;
-import com.github.zmzhou.easyboot.common.utils.ServletUtils;
+import com.github.zmzhou.easyboot.common.utils.SpringUtils;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.page.TableDataInfo;
 import com.github.zmzhou.easyboot.framework.vo.Params;
@@ -133,7 +133,7 @@ public class UserController extends BaseController {
 	@PostMapping("/importExcel")
 	@ApiOperation(value = "导入用户excel")
 	public ApiResult<String> importExcel(boolean isUpdate) throws IOException {
-		FileItem file = fileUploadUtils.singleUpload(ServletUtils.getRequest());
+		FileItem file = fileUploadUtils.singleUpload(SpringUtils.getRequest());
 		// excel数据
 		List<SysUserExcel> list = new ArrayList<>();
 		// 读取excel数据

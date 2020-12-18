@@ -1,15 +1,11 @@
-package ${packageName}.service;
+package com.github.zmzhou.easyboot.api.monitor.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,38 +14,37 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import ${packageName}.dao.${ClassName}Dao;
-import ${packageName}.entity.${ClassName};
-import ${packageName}.excel.${ClassName}Excel;
-import ${packageName}.vo.${ClassName}Params;
+import com.github.zmzhou.easyboot.api.monitor.dao.SysTaskLogDao;
+import com.github.zmzhou.easyboot.api.monitor.entity.SysTaskLog;
+import com.github.zmzhou.easyboot.api.monitor.excel.SysTaskLogExcel;
+import com.github.zmzhou.easyboot.api.monitor.vo.SysTaskLogParams;
 import com.github.zmzhou.easyboot.api.system.service.BaseService;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.excel.BaseExcel;
-import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
 import com.github.zmzhou.easyboot.framework.specification.Operator;
 import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
 
 /**
- * ${functionName}Service接口
+ * 定时任务日志Service接口
  * 
- * @author ${author}
+ * @author zmzhou
  * @version 1.0
- * date ${datetime}
+ * date 2020-12-17 19:40:43
  */
 @Service
-@CacheConfig(cacheNames = {"${moduleName}:${ClassName}"})
+@CacheConfig(cacheNames = {"monitor:SysTaskLog"})
 @Transactional(rollbackFor = Exception.class)
-public class ${ClassName}Service extends BaseService<${ClassName}Params> {
+public class SysTaskLogService extends BaseService<SysTaskLogParams> {
     @Resource
-    private ${ClassName}Dao dao;
+    private SysTaskLogDao dao;
 
     /**
-     * 分页查询${functionName}数据
+     * 分页查询定时任务日志数据
      * @param params 查询参数
      * @param pageable 分页
-     * @return Page<${ClassName}>
+     * @return Page<SysTaskLog>
      */
-    public Page<${ClassName}> findAll(${ClassName}Params params, Pageable pageable) {
+    public Page<SysTaskLog> findAll(SysTaskLogParams params, Pageable pageable) {
 	    // 构造分页排序条件
 	    Pageable page = pageable;
 	    if (pageable.getSort().equals(Sort.unsorted())) {
@@ -57,61 +52,48 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
 		    page = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 	    }
 	    // 构造查询条件
-	    Specification<${ClassName}> spec = new SimpleSpecificationBuilder<${ClassName}>()
+	    Specification<SysTaskLog> spec = new SimpleSpecificationBuilder<SysTaskLog>()
 			    .and(Constants.STATUS, Operator.EQUAL, params.getStatus())
+				.and("jobGroup", Operator.EQUAL, params.getJobGroup())
+				.and("jobName", Operator.LIKE, params.getJobName())
+				.between(Constants.CREATE_TIME, params.getBeginTime(), params.getEndTime())
 			    .build();
 	    return dao.findAll(spec, page);
     }
 
     /**
-     * 根据id查询${functionName}
+     * 根据id查询定时任务日志
      * 
-     * @param id ${functionName}id
-     * @return ${ClassName}对象
-     * @author ${author}
-     * date ${datetime}
+     * @param id 定时任务日志id
+     * @return SysTaskLog对象
+     * @author zmzhou
+     * date 2020-12-17 19:40:43
      */
-    public ${ClassName} findById(Long id) {
+    public SysTaskLog findById(Long id) {
 	    if (null == id) {
-		    return new ${ClassName}();
+		    return new SysTaskLog();
 	    }
-	    return dao.findById(id).orElse(new ${ClassName}());
+	    return dao.findById(id).orElse(new SysTaskLog());
     }
 
     /**
-     * 新增${functionName}
+     * 新增定时任务日志
      * 
-     * @param entity ${functionName}
-     * @return ${ClassName} 新增结果
-     * @author ${author}
-     * date ${datetime}
+     * @param entity 定时任务日志
+     * @return SysTaskLog 新增结果
+     * @author zmzhou
+     * date 2020-12-17 19:40:43
      */
-    public ${ClassName} save(${ClassName} entity) {
-	    entity.setCreateTime(new Date());
-	    entity.setCreateBy(SecurityUtils.getUsername());
+    public SysTaskLog save(SysTaskLog entity) {
 	    return dao.saveAndFlush(entity);
     }
 
     /**
-     * 修改${functionName}
+     * 批量删除定时任务日志
      * 
-     * @param entity ${functionName}
-     * @return ${ClassName} 修改结果
-     * @author ${author}
-     * date ${datetime}
-     */
-    public ${ClassName} update(${ClassName} entity) {
-	    entity.setUpdateTime(new Date());
-	    entity.setUpdateBy(SecurityUtils.getUsername());
-	    return dao.saveAndFlush(entity);
-    }
-
-    /**
-     * 批量删除${functionName}
-     * 
-     * @param ${pkColumn.javaField}s 需要删除的${functionName}ID
-     * @author ${author}
-     * date ${datetime}
+     * @param ids 需要删除的定时任务日志ID
+     * @author zmzhou
+     * date 2020-12-17 19:40:43
      */
     public void deleteByIds(Long[] ids) {
 	    for (Long id: ids) {
@@ -120,21 +102,30 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
 	    }
     }
 
+	/**
+	 * 清空定时任务日志 
+	 * @author zmzhou
+	 * @date 2020/12/18 20:09
+	 */
+	public void clean() {
+		dao.deleteAllInBatch();
+	}
+
     /**
      * 导出excel
      *
      * @param params 查询参数
      * @return excel文件路径名
      * @throws InterruptedException 异常信息
-     * @author ${author}
-     * date ${datetime}
+     * @author zmzhou
+     * date 2020-12-17 19:40:43
      */
     @Override
-    public String export(${ClassName}Params params) throws InterruptedException {
-		Page<${ClassName}> list = findAll(params, getExcelPageable(params));
+    public String export(SysTaskLogParams params) throws InterruptedException {
+		Page<SysTaskLog> list = findAll(params, getExcelPageable(params));
 		List<BaseExcel> excelList = new ArrayList<>();
 		// 判断是字典类型还是字典数据导出
-		Class<? extends BaseExcel> clazz = ${ClassName}Excel.class;
+		Class<? extends BaseExcel> clazz = SysTaskLogExcel.class;
 		// 判断是否还有下一页数据
 		while (list.hasNext()) {
 			dataConversion(list, excelList, clazz);

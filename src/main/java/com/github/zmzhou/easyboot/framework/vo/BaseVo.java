@@ -2,7 +2,7 @@ package com.github.zmzhou.easyboot.framework.vo;
 
 import java.io.Serializable;
 
-import com.github.zmzhou.easyboot.framework.entity.BaseEntity;
+import com.github.zmzhou.easyboot.framework.entity.BaseIdEntity;
 
 /**
  * vo类接口
@@ -15,8 +15,8 @@ public interface BaseVo extends Serializable {
 	/**
 	 * vo转实体类
 	 * @author zmzhou
-	 * @return {@link BaseEntity}
+	 * @return {@link BaseIdEntity}
 	 * date 2020/9/7 22:16
 	 */
-	BaseEntity toEntity();
+	BaseIdEntity toEntity();
 }

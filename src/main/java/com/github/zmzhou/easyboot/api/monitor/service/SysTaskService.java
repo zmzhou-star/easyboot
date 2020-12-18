@@ -1,11 +1,16 @@
 package com.github.zmzhou.easyboot.api.monitor.service;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.quartz.CronExpression;
-import org.springframework.cache.annotation.CacheConfig;
+import org.quartz.JobDataMap;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +26,12 @@ import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.ErrorCode;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
+import com.github.zmzhou.easyboot.common.utils.SpringUtils;
+import com.github.zmzhou.easyboot.framework.quartz.ScheduleUtils;
 import com.github.zmzhou.easyboot.framework.specification.Operator;
 import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 定时任务Service接口
@@ -31,13 +40,27 @@ import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBui
  * @version 1.0
  * date 2020-12-16 17:34:26
  */
+@Slf4j
 @Service
-@CacheConfig(cacheNames = {"monitor:SysTask"})
 @Transactional(rollbackFor = Exception.class)
 public class SysTaskService {
 	@Resource
 	private SysTaskDao dao;
+	@Resource
+	private Scheduler scheduler;
 
+	/**
+	 * 项目启动时，初始化定时任务（注：不能手动修改数据库ID和任务组名，否则会导致脏数据） 
+	 * @throws SchedulerException SchedulerException
+	 * @author zmzhou
+	 * @date 2020/12/18 17:44
+	 */
+	@PostConstruct
+	public void init() throws SchedulerException {
+		scheduler.clear();
+		List<SysTask> taskList = dao.findAll();
+		taskList.parallelStream().forEach(task -> ScheduleUtils.createScheduleJob(scheduler, task));
+	}
 	/**
 	 * 分页查询定时任务数据
 	 *
@@ -85,13 +108,14 @@ public class SysTaskService {
 	 * date 2020-12-16 17:34:26
 	 */
 	public SysTask save(SysTask entity) {
-		// cron表达式校验
-		if (!CronExpression.isValidExpression(entity.getCronExpression())) {
-			throw new BaseException(ErrorCode.PARAM_ERROR.getCode(), "cron表达式不正确");
-		}
+		this.validated(entity);
 		entity.setCreateTime(new Date());
 		entity.setCreateBy(SecurityUtils.getUsername());
-		return dao.saveAndFlush(entity);
+		// 保存定时任务信息
+		entity = dao.saveAndFlush(entity);
+		// 创建定时任务
+		ScheduleUtils.createScheduleJob(scheduler, entity);
+		return entity;
 	}
 
 	/**
@@ -103,13 +127,41 @@ public class SysTaskService {
 	 * date 2020-12-16 17:34:26
 	 */
 	public SysTask update(SysTask entity) {
+		this.validated(entity);
+		entity.setUpdateTime(new Date());
+		entity.setUpdateBy(SecurityUtils.getUsername());
+		// 删除旧的定时任务，再更新数据，创建新的定时任务
+		SysTask task = findById(entity.getId());
+		try {
+			// 判断是否存在
+			JobKey jobKey = ScheduleUtils.getJobKey(task.getId(), task.getJobGroup());
+			if (scheduler.checkExists(jobKey)) {
+				scheduler.deleteJob(jobKey);
+			}
+		} catch (SchedulerException e) {
+			log.error("删除旧的定时任务异常：{}", task, e);
+		}
+		entity = dao.saveAndFlush(entity);
+		// 创建定时任务
+		ScheduleUtils.createScheduleJob(scheduler, entity);
+		return entity;
+	}
+
+	/**
+	 * 校验定时任务字段信息是否正确 
+	 * @param entity 定时任务信息
+	 * @author zmzhou
+	 * @date 2020/12/18 12:07
+	 */
+	private void validated(SysTask entity) {
+		// 判断spring上下文是否存在bean
+		if (!SpringUtils.getContext().containsBean(entity.getBeanName())) {
+			throw new BaseException(ErrorCode.PARAM_ERROR.getCode(), "bean名字不存在");
+		}
 		// cron表达式校验
 		if (!CronExpression.isValidExpression(entity.getCronExpression())) {
 			throw new BaseException(ErrorCode.PARAM_ERROR.getCode(), "cron表达式不正确");
 		}
-		entity.setUpdateTime(new Date());
-		entity.setUpdateBy(SecurityUtils.getUsername());
-		return dao.saveAndFlush(entity);
 	}
 
 	/**
@@ -123,6 +175,13 @@ public class SysTaskService {
 		for (Long id : ids) {
 			// 根据用户id删除数据
 			dao.deleteById(id);
+			// 删除定时任务
+			SysTask task = findById(id);
+			try {
+				scheduler.deleteJob(ScheduleUtils.getJobKey(task.getId(), task.getJobGroup()));
+			} catch (SchedulerException e) {
+				log.error("删除定时任务异常：{}", task, e);
+			}
 		}
 	}
 
@@ -137,7 +196,43 @@ public class SysTaskService {
 	public Long changeStatus(Long id, String status) {
 		SysTask task = findById(id);
 		task.setStatus(status);
-		update(task);
+		task.setUpdateTime(new Date());
+		task.setUpdateBy(SecurityUtils.getUsername());
+		task = dao.saveAndFlush(task);
+		// 定时任务JobKey
+		JobKey jobKey = ScheduleUtils.getJobKey(task.getId(), task.getJobGroup());
+		try {
+			if (Constants.PAUSE.equals(status)) {
+				// 定时任务暂停
+				scheduler.pauseJob(jobKey);
+			} else {
+				// 定时任务运行
+				scheduler.resumeJob(jobKey);
+			}
+		} catch (SchedulerException e) {
+			log.error("修改定时任务运行状态异常：{}", status, e);
+		}
+		return task.getId();
+	}
+
+	/**
+	 * 定时任务立即执行一次 
+	 * @param id 定时任务id
+	 * @return 结果
+	 * @author zmzhou
+	 * @date 2020/12/18 19:14
+	 */
+	public long run(Long id) {
+		SysTask task = findById(id);
+		// 参数
+		JobDataMap dataMap = new JobDataMap();
+		dataMap.put(Constants.TASK_PROPERTIES, task);
+		try {
+			log.info("定时任务立即执行一次:{}", task.getJobName());
+			scheduler.triggerJob(ScheduleUtils.getJobKey(task.getId(), task.getJobGroup()), dataMap);
+		} catch (SchedulerException e) {
+			log.error("定时任务立即执行一次异常:{}", task, e);
+		}
 		return task.getId();
 	}
 }

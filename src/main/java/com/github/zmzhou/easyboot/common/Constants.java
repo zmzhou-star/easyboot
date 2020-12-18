@@ -95,6 +95,19 @@ public final class Constants {
     /** 所有权限标识 */
     public static final String ALL_PERMISSION = "*:*:*";
 
+    /** 定时任务执行类 */
+    public static final String TASK_CLASS_NAME = "TASK_CLASS_NAME";
+    /** 执行目标key */
+    public static final String TASK_PROPERTIES = "TASK_PROPERTIES";
+    /** 立即触发执行 */
+    public static final String MISFIRE_IGNORE_MISFIRES = "1";
+    /** 触发一次执行 */
+    public static final String MISFIRE_FIRE_AND_PROCEED = "2";
+    /** 不触发立即执行 */
+    public static final String MISFIRE_DO_NOTHING = "3";
+    /** 定时任务暂停 */
+    public static final String PAUSE = "0";
+    
 	/**
      * 私有构造器
      * @author zmzhou

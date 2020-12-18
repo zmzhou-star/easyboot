@@ -134,4 +134,17 @@ public class SysTaskController extends BaseController {
 	public ApiResult<Integer> changeStatus(@RequestBody Params params) {
 		return ok(sysTaskService.changeStatus(params.getId(), params.getStatus()));
 	}
+	/**
+	 * 定时任务立即执行一次 
+	 * @param params 定时任务id
+	 * @return ApiResult
+	 * @author zmzhou
+	 * @date 2020/12/18 19:11
+	 */
+	@PreAuthorize("@ebpe.hasPermission('monitor:job:run')")
+	@PutMapping("/run")
+	@ApiOperation(value = "定时任务立即执行一次")
+	public ApiResult<Integer> run(@RequestBody Params params) {
+		return ok(sysTaskService.run(params.getId()));
+	}
 }
