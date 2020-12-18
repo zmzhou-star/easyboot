@@ -58,7 +58,7 @@ public class FileUploadUtils {
 	 * @return the file upload utils
 	 */
 	public static FileUploadUtils getInstance(){
-		return ServletUtils.getBean(FileUploadUtils.class);
+		return SpringUtils.getBean(FileUploadUtils.class);
 	}
 
 	/**

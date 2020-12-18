@@ -18,7 +18,7 @@ import com.github.zmzhou.easyboot.api.system.service.MenuService;
 import com.github.zmzhou.easyboot.api.system.vo.RouterVo;
 import com.github.zmzhou.easyboot.api.system.vo.UserInfo;
 import com.github.zmzhou.easyboot.common.Constants;
-import com.github.zmzhou.easyboot.common.utils.ServletUtils;
+import com.github.zmzhou.easyboot.common.utils.SpringUtils;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.security.LoginBody;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
@@ -68,7 +68,7 @@ public class LoginController extends BaseController {
 	@ApiOperation(value = "获取用户信息")
 	@GetMapping("getUserInfo")
 	public ApiResult<UserInfo> getUserInfo() {
-		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+		LoginUser loginUser = tokenService.getLoginUser(SpringUtils.getRequest());
 		SysUser user = loginUser.getUser();
 		// 用户信息、角色、菜单权限信息
 		UserInfo userInfo = UserInfo.builder()
@@ -90,7 +90,7 @@ public class LoginController extends BaseController {
 	@ApiOperation(value = "获取菜单路由信息")
 	public ApiResult<RouterVo> getRouters() {
 		// 获取当前登录用户信息
-		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+		LoginUser loginUser = tokenService.getLoginUser(SpringUtils.getRequest());
 		// 用户信息
 		SysUser user = loginUser.getUser();
 		// 根据用户ID查询菜单

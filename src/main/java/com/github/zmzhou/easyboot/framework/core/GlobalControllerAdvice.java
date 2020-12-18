@@ -24,7 +24,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import com.github.zmzhou.easyboot.api.monitor.service.SysOperLogService;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
-import com.github.zmzhou.easyboot.common.utils.ServletUtils;
+import com.github.zmzhou.easyboot.common.utils.SpringUtils;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 
 import lombok.extern.slf4j.Slf4j;
@@ -64,9 +64,9 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 	public T beforeBodyWrite(T body, MethodParameter returnType, MediaType selectedContentType,
 							 Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request,
 							 ServerHttpResponse response) {
-		HttpServletResponse res = ServletUtils.getRequestAttributes().getResponse();
+		HttpServletResponse res = SpringUtils.getRequestAttributes().getResponse();
 		if (null != res){
-			HttpSession session = ServletUtils.getSession();
+			HttpSession session = SpringUtils.getSession();
 			// 设置Cookie;Secure;HttpOnly
 			res.setHeader( "Set-Cookie", "JSESSIONID=" + session.getId() + "; Secure; HttpOnly");
 			// 设置X-Frame-Options 只要包含在框架中的站点与为页面提供服务的站点相同，仍然可以在框架中使用该页面
@@ -106,7 +106,7 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
 	ApiResult<Object> exceptionHandler(Exception e) {
-		String uri = ServletUtils.getRequest().getRequestURI();
+		String uri = SpringUtils.getRequest().getRequestURI();
 		log.error("[exceptionHandler] {} Catch an exception:", uri, e);
 		// 记录操作失败日志
 		saveFailOperLog(e, e.getMessage());
@@ -118,7 +118,7 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 	 */
 	@ExceptionHandler(BindException.class)
 	public ApiResult<Object> validatedBindException(BindException e) {
-		String uri = ServletUtils.getRequest().getRequestURI();
+		String uri = SpringUtils.getRequest().getRequestURI();
 		log.error(e.getMessage() + " {}", uri, e);
 		String message = e.getAllErrors().get(0).getDefaultMessage();
 		// 记录操作失败日志
@@ -135,7 +135,7 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 	 */
 	@ExceptionHandler(AccessDeniedException.class)
 	public ApiResult<Object> accessDeniedExceptionHandler(AccessDeniedException e) {
-		String uri = ServletUtils.getRequest().getRequestURI();
+		String uri = SpringUtils.getRequest().getRequestURI();
 		String message = e.getMessage();
 		log.error("[accessDeniedExceptionHandler] {} Catch an exception:", uri, e);
 		// 记录操作失败日志
@@ -148,7 +148,7 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ApiResult<Object> validExceptionHandler(MethodArgumentNotValidException e) {
-		String uri = ServletUtils.getRequest().getRequestURI();
+		String uri = SpringUtils.getRequest().getRequestURI();
 		log.error(e.getMessage() + " {}", uri, e);
 		String message = "";
 		FieldError fieldError = e.getBindingResult().getFieldError();
@@ -170,7 +170,7 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 	private void saveFailOperLog(Exception e, String message) {
 		// 记录操作失败日志
 		StackTraceElement st = e.getStackTrace()[0];
-		operLogService.saveOperLog(ServletUtils.getRequest(), st.getClass(), st.getMethodName(), new Object[]{},
+		operLogService.saveOperLog(SpringUtils.getRequest(), st.getClass(), st.getMethodName(), new Object[]{},
 				null, Constants.ZERO, message);
 	}
 }

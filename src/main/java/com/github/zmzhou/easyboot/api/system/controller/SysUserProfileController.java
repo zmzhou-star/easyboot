@@ -29,7 +29,7 @@ import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.common.utils.FileUploadUtils;
 import com.github.zmzhou.easyboot.common.utils.FileUtil;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
-import com.github.zmzhou.easyboot.common.utils.ServletUtils;
+import com.github.zmzhou.easyboot.common.utils.SpringUtils;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
 import com.github.zmzhou.easyboot.framework.security.service.TokenService;
@@ -69,7 +69,7 @@ public class SysUserProfileController extends BaseController {
 	@ApiOperation(value = "获取用户个人信息")
 	public ApiResult<UserInfo> profile() {
 		// 从redis缓存获取当前用户身份信息
-		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+		LoginUser loginUser = tokenService.getLoginUser(SpringUtils.getRequest());
 		SysUser user = loginUser.getUser();
 		UserInfo info = UserInfo.builder().user(user)
 				// 获取用户角色名称集合
@@ -97,7 +97,7 @@ public class SysUserProfileController extends BaseController {
 		SysUser sysUser = userService.update(user.toEntity());
 		result.setData(sysUser);
 		// 更新缓存中的用户信息
-		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+		LoginUser loginUser = tokenService.getLoginUser(SpringUtils.getRequest());
 		loginUser.setUser(sysUser);
 		tokenService.setLoginUser(loginUser);
 		return result;
@@ -115,7 +115,7 @@ public class SysUserProfileController extends BaseController {
 	@ApiOperation(value = "修改用户密码")
 	public ApiResult<SysUser> updatePwd(@ApiParam(name = "oldPassword",value="原密码",required=true)String oldPassword,
                     @ApiParam(name = "newPassword", value = "新密码", required = true) String newPassword) {
-		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+		LoginUser loginUser = tokenService.getLoginUser(SpringUtils.getRequest());
 		SysUser sysUser = loginUser.getUser();
 		String password = loginUser.getPassword();
 		if (!SecurityUtils.matchesPassword(oldPassword, password)) {
@@ -140,7 +140,7 @@ public class SysUserProfileController extends BaseController {
 	@PostMapping("/avatar")
 	@ApiOperation(value = "用户上传头像")
 	public ApiResult<SysUser> avatar() {
-		HttpServletRequest request = ServletUtils.getRequest();
+		HttpServletRequest request = SpringUtils.getRequest();
 		LoginUser loginUser = tokenService.getLoginUser(request);
 		// 头像文件
 		FileItem avatar = FileUploadUtils.getInstance().singleUpload(request);

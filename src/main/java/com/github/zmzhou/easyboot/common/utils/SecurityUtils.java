@@ -74,10 +74,10 @@ public final class SecurityUtils {
 	 * @return 加密字符串
 	 */
 	public static String encryptPassword(String password) {
-		BCryptPasswordEncoder passwordEncoder = ServletUtils.getBean(BCryptPasswordEncoder.class);
+		BCryptPasswordEncoder passwordEncoder = SpringUtils.getBean(BCryptPasswordEncoder.class);
 		// 默认密码
 		if (StringUtils.isBlank(password)){
-			return passwordEncoder.encode(ServletUtils.getBean(SysConfigService.class)
+			return passwordEncoder.encode(SpringUtils.getBean(SysConfigService.class)
 					.findByKey("sys.user.initPassword"));
 		}
 		return passwordEncoder.encode(password);
@@ -91,7 +91,7 @@ public final class SecurityUtils {
 	 * @return 结果
 	 */
 	public static boolean matchesPassword(String rawPassword, String encodedPassword) {
-		BCryptPasswordEncoder passwordEncoder = ServletUtils.getBean(BCryptPasswordEncoder.class);
+		BCryptPasswordEncoder passwordEncoder = SpringUtils.getBean(BCryptPasswordEncoder.class);
 		return passwordEncoder.matches(rawPassword, encodedPassword);
 	}
 	

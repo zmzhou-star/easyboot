@@ -3,7 +3,7 @@ package com.github.zmzhou.easyboot.framework.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import com.github.zmzhou.easyboot.common.utils.ServletUtils;
+import com.github.zmzhou.easyboot.common.utils.SpringUtils;
 
 import lombok.Data;
 
@@ -40,6 +40,6 @@ public class CodeGenConfig {
 	 * @return the gen config
 	 */
 	public static CodeGenConfig getInstance(){
-		return ServletUtils.getBean(CodeGenConfig.class);
+		return SpringUtils.getBean(CodeGenConfig.class);
 	}
 }

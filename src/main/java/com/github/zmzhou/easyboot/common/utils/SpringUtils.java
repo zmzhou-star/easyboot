@@ -21,14 +21,14 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- *  @title ServletUtils
- *  @Description 客户端工具类
+ *  spring上下文工具类
+ *  @title SpringUtils
  *  @author zmzhou
  *  @Date 2020/07/03 15:36
  */
 @Slf4j
 @Component
-public final class ServletUtils implements ApplicationContextAware {
+public final class SpringUtils implements ApplicationContextAware {
     /** spring上下文 */
     private static ApplicationContext context;
 
@@ -38,7 +38,7 @@ public final class ServletUtils implements ApplicationContextAware {
      * @author zmzhou
      * @date 2020/08/29 14:18
      */
-    private ServletUtils() {
+    private SpringUtils() {
     }
 
     /**
@@ -50,7 +50,7 @@ public final class ServletUtils implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         log.info("初始化上下文：{}", applicationContext);
-        ServletUtils.context = applicationContext;
+        SpringUtils.context = applicationContext;
     }
     /**
      * @description  获取ApplicationContext.

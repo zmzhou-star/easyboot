@@ -19,7 +19,7 @@ import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.common.utils.AmapUtils;
 import com.github.zmzhou.easyboot.common.utils.IpUtils;
-import com.github.zmzhou.easyboot.common.utils.ServletUtils;
+import com.github.zmzhou.easyboot.common.utils.SpringUtils;
 import com.github.zmzhou.easyboot.framework.redis.RedisUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
 import com.github.zmzhou.easyboot.framework.vo.AmapAddressInfo;
@@ -184,7 +184,7 @@ public class TokenService {
      * @date 2020/08/26 16:36
      */
     public void setUserAgent(LoginUser loginUser) {
-        UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
+        UserAgent userAgent = UserAgent.parseUserAgentString(SpringUtils.getRequest().getHeader("User-Agent"));
         // 获取用户ip定位信息
         IpInfo ipInfo = IpUtils.getIpInfo();
         loginUser.setIpInfo(ipInfo);
@@ -208,7 +208,7 @@ public class TokenService {
             user.setLoginAddr(ipInfo.getAddr());
             user.setLoginIp(ipInfo.getIp());
         } else {
-            loginUser.setIpAddr(IpUtils.getIpAddr(ServletUtils.getRequest()));
+            loginUser.setIpAddr(IpUtils.getIpAddr(SpringUtils.getRequest()));
         }
         // 获取用户高德地图ip定位信息
         AmapAddressInfo addressInfo = AmapUtils.getInstance().getAddressInfo();

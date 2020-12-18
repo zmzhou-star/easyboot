@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.github.zmzhou.easyboot.common.Constants;
-import com.github.zmzhou.easyboot.common.utils.ServletUtils;
+import com.github.zmzhou.easyboot.common.utils.SpringUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class EasyBootPermissionEvaluator {
 	 * @date 2020/12/9 17:27
 	 */
 	public boolean hasPermission(String permissions) {
-		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+		LoginUser loginUser = tokenService.getLoginUser(SpringUtils.getRequest());
 		// 菜单权限为空
 		if (null == loginUser || CollectionUtils.isEmpty(loginUser.getPermissions())) {
 			return false;
@@ -66,7 +66,7 @@ public class EasyBootPermissionEvaluator {
 	 * @date 2020/12/9 17:31
 	 */
 	public boolean hasRole(String roles) {
-		LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
+		LoginUser loginUser = tokenService.getLoginUser(SpringUtils.getRequest());
 		// 角色权限为空
 		if (null == loginUser || CollectionUtils.isEmpty(loginUser.getRoles())) {
 			return false;

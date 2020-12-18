@@ -432,12 +432,12 @@ CREATE TABLE sys_notice  (
 DROP TABLE IF EXISTS sys_task;
 CREATE TABLE sys_task (
     id bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
-    job_name varchar(128) NOT NULL DEFAULT NULL COMMENT '任务名称',
+    job_name varchar(128) NOT NULL COMMENT '任务名称',
     job_group varchar(32) NOT NULL DEFAULT 'DEFAULT' COMMENT '任务分组',
-    bean_name varchar(128) NOT NULL DEFAULT NULL COMMENT '任务执行时调用哪个类',
-    method_name varchar(32) NOT NULL DEFAULT NULL COMMENT '类的方法名',
+    bean_name varchar(128) NOT NULL COMMENT '任务执行时调用哪个类',
+    method_name varchar(32) NOT NULL COMMENT '类的方法名',
     method_params varchar(64) DEFAULT NULL COMMENT '类的方法参数',
-    cron_expression varchar(64) NOT NULL DEFAULT NULL COMMENT 'cron表达式',
+    cron_expression varchar(64) NOT NULL COMMENT 'cron表达式',
     misfire_policy char(1) default '3' comment '计划执行错误策略（1立即执行 2执行一次 3放弃执行）',
     concurrent  char(1) default '0' comment '是否并发执行（1允许 0禁止）',
     status char(1) NOT NULL DEFAULT '1' COMMENT '任务状态（1正常 0关闭）',
@@ -448,5 +448,21 @@ CREATE TABLE sys_task (
     remark varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '备注',
     PRIMARY KEY (id)
 )COMMENT = '定时任务表';
+
+drop table if exists sys_task_log;
+create table sys_task_log (
+    id          bigint not null auto_increment    comment '主键',
+    job_name varchar(128) NOT NULL COMMENT '任务名称',
+    job_group varchar(32) NOT NULL DEFAULT 'DEFAULT' COMMENT '任务分组',
+    bean_name varchar(128) NOT NULL COMMENT '任务执行时调用哪个类',
+    method_name varchar(32) NOT NULL COMMENT '类的方法名',
+    method_params varchar(64) DEFAULT NULL COMMENT '类的方法参数',
+    cron_expression varchar(64) NOT NULL COMMENT 'cron表达式',
+    time_consuming      bigint                                    comment '耗时',
+    status              char(1)        default '1'                comment '执行状态（1正常 0失败）',
+    exception_info      varchar(512)  default ''                 comment '异常信息',
+    create_time datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(0)    comment '创建时间',
+    primary key (id)
+) comment = '定时任务日志表';
 
 SET FOREIGN_KEY_CHECKS = 1;
