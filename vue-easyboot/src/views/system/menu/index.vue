@@ -316,6 +316,8 @@ export default {
         parentId: 0,
         menuName: undefined,
         icon: '#',
+        path: '',
+        component: '',
         menuType: 'M',
         sortBy: 1,
         isFrame: '0',

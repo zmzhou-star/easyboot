@@ -19,7 +19,7 @@ import com.github.zmzhou.easyboot.api.monitor.dao.SysLoginLogDao;
 import com.github.zmzhou.easyboot.api.monitor.entity.SysLoginLog;
 import com.github.zmzhou.easyboot.api.monitor.excel.SysLoginLogExcel;
 import com.github.zmzhou.easyboot.api.monitor.vo.SysLoginLogParams;
-import com.github.zmzhou.easyboot.api.system.service.BaseService;
+import com.github.zmzhou.easyboot.framework.service.BaseService;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.excel.BaseExcel;
 import com.github.zmzhou.easyboot.common.utils.ThreadPoolUtils;

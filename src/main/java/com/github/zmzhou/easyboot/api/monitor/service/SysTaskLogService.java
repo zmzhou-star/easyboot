@@ -18,7 +18,7 @@ import com.github.zmzhou.easyboot.api.monitor.dao.SysTaskLogDao;
 import com.github.zmzhou.easyboot.api.monitor.entity.SysTaskLog;
 import com.github.zmzhou.easyboot.api.monitor.excel.SysTaskLogExcel;
 import com.github.zmzhou.easyboot.api.monitor.vo.SysTaskLogParams;
-import com.github.zmzhou.easyboot.api.system.service.BaseService;
+import com.github.zmzhou.easyboot.framework.service.BaseService;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.excel.BaseExcel;
 import com.github.zmzhou.easyboot.framework.specification.Operator;
@@ -48,7 +48,7 @@ public class SysTaskLogService extends BaseService<SysTaskLogParams> {
 	    // 构造分页排序条件
 	    Pageable page = pageable;
 	    if (pageable.getSort().equals(Sort.unsorted())) {
-		    Sort sort = Sort.by(Sort.Order.desc(Constants.STATUS));
+		    Sort sort = Sort.by(Sort.Order.desc(Constants.CREATE_TIME));
 		    page = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
 	    }
 	    // 构造查询条件

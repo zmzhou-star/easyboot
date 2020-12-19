@@ -44,7 +44,7 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button v-hasPermi="['monitor:jobLog:list']" type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -110,7 +110,7 @@
           <el-tag :type="scope.row.status | statusFilter">{{ statusFormat(scope.row) }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="异常信息" align="center" prop="exceptionInfo" :show-overflow-tooltip="true" />
+      <el-table-column label="执行时间" align="center" prop="createTime" min-width="90" :show-overflow-tooltip="true" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button

@@ -3,21 +3,19 @@ package com.github.zmzhou.easyboot.framework.web;
 import java.beans.PropertyEditorSupport;
 import java.util.Date;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
 import com.github.zmzhou.easyboot.common.utils.DateUtils;
+import com.github.zmzhou.easyboot.common.utils.EasyBootUtils;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.page.TableDataInfo;
 import com.github.zmzhou.easyboot.framework.vo.PageParams;
 
 /**
- * @description web层通用数据处理
+ * web层通用数据处理
  * @author zmzhou
  * @date 2020/07/02 16:59
  */
@@ -44,18 +42,7 @@ public class BaseController {
      * @date 2020/07/09 11:31
      */
     protected Pageable getPageable(PageParams params) {
-        if (null == params) {
-            return PageRequest.of(0, 10);
-        }
-        Sort sort = Sort.unsorted();
-        if (StringUtils.isNotBlank(params.getProp())) {
-            Sort.Direction direct = Sort.Direction.ASC;
-            if (StringUtils.isNotBlank(params.getOrder())) {
-                direct = Sort.Direction.fromString(params.getOrder().replace("ending", ""));
-            }
-            sort = Sort.by(direct, params.getProp());
-        }
-        return PageRequest.of(params.getPageNum() - 1, params.getPageSize(), sort);
+        return EasyBootUtils.getPageable(params);
     }
     
     /**

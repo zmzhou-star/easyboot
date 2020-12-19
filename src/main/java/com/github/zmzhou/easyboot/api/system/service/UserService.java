@@ -38,6 +38,7 @@ import com.github.zmzhou.easyboot.common.utils.FileUploadUtils;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
 import com.github.zmzhou.easyboot.common.utils.ThreadPoolUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
+import com.github.zmzhou.easyboot.framework.service.BaseService;
 import com.github.zmzhou.easyboot.framework.specification.Operator;
 import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
 

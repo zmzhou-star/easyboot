@@ -6,10 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +19,7 @@ import ${packageName}.dao.${ClassName}Dao;
 import ${packageName}.entity.${ClassName};
 import ${packageName}.excel.${ClassName}Excel;
 import ${packageName}.vo.${ClassName}Params;
-import com.github.zmzhou.easyboot.api.system.service.BaseService;
+import com.github.zmzhou.easyboot.framework.service.BaseService;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.excel.BaseExcel;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;

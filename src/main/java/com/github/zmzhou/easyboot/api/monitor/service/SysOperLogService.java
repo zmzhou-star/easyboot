@@ -26,7 +26,7 @@ import com.github.zmzhou.easyboot.api.monitor.entity.SysOperLog;
 import com.github.zmzhou.easyboot.api.monitor.excel.SysOperLogExcel;
 import com.github.zmzhou.easyboot.api.monitor.vo.SysOperLogParams;
 import com.github.zmzhou.easyboot.api.system.controller.LoginController;
-import com.github.zmzhou.easyboot.api.system.service.BaseService;
+import com.github.zmzhou.easyboot.framework.service.BaseService;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.excel.BaseExcel;
 import com.github.zmzhou.easyboot.common.utils.EasyBootUtils;
