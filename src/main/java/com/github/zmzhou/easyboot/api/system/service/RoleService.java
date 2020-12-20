@@ -35,6 +35,7 @@ import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.excel.BaseExcel;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
+import com.github.zmzhou.easyboot.framework.service.BaseService;
 import com.github.zmzhou.easyboot.framework.specification.Operator;
 import com.github.zmzhou.easyboot.framework.specification.SimpleSpecification;
 import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;

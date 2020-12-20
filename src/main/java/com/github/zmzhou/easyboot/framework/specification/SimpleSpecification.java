@@ -16,9 +16,9 @@ import com.github.zmzhou.easyboot.common.Constants;
 import lombok.ToString;
 
 /**
+ * 封装Specification工具类
  * @author zmzhou
  * @title SimpleSpecification
- * @Description 封装Specification工具类
  * @Date 2020/07/07 18:29
  */
 @ToString
@@ -33,7 +33,7 @@ public class SimpleSpecification<T> implements Specification<T> {
 	/**
 	 * 构造器
 	 *
-	 * @param operators
+	 * @param operators SpecificationOperator集合
 	 * @author zmzhou
 	 * @date 2020/07/07 18:30
 	 */
@@ -73,7 +73,7 @@ public class SimpleSpecification<T> implements Specification<T> {
 		switch (op.getOperator()) {
 			case EQUAL:
 				return criteriaBuilder.equal(root.get(op.getKey()), op.getValue());
-			case NOTEQUAL:
+			case NOT_EQUAL:
 				return criteriaBuilder.notEqual(root.get(op.getKey()), op.getValue());
 			case GE:
 				return criteriaBuilder.ge(root.get(op.getKey()), (Number) op.getValue());

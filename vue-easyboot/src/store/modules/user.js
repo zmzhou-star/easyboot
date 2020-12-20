@@ -6,6 +6,7 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
+    nickName: '',
     avatar: '',
     roles: [],
     permissions: []
@@ -23,6 +24,9 @@ const mutations = {
   },
   SET_NAME: (state, name) => {
     state.name = name
+  },
+  SET_NICKNAME: (state, nickName) => {
+    state.nickName = nickName
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
@@ -69,6 +73,7 @@ const actions = {
           commit('SET_ROLES', ['ROLE_DEFAULT'])
         }
         commit('SET_NAME', user.username)
+        commit('SET_NICKNAME', user.nickName)
         commit('SET_AVATAR', avatar)
         resolve(res)
       }).catch(error => {

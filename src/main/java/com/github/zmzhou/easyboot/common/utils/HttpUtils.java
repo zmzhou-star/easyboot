@@ -4,7 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.fastjson.JSON;
@@ -41,7 +52,7 @@ public final class HttpUtils {
     public static String get(String url, Map<String, String> params) {
         // 请求开始时间戳
         long start = System.currentTimeMillis();
-        RestTemplate rest = new RestTemplate();
+        RestTemplate rest = getRestTemplate();
         // url定义为http://USER-SERVICE/user?name={name)
         StringBuilder reqUrl = new StringBuilder(url);
         if (null == params) {
@@ -80,5 +91,36 @@ public final class HttpUtils {
             return JSON.parseObject(res, clazz);
         }
         return null;
+    }
+
+    /**
+     * RestTemplate 支持HTTP、HTTPS
+     * @return RestTemplate
+     * @author zmzhou
+     * @date 2020/12/20 17:30
+     */
+    private static RestTemplate getRestTemplate() {
+        // 支持HTTP、HTTPS
+        Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
+                .register("http", PlainConnectionSocketFactory.getSocketFactory())
+                .register("https", SSLConnectionSocketFactory.getSocketFactory())
+                .build();
+        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(registry);
+        connectionManager.setMaxTotal(200);
+        connectionManager.setDefaultMaxPerRoute(100);
+        connectionManager.setValidateAfterInactivity(2000);
+        RequestConfig requestConfig = RequestConfig.custom()
+                // 服务器返回数据(response)的时间，超时抛出read timeout
+                .setSocketTimeout(65000)
+                // 连接上服务器(握手成功)的时间，超时抛出connect timeout
+                .setConnectTimeout(5000)
+                // 从连接池中获取连接的超时时间，超时抛出ConnectionPoolTimeoutException
+                .setConnectionRequestTimeout(1000)
+                .build();
+        // Apache HttpClient
+        CloseableHttpClient httpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig)
+                .setConnectionManager(connectionManager).build();
+        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+        return new RestTemplate(requestFactory);
     }
 }

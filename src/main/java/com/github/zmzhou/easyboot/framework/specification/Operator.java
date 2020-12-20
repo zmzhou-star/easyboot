@@ -9,7 +9,7 @@ public enum Operator {
 	/** 等于 = */
 	EQUAL,
 	/** 不等于 <> */
-	NOTEQUAL,
+	NOT_EQUAL,
 	/** 大于等于 >= */
 	GE,
 	/** 小于等于 <= */

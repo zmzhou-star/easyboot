@@ -8,11 +8,15 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.zmzhou.easyboot.common.Constants;
+import com.github.zmzhou.easyboot.framework.vo.PageParams;
 
 /**
  * 工具类
@@ -145,5 +149,27 @@ public final class EasyBootUtils {
 			}
 		}
 		return map;
+	}
+
+	/**
+	 * 组装分页参数
+	 * @param params 查询参数
+	 * @return Pageable
+	 * @author zmzhou
+	 * @date 2020/07/09 11:31
+	 */
+	public static Pageable getPageable(PageParams params) {
+		if (null == params) {
+			return PageRequest.of(0, 10);
+		}
+		Sort sort = Sort.unsorted();
+		if (StringUtils.isNotBlank(params.getProp())) {
+			Sort.Direction direct = Sort.Direction.ASC;
+			if (StringUtils.isNotBlank(params.getOrder())) {
+				direct = Sort.Direction.fromString(params.getOrder().replace("ending", ""));
+			}
+			sort = Sort.by(direct, params.getProp());
+		}
+		return PageRequest.of(params.getPageNum() - 1, params.getPageSize(), sort);
 	}
 }

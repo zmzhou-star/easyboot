@@ -1,29 +1,28 @@
-package com.github.zmzhou.easyboot.api.system.service;
+package com.github.zmzhou.easyboot.framework.service;
 
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.github.zmzhou.easyboot.common.excel.BaseExcel;
 import com.github.zmzhou.easyboot.common.excel.ExcelUtils;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
+import com.github.zmzhou.easyboot.common.utils.EasyBootUtils;
 import com.github.zmzhou.easyboot.framework.entity.BaseIdEntity;
 import com.github.zmzhou.easyboot.framework.vo.PageParams;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 数据导出接口抽象service 
  * @title BaseService
- * @description 
  * @author zmzhou
  * @version 1.0
  * @date 2020/9/3 22:53
@@ -69,18 +68,7 @@ public abstract class BaseService<P> {
     * @date 2020/07/09 11:31
     */
    protected Pageable getPageable(PageParams params) {
-      if (null == params) {
-         return PageRequest.of(0, 10);
-      }
-      Sort sort = Sort.unsorted();
-      if (StringUtils.isNotBlank(params.getProp())) {
-         Sort.Direction direct = Sort.Direction.ASC;
-         if (StringUtils.isNotBlank(params.getOrder())) {
-            direct = Sort.Direction.fromString(params.getOrder().replace("ending", ""));
-         }
-         sort = Sort.by(direct, params.getProp());
-      }
-      return PageRequest.of(params.getPageNum() - 1, params.getPageSize(), sort);
+      return EasyBootUtils.getPageable(params);
    }
 
    /**

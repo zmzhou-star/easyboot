@@ -1,11 +1,13 @@
 package com.github.zmzhou.easyboot.api.monitor.service;
 
+import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.quartz.CronExpression;
 import org.quartz.JobDataMap;
 import org.quartz.JobKey;
@@ -59,6 +61,7 @@ public class SysTaskService {
 	public void init() throws SchedulerException {
 		scheduler.clear();
 		List<SysTask> taskList = dao.findAll();
+		log.info("项目启动，初始化定时任务{}个", taskList.size());
 		taskList.parallelStream().forEach(task -> ScheduleUtils.createScheduleJob(scheduler, task));
 	}
 	/**
@@ -100,6 +103,23 @@ public class SysTaskService {
 	}
 
 	/**
+	 * 根据bean名字、方法名、方法参数、cron表达式判断定时任务是否存在
+	 * @param entity 定时任务信息
+	 * @return 是否存在
+	 * @author zmzhou
+	 * @date 2020/12/19 15:05
+	 */
+	public boolean exists(SysTask entity) {
+		Specification<SysTask> spec = new SimpleSpecificationBuilder<SysTask>(
+				"beanName", Operator.EQUAL, entity.getBeanName())
+				.and("id", Operator.NOT_EQUAL, entity.getId())
+				.and("methodName", Operator.EQUAL, entity.getMethodName())
+				.and("methodParams", Operator.EQUAL, entity.getMethodParams())
+				.and("cronExpression", Operator.EQUAL, entity.getCronExpression()).build();
+		return dao.findOne(spec).isPresent();
+	}
+	
+	/**
 	 * 新增定时任务
 	 *
 	 * @param entity 定时任务
@@ -136,6 +156,7 @@ public class SysTaskService {
 			// 判断是否存在
 			JobKey jobKey = ScheduleUtils.getJobKey(task.getId(), task.getJobGroup());
 			if (scheduler.checkExists(jobKey)) {
+				log.info("删除旧的定时任务:{}，再更新数据", jobKey);
 				scheduler.deleteJob(jobKey);
 			}
 		} catch (SchedulerException e) {
@@ -154,9 +175,26 @@ public class SysTaskService {
 	 * @date 2020/12/18 12:07
 	 */
 	private void validated(SysTask entity) {
+		if (exists(entity)) {
+			throw new BaseException(ErrorCode.PARAM_ERROR.getCode(), "存在相同定时任务");
+		}
 		// 判断spring上下文是否存在bean
 		if (!SpringUtils.getContext().containsBean(entity.getBeanName())) {
 			throw new BaseException(ErrorCode.PARAM_ERROR.getCode(), "bean名字不存在");
+		}
+		Object bean = SpringUtils.getContext().getBean(entity.getBeanName());
+		String methodParams = entity.getMethodParams();
+		String methodName = entity.getMethodName();
+		try {
+			Method method;
+			if (StringUtils.isNotBlank(methodParams)) {
+				method = bean.getClass().getDeclaredMethod(methodName, String.class);
+			} else {
+				method = bean.getClass().getDeclaredMethod(methodName);
+			}
+			log.info("方法名：{}", method.getName());
+		} catch (NoSuchMethodException e) {
+			throw new BaseException(ErrorCode.PARAM_ERROR.getCode(), "方法名不存在");
 		}
 		// cron表达式校验
 		if (!CronExpression.isValidExpression(entity.getCronExpression())) {

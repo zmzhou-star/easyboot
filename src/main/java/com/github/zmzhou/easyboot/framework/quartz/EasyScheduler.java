@@ -8,7 +8,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.github.zmzhou.easyboot.api.system.service.UserService;
@@ -55,8 +54,8 @@ public class EasyScheduler {
 	 * @author zmzhou
 	 * @date 2020/9/13 12:37
 	 */
-	@Scheduled(cron = "0 0/2 * * * ?")
 	public void updateOfflineUserStatus() {
+		//	@Scheduled(cron = "0 0/2 * * * ?")
 		log.info("定时查询不在线用户，修改用户状态开始...");
 		Set<Long> onlineIds = new HashSet<>();
 		// 获取所有登录用户的tokenId集合
@@ -78,8 +77,8 @@ public class EasyScheduler {
 	 * @author zmzhou
 	 * @date 2020/9/13 15:04
 	 */
-	@Scheduled(cron = "0 0/10 * * * ?")
 	public void deleteTempFile() {
+		//	@Scheduled(cron = "0 0/10 * * * ?")
 		log.info("删除目录：[{}]下的临时文件开始...", downloadPath);
 		FileUtil.deleteFile(downloadPath, false);
 	}
