@@ -112,6 +112,7 @@ public class SysTaskService {
 	public boolean exists(SysTask entity) {
 		Specification<SysTask> spec = new SimpleSpecificationBuilder<SysTask>(
 				"beanName", Operator.EQUAL, entity.getBeanName())
+				.and("id", Operator.NOT_EQUAL, entity.getId())
 				.and("methodName", Operator.EQUAL, entity.getMethodName())
 				.and("methodParams", Operator.EQUAL, entity.getMethodParams())
 				.and("cronExpression", Operator.EQUAL, entity.getCronExpression()).build();
@@ -174,7 +175,7 @@ public class SysTaskService {
 	 * @date 2020/12/18 12:07
 	 */
 	private void validated(SysTask entity) {
-		if (null == entity.getId() && exists(entity)) {
+		if (exists(entity)) {
 			throw new BaseException(ErrorCode.PARAM_ERROR.getCode(), "存在相同定时任务");
 		}
 		// 判断spring上下文是否存在bean

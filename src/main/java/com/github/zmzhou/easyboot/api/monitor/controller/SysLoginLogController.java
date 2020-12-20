@@ -17,6 +17,7 @@ import com.github.zmzhou.easyboot.api.monitor.service.SysLoginLogService;
 import com.github.zmzhou.easyboot.api.monitor.vo.SysLoginLogParams;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.page.TableDataInfo;
+import com.github.zmzhou.easyboot.framework.vo.PageParams;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
 import io.swagger.annotations.Api;
@@ -101,5 +102,19 @@ public class SysLoginLogController extends BaseController {
 	public ApiResult<String> export(@RequestBody(required = false) SysLoginLogParams params)
 			throws InterruptedException {
 		return ok(loginLogService.export(params));
+	}
+	
+	/**
+	 * 用户登录日志记录统计 
+	 * @param params 查询参数
+	 * @return ApiResult
+	 * @author zmzhou
+	 * @date 2020/12/20 16:51
+	 */
+	@PreAuthorize("@ebpe.hasRole('admin')")
+	@PostMapping("/stat")
+	@ApiOperation(value = "用户登录日志记录统计")
+	public ApiResult<String> stat(@RequestBody(required = false) PageParams params) {
+		return ok(loginLogService.stat(params));
 	}
 }

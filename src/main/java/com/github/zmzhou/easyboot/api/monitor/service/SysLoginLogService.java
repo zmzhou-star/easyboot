@@ -19,14 +19,15 @@ import com.github.zmzhou.easyboot.api.monitor.dao.SysLoginLogDao;
 import com.github.zmzhou.easyboot.api.monitor.entity.SysLoginLog;
 import com.github.zmzhou.easyboot.api.monitor.excel.SysLoginLogExcel;
 import com.github.zmzhou.easyboot.api.monitor.vo.SysLoginLogParams;
-import com.github.zmzhou.easyboot.framework.service.BaseService;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.excel.BaseExcel;
 import com.github.zmzhou.easyboot.common.utils.ThreadPoolUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
 import com.github.zmzhou.easyboot.framework.security.service.TokenService;
+import com.github.zmzhou.easyboot.framework.service.BaseService;
 import com.github.zmzhou.easyboot.framework.specification.Operator;
 import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
+import com.github.zmzhou.easyboot.framework.vo.PageParams;
 
 /**
  * 系统登录日志记录表service
@@ -159,4 +160,19 @@ public class SysLoginLogService extends BaseService<SysLoginLogParams> {
 		return excelUtils.download(excelList, SysLoginLogExcel.class, params.getExcelName());
 	}
 
+	/**
+	 * 根据登录时间统计用户登录信息 
+	 * @param params 查询参数
+	 * @return 查询结果
+	 * @author zmzhou
+	 * @date 2020/12/20 16:54
+	 */
+	public List<SysLoginLog> stat(PageParams params) {
+		// 构造查询条件
+		Specification<SysLoginLog> spec = new SimpleSpecificationBuilder<SysLoginLog>()
+				.and( Constants.STATUS, Operator.EQUAL, Constants.ONE)
+				.between(Constants.LOGIN_TIME, params.getBeginTime(), params.getEndTime())
+				.build();
+		return loginLogDao.findAll(spec);
+	}
 }

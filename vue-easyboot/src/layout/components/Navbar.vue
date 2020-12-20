@@ -18,6 +18,9 @@
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
       </template>
+      <router-link to="/user/profile">
+        <div class="right-menu-item hover-effect nick-name">{{ nickName }}</div>
+      </router-link>
 
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
@@ -72,6 +75,7 @@ export default {
       'sidebar',
       'avatar',
       'device',
+      'nickName',
       'name'
     ]),
     setting: {
@@ -148,6 +152,9 @@ export default {
           background: rgba(0, 0, 0, .025)
         }
       }
+    }
+    .nick-name {
+      font-size: 15px;
     }
 
     .avatar-container {
