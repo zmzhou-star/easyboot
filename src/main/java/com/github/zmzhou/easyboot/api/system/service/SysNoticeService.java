@@ -106,4 +106,20 @@ public class SysNoticeService {
 		    dao.deleteById(id);
 	    }
     }
+
+	/**
+	 * 统计用户数量 
+	 * @param noticeType 公告类型
+	 * @return 用户数量
+	 * @author zmzhou
+	 * @date 2020/12/21 10:59
+	 */
+	public long count(String noticeType){
+		// 构造查询条件
+		Specification<SysNotice> spec = new SimpleSpecificationBuilder<SysNotice>()
+				.and("noticeType", Operator.EQUAL, noticeType)
+				.and( Constants.STATUS, Operator.EQUAL, Constants.ONE)
+				.build();
+		return dao.count(spec);
+	}
 }

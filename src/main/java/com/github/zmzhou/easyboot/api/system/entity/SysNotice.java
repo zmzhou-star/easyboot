@@ -27,7 +27,7 @@ public class SysNotice extends BaseEntity {
     @Size(max = 50, message = "公告标题长度不符")
     private String noticeTitle;
 
-    /** 公告类型（1通知 2公告） */
+    /** 公告类型（1通知 2公告 3消息） */
     @NotBlank(message = "公告类型不能为空")
     private String noticeType;
 

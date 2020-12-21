@@ -1,6 +1,6 @@
 <template>
   <div class="chartBox">
-    <div class="chartBox_d" id="myCharts" ref="myCharts"></div>
+    <div id="myCharts" ref="myCharts" class="chartBox_d" />
   </div>
 </template>
 
@@ -45,13 +45,19 @@ export default {
     initEcharts() {
       this.myCharts = echarts.init(this.$refs.myCharts, 'vintage')
       // 监听屏幕变化自动缩放图表
-      let that = this
-      window.addEventListener('resize', function () {
+      const that = this
+      window.addEventListener('resize', function() {
         that.myCharts.resize()
       })
       this._setOption(this.mapData)
     },
     _setOption(mapData) {
+      if (mapData) {
+        for (let i = 0; i < mapData.length; i++) {
+          mapData[i].name = mapData[i].userName
+          mapData[i].value = mapData[i].coordinate.split(',')
+        }
+      }
       this.myCharts.setOption({
         backgroundColor: '#404a59',
         title: {
@@ -104,10 +110,10 @@ export default {
             tooltip: {
               trigger: 'item',
               padding: 10,
-              formatter: function (param) {
-                let data = param.data;
-                return param.seriesName + '<br>ip地址：' + data.ipAddr + '<br>登录地点：' + data.loginLocation
-                  + '<br>浏览器类型：' + data.browser + '<br>操作系统：' + data.os + '<br>登录时间：' + data.loginTime;
+              formatter: function(param) {
+                const data = param.data
+                return param.seriesName + '<br>ip地址：' + data.ipAddr + '<br>登录地点：' + data.loginLocation +
+                  '<br>浏览器类型：' + data.browser + '<br>操作系统：' + data.os + '<br>登录时间：' + data.loginTime
               }
             },
             label: {
