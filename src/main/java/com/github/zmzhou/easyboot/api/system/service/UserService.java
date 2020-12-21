@@ -176,6 +176,17 @@ public class UserService extends BaseService<SysUserParams> {
 	public boolean exists(SysUser user) {
 		return null != getUser(user).getId();
 	}
+	
+	/**
+	 * 统计用户数量 
+	 * @return 用户数量
+	 * @author zmzhou
+	 * @date 2020/12/21 10:59
+	 */
+	public long count(){
+		return userDao.count();
+	}
+	
 	/**
 	 * 保存用户角色信息
 	 * @param userVo 用户信息

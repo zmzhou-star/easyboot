@@ -9,14 +9,23 @@
             <div class="cardItem_txt">
               <count-to
                 class="cardItem_p0 color-green1"
-                :startVal="startVal"
-                :endVal="vistors"
+                :start-val="startVal"
+                :end-val="cardsData.totalVisitors"
                 :duration="2000"
-              ></count-to>
+              />
               <p class="cardItem_p1">Total Visitors</p>
             </div>
+            <div class="cardItem_txt">
+              <count-to
+                class="cardItem_p0 color-green1"
+                :start-val="startVal"
+                :end-val="cardsData.onlineVisitors"
+                :duration="2000"
+              />
+              <p class="cardItem_p1">Online Visitors</p>
+            </div>
             <div class="cardItem_icon">
-              <i class="el-icon-user color-green1"></i>
+              <i class="el-icon-user color-green1" />
             </div>
           </div>
         </el-col>
@@ -25,14 +34,14 @@
             <div class="cardItem_txt">
               <count-to
                 class="cardItem_p0 color-blue"
-                :startVal="startVal"
-                :endVal="message"
+                :start-val="startVal"
+                :end-val="cardsData.messages"
                 :duration="2000"
-              ></count-to>
+              />
               <p class="cardItem_p1">Messages</p>
             </div>
             <div class="cardItem_icon">
-              <i class="el-icon-s-comment color-blue"></i>
+              <i class="el-icon-s-comment color-blue" />
             </div>
           </div>
         </el-col>
@@ -41,14 +50,14 @@
             <div class="cardItem_txt">
               <count-to
                 class="cardItem_p0 color-red"
-                :startVal="startVal"
-                :endVal="order"
+                :start-val="startVal"
+                :end-val="cardsData.orderForm"
                 :duration="2000"
-              ></count-to>
+              />
               <p class="cardItem_p1">Total Order Placeed</p>
             </div>
             <div class="cardItem_icon">
-              <i class="el-icon-shopping-cart-2 color-red"></i>
+              <i class="el-icon-shopping-cart-2 color-red" />
             </div>
           </div>
         </el-col>
@@ -57,14 +66,14 @@
             <div class="cardItem_txt">
               <count-to
                 class="cardItem_p0 color-green2"
-                :startVal="startVal"
-                :endVal="profit"
+                :start-val="startVal"
+                :end-val="cardsData.profit"
                 :duration="2000"
-              ></count-to>
+              />
               <p class="cardItem_p1">Total Profit</p>
             </div>
             <div class="cardItem_icon">
-              <i class="el-icon-wallet color-green2"></i>
+              <i class="el-icon-wallet color-green2" />
             </div>
           </div>
         </el-col>
@@ -88,7 +97,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <mapChart class="map-charts" :mapData="mapData"></mapChart>
+      <mapChart class="map-charts" :map-data="mapData" />
     </div>
   </div>
 </template>
@@ -97,7 +106,7 @@
 import { mapGetters } from 'vuex'
 import CountTo from 'vue-count-to'
 import mapChart from '@/views/echarts/map-chart'
-import request from '@/utils/request'
+import { cardStat, userLoginStat } from '@/api/dashboard'
 
 export default {
   name: 'Dashboard',
@@ -106,22 +115,25 @@ export default {
       'name', 'roles'
     ])
   },
+  components: {
+    CountTo,
+    mapChart
+  },
   data() {
     return {
       startVal: 0,
-      vistors: 0,
-      message: 0,
-      order: 0,
-      profit: 0,
+      cardsData: {
+        totalVisitors: 0,
+        onlineVisitors: 0,
+        messages: 0,
+        orderForm: 0,
+        profit: 0
+      },
       mapData: [],
       // 日期范围
       dateRange: [this.parseTime(new Date(), '{y}-{m}-{d}'), this.parseTime(new Date(), '{y}-{m}-{d}')],
       queryParams: {}
     }
-  },
-  components: {
-    CountTo,
-    mapChart
   },
   created() {
     this.getConfigKey('sys.index.skin').then(res => {
@@ -130,26 +142,30 @@ export default {
         value: res
       })
     })
-    this.getMapData();
-    let that = this
-    setTimeout(function() {
-      that.getMapData();
-    }, 60 * 1000)
+    if (this.roles.includes('admin')) {
+      this.getMapData()
+      this.getCardsData()
+      const that = this
+      setTimeout(function() {
+        that.getMapData()
+        that.getCardsData()
+      }, 60 * 1000)
+    }
   },
   methods: {
+    /**
+     * 获取卡片统计数据
+     */
+    getCardsData() {
+      cardStat().then(res => {
+        this.cardsData = res
+      })
+    },
+    /**
+     * 获取用户登录日志统计
+     */
     getMapData() {
-      let params = this.addDateRange(this.queryParams, this.dateRange)
-      request({
-        url: '/monitor/loginLog/stat',
-        method: 'post',
-        data: params
-      }).then(res => {
-        if (res) {
-          for (let i = 0; i < res.length; i++) {
-            res[i].name = res[i].userName
-            res[i].value = res[i].coordinate.split(',')
-          }
-        }
+      userLoginStat(this.addDateRange(this.queryParams, this.dateRange)).then(res => {
         this.mapData = res
       })
     }
