@@ -108,7 +108,7 @@
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" min-width="100">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" min-width="120">
         <template slot-scope="scope">
           <el-button
             v-hasPermi="['monitor:job:run']"
