@@ -8,7 +8,7 @@
         <version>2.4.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.github.zmzhou</groupId>
+    <groupId>com.github.zmzhou-star</groupId>
     <artifactId>easyboot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>easyboot</name>
@@ -193,7 +193,7 @@
         </dependency>
         <!-- 获取系统信息 -->
         <dependency>
-            <groupId>com.github.zmzhou</groupId>
+            <groupId>com.github.zmzhou-star</groupId>
             <artifactId>server-info</artifactId>
             <version>1.0</version>
         </dependency>
