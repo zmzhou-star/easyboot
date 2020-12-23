@@ -1,8 +1,8 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <hamburger id="hamburger-container" :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
-    <breadcrumb class="breadcrumb-container" />
+    <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
     <div class="right-menu">
 
@@ -19,10 +19,10 @@
         </el-tooltip>
       </template>
       <router-link to="/user/profile">
-        <div class="right-menu-item hover-effect nick-name">{{ nickName }}</div>
+        <div id="nick-name" class="right-menu-item hover-effect nick-name">{{ nickName }}</div>
       </router-link>
 
-      <el-dropdown class="avatar-container" trigger="click">
+      <el-dropdown id="avatar-container" class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img :src="avatar" class="user-avatar" :alt="name">
           <em class="el-icon-caret-bottom" />
