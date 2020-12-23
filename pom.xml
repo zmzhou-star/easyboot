@@ -8,7 +8,7 @@
         <version>2.4.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.github.zmzhou</groupId>
+    <groupId>com.github.zmzhou-star</groupId>
     <artifactId>easyboot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>easyboot</name>
@@ -124,7 +124,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.2.3</version>
+            <version>1.2.4</version>
         </dependency>
         <dependency>
             <groupId>io.github.yedaxia</groupId>
@@ -193,7 +193,7 @@
         </dependency>
         <!-- 获取系统信息 -->
         <dependency>
-            <groupId>com.github.zmzhou</groupId>
+            <groupId>com.github.zmzhou-star</groupId>
             <artifactId>server-info</artifactId>
             <version>1.0</version>
         </dependency>
@@ -336,9 +336,9 @@
     </build>
     <repositories>
         <repository>
-            <id>nexus-aliyun</id>
-            <name>Nexus aliyun</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+            <id>aliyunmaven</id>
+            <name>阿里云公共仓库</name>
+            <url>https://maven.aliyun.com/repository/public</url>
         </repository>
     </repositories>
     <distributionManagement>
