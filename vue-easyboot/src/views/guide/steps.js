@@ -14,7 +14,8 @@ const steps = [
       title: '折叠按钮',
       description: '点击收缩和展开菜单导航',
       position: 'bottom'
-    }
+    },
+    padding: 0
   },
   {
     element: '#breadcrumb-container',
@@ -22,15 +23,17 @@ const steps = [
       title: '页面导航',
       description: '指示当前页面位置',
       position: 'bottom'
-    }
+    },
+    padding: 0
   },
   {
     element: '#header-search',
     popover: {
-      title: 'Page Search',
-      description: 'Page search, quick navigation',
+      title: '页面搜寻',
+      description: '页面搜索，快速导航',
       position: 'left'
-    }
+    },
+    padding: 0
   },
   {
     element: '#screenfull',
@@ -38,7 +41,8 @@ const steps = [
       title: '全屏显示',
       description: '将页面设置为全屏显示',
       position: 'left'
-    }
+    },
+    padding: 0
   },
   {
     element: '#size-select',
@@ -46,7 +50,8 @@ const steps = [
       title: '尺寸开关',
       description: '切换系统文字大小',
       position: 'left'
-    }
+    },
+    padding: 0
   },
   {
     element: '#nick-name',
@@ -63,8 +68,7 @@ const steps = [
       title: '个人中心',
       description: '点击图标，显示个人中心等链接',
       position: 'left'
-    },
-    padding: 0
+    }
   },
   {
     element: '#tags-view-container',

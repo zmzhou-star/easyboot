@@ -1,8 +1,10 @@
 <template>
-  <div class="app-container driver">
-    <p class="driver_p0">
-      <i class="el-icon-s-opportunity"></i>点击按钮可查看本系统的基本操作
-    </p>
+  <div class="app-container">
+    <aside>
+      <i class="el-icon-s-opportunity"></i>
+      引导页面对于某些首次进入该项目的人很有用，点击按钮可查看本系统的基本操作。演示基于
+      <a href="https://github.com/kamranahmedse/driver.js" target="_blank">driver.js.</a>
+    </aside>
     <el-button icon="el-icon-question" type="primary" @click.prevent.stop="guide">
       打开引导
     </el-button>
@@ -36,13 +38,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.driver_p0 {
-  font-size: 14px;
-  margin-bottom: 20px;
+aside {
   i {
     margin-right: 5px;
     color: #ffc107;
-    font-size: 18px;
+    font-size: 20px;
   }
 }
 </style>

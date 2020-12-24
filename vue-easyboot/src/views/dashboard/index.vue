@@ -1,5 +1,7 @@
 <template>
   <div class="dashboard-container">
+    <github-corner class="github-corner" />
+
     <div v-if="roles[0] !== 'admin'" class="dashboard-text">name: {{ name }} </div>
     <!-- cardList -->
     <div v-hasRole="['admin']">
@@ -15,35 +17,39 @@
               />
               <p class="cardItem_p1">Total Visitors</p>
             </div>
-            <div class="cardItem_txt">
-              <count-to
-                class="cardItem_p0 color-green1"
-                :start-val="startVal"
-                :end-val="cardsData.onlineVisitors"
-                :duration="2000"
-              />
-              <p class="cardItem_p1">Online Visitors</p>
-            </div>
+            <router-link to="/monitor/online">
+              <div class="cardItem_txt">
+                <count-to
+                  class="cardItem_p0 color-green1"
+                  :start-val="startVal"
+                  :end-val="cardsData.onlineVisitors"
+                  :duration="2000"
+                />
+                <p class="cardItem_p1">Online Visitors</p>
+              </div>
+            </router-link>
             <div class="cardItem_icon">
               <i class="el-icon-user color-green1" />
             </div>
           </div>
         </el-col>
         <el-col :span="6">
-          <div class="cardItem">
-            <div class="cardItem_txt">
-              <count-to
-                class="cardItem_p0 color-blue"
-                :start-val="startVal"
-                :end-val="cardsData.messages"
-                :duration="2000"
-              />
-              <p class="cardItem_p1">Messages</p>
+          <router-link to="/system/notice">
+            <div class="cardItem">
+              <div class="cardItem_txt">
+                <count-to
+                  class="cardItem_p0 color-blue"
+                  :start-val="startVal"
+                  :end-val="cardsData.messages"
+                  :duration="2000"
+                />
+                <p class="cardItem_p1">Messages</p>
+              </div>
+              <div class="cardItem_icon">
+                <i class="el-icon-s-comment color-blue" />
+              </div>
             </div>
-            <div class="cardItem_icon">
-              <i class="el-icon-s-comment color-blue" />
-            </div>
-          </div>
+          </router-link>
         </el-col>
         <el-col :span="6">
           <div class="cardItem">
@@ -107,6 +113,7 @@ import { mapGetters } from 'vuex'
 import CountTo from 'vue-count-to'
 import mapChart from '@/views/echarts/map-chart'
 import { cardStat, userLoginStat } from '@/api/dashboard'
+import GithubCorner from '@/components/GithubCorner'
 
 export default {
   name: 'Dashboard',
@@ -116,6 +123,7 @@ export default {
     ])
   },
   components: {
+    GithubCorner,
     CountTo,
     mapChart
   },
@@ -177,7 +185,16 @@ export default {
 .dashboard {
   &-container {
     height: 100%;
-    margin: 30px;
+    padding: 30px;
+    position: relative;
+    background-color: #f0f2f5;
+    .github-corner {
+      position: absolute;
+      top: 0;
+      border: 0;
+      right: 0;
+      z-index: 9;
+    }
   }
   &-text {
     font-size: 30px;

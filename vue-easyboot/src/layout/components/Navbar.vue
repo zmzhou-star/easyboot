@@ -7,6 +7,8 @@
     <div class="right-menu">
 
       <template v-if="device!=='mobile'">
+        <search id="header-search" class="right-menu-item" />
+
         <el-tooltip content="源码地址" effect="dark" placement="bottom">
           <git id="easyboot-git" class="right-menu-item hover-effect" />
         </el-tooltip>
@@ -60,6 +62,7 @@ import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Doc from '@/components/Doc'
 import Git from '@/components/Git'
+import Search from '@/components/HeaderSearch'
 
 export default {
   components: {
@@ -68,7 +71,8 @@ export default {
     Screenfull,
     SizeSelect,
     Doc,
-    Git
+    Git,
+    Search
   },
   computed: {
     ...mapGetters([
