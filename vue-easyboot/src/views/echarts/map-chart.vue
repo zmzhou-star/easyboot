@@ -112,7 +112,7 @@ export default {
               padding: 10,
               formatter: function(param) {
                 const data = param.data
-                return param.seriesName + '<br>ip地址：' + data.ipAddr + '<br>登录地点：' + data.loginLocation +
+                return param.seriesName + '<br>IP地址：' + data.ipAddr + '<br>登录地点：' + data.loginLocation +
                   '<br>浏览器类型：' + data.browser + '<br>操作系统：' + data.os + '<br>登录时间：' + data.loginTime
               }
             },

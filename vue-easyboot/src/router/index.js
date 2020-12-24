@@ -38,7 +38,7 @@ export const constantRoutes = [
     children: [
       {
         path: '/redirect/:path(.*)',
-        component: (resolve) => require(['@/views/redirect'], resolve)
+        component: () => import('@/views/redirect')
       }
     ]
   },

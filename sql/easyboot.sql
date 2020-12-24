@@ -316,6 +316,7 @@ INSERT INTO sys_menu VALUES (2014, '查询定时任务日志', 2013, 1, NULL, NU
 INSERT INTO sys_menu VALUES (2015, '删除定时任务日志', 2013, 2, '#', NULL, '0', 'F', '1', '1', 'monitor:jobLog:remove', '#', 'admin', '2020-12-18 21:01:36', 'admin', '2020-12-18 21:05:32', NULL);
 INSERT INTO sys_menu VALUES (2016, '导出定时任务日志', 2013, 3, NULL, NULL, '0', 'F', '1', '1', 'monitor:jobLog:export', '#', 'admin', '2020-12-18 21:02:19', 'admin', '2020-12-18 21:04:23', NULL);
 INSERT INTO sys_menu VALUES (2017, '定时任务日志按钮', 110, 8, '#', '', '0', 'F', '1', '1', 'monitor:job:log', '#', 'admin', '2020-12-18 21:13:30', 'admin', '2020-12-18 21:16:27', '定时任务日志按钮');
+INSERT INTO sys_menu VALUES (2018, '图标库', 3, 4, 'icons', 'tool/icons/index', '0', 'C', '1', '1', 'tool:icons:index', 'icon', 'admin', '2020-12-24 10:13:55', NULL, NULL, '图标库');
 
 -- ----------------------------
 -- Table structure for sys_notice
