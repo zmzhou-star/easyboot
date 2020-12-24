@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.framework.vo.IpInfo;
 
 import lombok.extern.slf4j.Slf4j;
@@ -90,7 +91,8 @@ public final class IpUtils {
 
     /**
      * Gets ip addr.
-     *
+     * 获取用户真实IP地址，不使用request.getRemoteAddr()的原因是有可能用户使用了代理软件方式避免真实IP地址
+     * 如果通过了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP值
      * @param request the request
      * @return the ip addr
      */
@@ -99,6 +101,12 @@ public final class IpUtils {
             return UNKNOWN;
         }
         String ip = request.getHeader("x-forwarded-for");
+        if (ip != null && ip.length() != 0 && !UNKNOWN.equalsIgnoreCase(ip)) {
+            // 多次反向代理后会有多个ip值，第一个ip才是真实ip
+            if (ip.contains(Constants.COMMA)) {
+                ip = ip.split(Constants.COMMA)[0];
+            }
+        }
         if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }

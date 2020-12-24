@@ -87,7 +87,7 @@ public final class FileUtil {
      * @date 2020/8/30 21:18
      */
     public static boolean deleteFile(String filePath, boolean immediate) {
-        // 当前时间减一小时
+        // 当前时间减10分钟
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MINUTE, -10);
         boolean flag = false;
