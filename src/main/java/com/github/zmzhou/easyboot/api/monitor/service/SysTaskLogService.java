@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,13 +25,12 @@ import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBui
 
 /**
  * 定时任务日志Service接口
- * 
+ *
  * @author zmzhou
  * @version 1.0
  * date 2020-12-17 19:40:43
  */
 @Service
-@CacheConfig(cacheNames = {"monitor:SysTaskLog"})
 @Transactional(rollbackFor = Exception.class)
 public class SysTaskLogService extends BaseService<SysTaskLogParams> {
     @Resource
@@ -63,7 +61,7 @@ public class SysTaskLogService extends BaseService<SysTaskLogParams> {
 
     /**
      * 根据id查询定时任务日志
-     * 
+     *
      * @param id 定时任务日志id
      * @return SysTaskLog对象
      * @author zmzhou
@@ -78,7 +76,7 @@ public class SysTaskLogService extends BaseService<SysTaskLogParams> {
 
     /**
      * 新增定时任务日志
-     * 
+     *
      * @param entity 定时任务日志
      * @return SysTaskLog 新增结果
      * @author zmzhou
@@ -90,7 +88,7 @@ public class SysTaskLogService extends BaseService<SysTaskLogParams> {
 
     /**
      * 批量删除定时任务日志
-     * 
+     *
      * @param ids 需要删除的定时任务日志ID
      * @author zmzhou
      * date 2020-12-17 19:40:43
@@ -103,7 +101,7 @@ public class SysTaskLogService extends BaseService<SysTaskLogParams> {
     }
 
 	/**
-	 * 清空定时任务日志 
+	 * 清空定时任务日志
 	 * @author zmzhou
 	 * @date 2020/12/18 20:09
 	 */

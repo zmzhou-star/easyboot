@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,8 +26,9 @@ import com.github.zmzhou.easyboot.framework.vo.PageParams;
 @SpringBootTest
 @WebAppConfiguration
 @Transactional
+@WithMockUser(username="admin", roles={"admin"})
 public class EasybootApplicationTests {
-    
+
     /**
      * The Constant log.
      */
@@ -50,7 +52,7 @@ public class EasybootApplicationTests {
     public void init() {
         log.info("开始测试...");
     }
-    
+
     /**
      * After.
      */
@@ -58,7 +60,7 @@ public class EasybootApplicationTests {
     public void after() {
         log.info("测试结束...");
     }
-    
+
     /**
      * Context loads.
      */

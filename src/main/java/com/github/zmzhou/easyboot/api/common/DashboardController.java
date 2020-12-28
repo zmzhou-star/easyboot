@@ -1,5 +1,7 @@
 package com.github.zmzhou.easyboot.api.common;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.zmzhou.easyboot.api.common.service.DashboardService;
 import com.github.zmzhou.easyboot.api.common.vo.CardVo;
+import com.github.zmzhou.easyboot.api.monitor.entity.SysLoginLog;
 import com.github.zmzhou.easyboot.api.monitor.service.SysLoginLogService;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.vo.PageParams;
@@ -19,7 +22,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 /**
- * 首页监控面板 
+ * 首页监控面板
  * @author zmzhou
  * @version 1.0
  * @date 2020/12/21 10:36
@@ -34,7 +37,7 @@ public class DashboardController extends BaseController {
 	private SysLoginLogService loginLogService;
 
 	/**
-	 * 首页面板卡片统计 
+	 * 首页面板卡片统计
 	 * @return ApiResult
 	 * @author zmzhou
 	 * @date 2020/12/21 10:43
@@ -46,7 +49,7 @@ public class DashboardController extends BaseController {
 		return ok(service.cardStat());
 	}
 	/**
-	 * 用户登录日志记录统计 
+	 * 用户登录日志记录统计
 	 * @param params 查询参数
 	 * @return ApiResult
 	 * @author zmzhou
@@ -55,7 +58,7 @@ public class DashboardController extends BaseController {
 	@PreAuthorize("@ebpe.hasRole('admin')")
 	@PostMapping("/userLoginStat")
 	@ApiOperation(value = "用户登录日志记录统计")
-	public ApiResult<String> userLoginStat(@RequestBody(required = false) PageParams params) {
+	public ApiResult<List<SysLoginLog>> userLoginStat(@RequestBody(required = false) PageParams params) {
 		return ok(loginLogService.stat(params));
 	}
 }
