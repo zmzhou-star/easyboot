@@ -2,7 +2,8 @@
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <div class="title-container">
-        <h3 class="title">Easy Boot</h3>
+        <h3 class="top title">Easy Boot</h3>
+        <div class="top desc">企业级前端解决方案</div>
       </div>
       <el-form-item prop="username">
         <span class="svg-container">
@@ -18,7 +19,6 @@
           auto-complete="on"
         />
       </el-form-item>
-
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
@@ -43,6 +43,7 @@
           <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
         </span>
         <el-input
+          ref="code"
           v-model="loginForm.code"
           auto-complete="off"
           maxlength="4"
@@ -54,7 +55,12 @@
           <img :src="codeUrl" alt="验证码" @click="getCode">
         </div>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">记住密码</el-checkbox>
+      <div>
+        <el-checkbox v-model="loginForm.rememberMe" style="margin:0 0 25px 0;">记住密码</el-checkbox>
+        <router-link to="/forgetPassword" class="link-type2" style="font-size: 14px;float: right">
+          <span>忘记密码</span>
+        </router-link>
+      </div>
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
       <div class="tips">
@@ -99,6 +105,9 @@ export default {
       },
       immediate: true
     }
+  },
+  mounted() {
+    this.$refs.code.focus()
   },
   created() {
     this.getCookie()
@@ -189,16 +198,16 @@ $cursor: #fff;
 
     input {
       background: transparent;
-      border: 0px;
+      border: 0;
       -webkit-appearance: none;
-      border-radius: 0px;
+      border-radius: 0;
       padding: 12px 5px 12px 15px;
       color: $light_gray;
       height: 47px;
       caret-color: $cursor;
 
       &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
+        box-shadow: 0 0 0 1000px $bg inset !important;
         -webkit-text-fill-color: $cursor !important;
       }
     }
@@ -211,13 +220,13 @@ $cursor: #fff;
     color: #454545;
   }
   .captcha {
-    width: 60%;
+    width: calc(100% - 160px);
     input{
       text-transform: uppercase;
     }
   }
   .login-code {
-      width: 31%;
+      width: 120px;
       height: 50px;
       float: right;
   }
@@ -234,12 +243,16 @@ $light_gray:#eee;
   width: 100%;
   background-color: $bg;
   overflow: hidden;
+  background-image: url('~@/assets/bg.svg');
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 100%;
 
   .login-form {
     position: relative;
     width: 460px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 130px 35px 0;
     margin: 0 auto;
     overflow: hidden;
   }
@@ -267,12 +280,18 @@ $light_gray:#eee;
   .title-container {
     position: relative;
 
+    .top {
+      text-align: center;
+      margin: 0 auto 20px auto;
+      color: $light_gray;
+    }
     .title {
       font-size: 26px;
-      color: $light_gray;
-      margin: 0px auto 40px auto;
-      text-align: center;
       font-weight: bold;
+    }
+    .desc {
+      font-size: 14px;
+      opacity: 0.8;
     }
   }
 

@@ -170,6 +170,15 @@ aside {
     color: rgb(32, 160, 255);
   }
 }
+.link-type2,
+.link-type2:focus {
+  color: #1890ff;
+  cursor: pointer;
+
+  &:hover {
+    color: rgb(32, 182, 249);
+  }
+}
 
 .filter-container {
   padding-bottom: 10px;
