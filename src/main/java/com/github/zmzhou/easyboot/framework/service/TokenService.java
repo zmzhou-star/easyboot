@@ -1,4 +1,4 @@
-package com.github.zmzhou.easyboot.framework.security.service;
+package com.github.zmzhou.easyboot.framework.service;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -39,14 +39,14 @@ import io.jsonwebtoken.SignatureAlgorithm;
  */
 @Component
 public class TokenService {
-    
+
     /**
      * The constant MILLIS_MINUTE. 一分钟
      */
     protected static final long MILLIS_MINUTE = 60 * 1000L;
     /** 20分钟 */
     private static final Long MILLIS_MINUTE_TEN = 20 * MILLIS_MINUTE;
-    
+
     /** 令牌自定义标识 */
     @Value("${token.header}")
     private String header;
@@ -142,7 +142,7 @@ public class TokenService {
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
-    
+
     /**
      * 验证令牌有效期，相差不足20分钟，自动刷新缓存
      *
@@ -219,7 +219,7 @@ public class TokenService {
         loginUser.setBrowser(userAgent.getBrowser().getName());
         loginUser.setOs(userAgent.getOperatingSystem().getName());
     }
-    
+
     /**
      * 从令牌中获取数据声明
      *

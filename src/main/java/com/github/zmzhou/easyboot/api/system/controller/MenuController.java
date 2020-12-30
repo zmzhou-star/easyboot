@@ -25,7 +25,7 @@ import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.utils.SpringUtils;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
-import com.github.zmzhou.easyboot.framework.security.service.TokenService;
+import com.github.zmzhou.easyboot.framework.service.TokenService;
 import com.github.zmzhou.easyboot.framework.vo.TreeSelect;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
@@ -46,7 +46,7 @@ public class MenuController extends BaseController {
 	private MenuService menuService;
 	@Resource
 	private TokenService tokenService;
-	
+
 	/**
 	 * 获取菜单列表
 	 *
@@ -93,7 +93,7 @@ public class MenuController extends BaseController {
 		List<SysMenu> menus = menuService.selectMenuList(menu.toEntity(), userId);
 		return ok(menuService.buildMenuTreeSelect(menus));
 	}
-	
+
 	/**
 	 * 加载对应角色菜单列表树
 	 * @param roleId 角色id

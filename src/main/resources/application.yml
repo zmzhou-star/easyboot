@@ -88,6 +88,12 @@ spring:
   session:
     store-type: redis
     timeout: 30M
+  mail:
+    host: smtp.qq.com #SMTP服务器地址
+    username: zmzhou8 #登陆账号
+    password: 123456 #登陆密码（或授权码）
+    properties:
+      from: zmzhou8@qq.com #邮件发信人（即真实邮箱）
 # token配置
 token:
   # 令牌自定义标识
@@ -99,7 +105,7 @@ token:
   # Token前缀字符
   prefix: easybooy-
   # 配置不需要认证的接口
-  antMatchers: /index,/login/**,/favicon.ico,/common/**,/druid/**,/swagger**/**,/doc.html,/webjars/**,/v2/api-docs
+  antMatchers: /index,/login/**,/nonAuth/**,/favicon.ico,/common/**,/druid/**,/swagger**/**,/doc.html,/webjars/**,/v2/api-docs
 #登录页验证码有效时间(单位分钟)/宽度/高度/位数
 captcha:
   expiration: 2

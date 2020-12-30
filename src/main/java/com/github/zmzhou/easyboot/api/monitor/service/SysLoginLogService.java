@@ -23,7 +23,7 @@ import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.excel.BaseExcel;
 import com.github.zmzhou.easyboot.common.utils.ThreadPoolUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
-import com.github.zmzhou.easyboot.framework.security.service.TokenService;
+import com.github.zmzhou.easyboot.framework.service.TokenService;
 import com.github.zmzhou.easyboot.framework.service.BaseService;
 import com.github.zmzhou.easyboot.framework.specification.Operator;
 import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
@@ -161,7 +161,7 @@ public class SysLoginLogService extends BaseService<SysLoginLogParams> {
 	}
 
 	/**
-	 * 根据登录时间统计用户登录信息 
+	 * 根据登录时间统计用户登录信息
 	 * @param params 查询参数
 	 * @return 查询结果
 	 * @author zmzhou

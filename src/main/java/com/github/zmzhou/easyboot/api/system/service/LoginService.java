@@ -19,7 +19,7 @@ import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.framework.redis.RedisUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginBody;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
-import com.github.zmzhou.easyboot.framework.security.service.TokenService;
+import com.github.zmzhou.easyboot.framework.service.TokenService;
 
 /**
  *  @title LoginService
@@ -40,7 +40,7 @@ public class LoginService {
 	private SysLoginLogService loginLogService;
 	@Resource
 	private UserService userService;
-	
+
 	/**
 	 * 登录验证
 	 *

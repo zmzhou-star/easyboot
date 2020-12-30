@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
-import com.github.zmzhou.easyboot.framework.security.service.TokenService;
+import com.github.zmzhou.easyboot.framework.service.TokenService;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
 
 import lombok.extern.slf4j.Slf4j;

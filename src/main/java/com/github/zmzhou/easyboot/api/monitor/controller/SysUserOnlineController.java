@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.zmzhou.easyboot.api.monitor.service.SysUserOnlineService;
 import com.github.zmzhou.easyboot.api.monitor.vo.SysUserOnlineVo;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
-import com.github.zmzhou.easyboot.framework.security.service.TokenService;
+import com.github.zmzhou.easyboot.framework.service.TokenService;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
 import io.swagger.annotations.Api;

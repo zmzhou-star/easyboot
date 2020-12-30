@@ -9,7 +9,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import org.springframework.stereotype.Component;
 
 import com.github.zmzhou.easyboot.common.utils.SpringUtils;
-import com.github.zmzhou.easyboot.framework.security.service.TokenService;
+import com.github.zmzhou.easyboot.framework.service.TokenService;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.api.system.service.UserService;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
@@ -30,7 +30,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 	private TokenService tokenService;
 	@Autowired
 	private UserService userService;
-	
+
 	/**
 	 * 退出处理
 	 * @param request  HttpServletRequest

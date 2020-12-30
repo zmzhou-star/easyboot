@@ -11,6 +11,7 @@ import org.springframework.util.CollectionUtils;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.utils.SpringUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
+import com.github.zmzhou.easyboot.framework.service.TokenService;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -32,7 +32,7 @@ import com.github.zmzhou.easyboot.common.excel.BaseExcel;
 import com.github.zmzhou.easyboot.common.utils.EasyBootUtils;
 import com.github.zmzhou.easyboot.common.utils.ThreadPoolUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
-import com.github.zmzhou.easyboot.framework.security.service.TokenService;
+import com.github.zmzhou.easyboot.framework.service.TokenService;
 import com.github.zmzhou.easyboot.framework.specification.Operator;
 import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBuilder;
 import com.github.zmzhou.easyboot.framework.vo.IpInfo;
