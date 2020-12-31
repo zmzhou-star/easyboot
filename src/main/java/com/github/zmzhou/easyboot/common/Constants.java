@@ -16,6 +16,10 @@ public final class Constants {
      * 验证码 redis key
      */
     public static final String CAPTCHA_CODE_KEY = "captcha_codes:";
+    /**
+     * 邮箱验证码 redis key
+     */
+    public static final String EMAIL_CAPTCHA_CODE_KEY = "email_captcha_codes:";
 
     /**
      * 登录用户 redis key
@@ -91,7 +95,7 @@ public final class Constants {
 	public static final String CREATE_TIME = "createTime";
     /** 文件下载缓冲区大小 */
     public static final int BUFFER_SIZE = 2 * 1024 * 1024;
-    
+
     /** 所有权限标识 */
     public static final String ALL_PERMISSION = "*:*:*";
 
@@ -107,7 +111,7 @@ public final class Constants {
     public static final String MISFIRE_DO_NOTHING = "3";
     /** 定时任务暂停 */
     public static final String PAUSE = "0";
-    
+
 	/**
      * 私有构造器
      * @author zmzhou

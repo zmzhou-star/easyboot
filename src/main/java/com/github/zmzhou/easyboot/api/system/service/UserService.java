@@ -176,9 +176,9 @@ public class UserService extends BaseService<SysUserParams> {
 	public boolean exists(SysUser user) {
 		return null != getUser(user).getId();
 	}
-	
+
 	/**
-	 * 统计用户数量 
+	 * 统计用户数量
 	 * @return 用户数量
 	 * @author zmzhou
 	 * @date 2020/12/21 10:59
@@ -186,7 +186,7 @@ public class UserService extends BaseService<SysUserParams> {
 	public long count(){
 		return userDao.count();
 	}
-	
+
 	/**
 	 * 保存用户角色信息
 	 * @param userVo 用户信息
@@ -216,6 +216,18 @@ public class UserService extends BaseService<SysUserParams> {
 		}
 		return user;
 	}
+
+	/**
+	 * Save and flush sys user.
+	 *
+	 * @param user the user
+	 * @return the sys user
+	 */
+	public SysUser saveAndFlush(SysUser user) {
+		user.setUpdateTime(new Date());
+		return userDao.saveAndFlush(user);
+	}
+
 	/**
 	 * 保存用户信息
 	 * @param user 用户信息
@@ -262,7 +274,7 @@ public class UserService extends BaseService<SysUserParams> {
 			ThreadPoolUtils.execute(()-> FileUploadUtils.getInstance().deleteAvatar(getUser(id).getUsername()));
 		}
 	}
-	
+
 	/**
 	 * 重置密码
 	 * @param id 用户id
@@ -288,7 +300,7 @@ public class UserService extends BaseService<SysUserParams> {
 		user.setUpdateTime(new Date());
 		return userDao.saveAndFlush(user);
 	}
-	
+
 	/**
 	 * 更新用户登录时间
 	 * @param loginUser 用户登录信息

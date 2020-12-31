@@ -46,7 +46,8 @@
           class="captcha"
           @keyup.enter.native="checkEmailCode"
         />
-        <el-button :loading="loadingEmailCode" type="primary" class="get-code" @click.native.prevent="getEmailCode">点击获取验证码</el-button>
+        <el-button v-if="countdown !== 60" type="info" class="get-code">{{ countdown }}s</el-button>
+        <el-button v-if="countdown === 60" :loading="loadingEmailCode" type="primary" class="get-code" @click.native.prevent="getEmailCode">点击获取验证码</el-button>
       </el-form-item>
       <div style="margin:0 0 25px 0;">
         <router-link to="/login" class="link-type2" style="font-size: 14px;">
@@ -107,7 +108,7 @@
 </template>
 
 <script>
-import { getEmailCode } from '@/api/nonAuth'
+import { getEmailCode, checkEmailCode, resetPwd } from '@/api/nonAuth'
 
 export default {
   name: 'ForgetPassword',
@@ -121,19 +122,21 @@ export default {
     }
     return {
       step: 1,
+      countdown: 60,
       emailCodeForm: {
         username: '',
+        email: '',
         code: '',
-        email: ''
+        uuid: ''
       },
       resetForm: {
         password: '',
-        confirmPassword: '',
+        confirmPassword: ''
       },
       emailCodeRules: {
         username: [{ required: true, trigger: 'blur', message: '用户名不能为空' }],
         email: [{ required: true, message: '邮箱地址不能为空', trigger: 'blur' },
-            { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change']}],
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
         code: [{ required: false, trigger: 'change', message: '验证码邮箱不能为空' }]
       },
       resetFormRules: {
@@ -149,7 +152,7 @@ export default {
       },
       passwordType: 'password',
       loading: false,
-      loadingEmailCode: false,
+      loadingEmailCode: false
     }
   },
   mounted() {
@@ -167,61 +170,76 @@ export default {
       })
     },
     /** 获取邮箱验证码 */
-    getEmailCode(){
-      let that = this
-      console.log('getEmailCode!!')
+    getEmailCode() {
+      const that = this
       this.emailCodeRules.code[0].required = false
       this.$refs.emailCodeForm.validate(valid => {
         if (valid) {
           that.loadingEmailCode = true
           getEmailCode(that.emailCodeForm).then(res => {
-            console.log(res)
+            that.emailCodeForm.uuid = res
             that.loadingEmailCode = false
+            this.msgSuccess('验证码发送成功，请前往邮箱查看')
+            // 已经成功发送了邮件，开始倒计时60秒内不允许再点获取邮箱验证码按钮
+            that.countdown -= 1
+            const myInterval = setInterval(function() {
+              that.countdown -= 1
+              if (that.countdown === 0) {
+                that.countdown = 60
+                clearInterval(myInterval)
+              }
+            }, 1000)
           }).catch(() => {
             that.loadingEmailCode = false
           })
         } else {
-          console.log('error submit!!')
+          console.error('validate error !!!')
           return false
         }
       })
     },
     /** 验证用户名邮箱验证码 */
-    checkEmailCode(){
-      console.log('checkEmailCode!!')
+    checkEmailCode() {
       this.emailCodeRules.code[0].required = true
-      let that = this
+      const that = this
       this.$refs.emailCodeForm.validate(valid => {
         if (valid) {
           that.loading = true
-          getEmailCode(that.emailCodeForm).then(res => {
-            console.log(res)
+          checkEmailCode(that.emailCodeForm).then(res => {
             that.loading = false
-            that.step = 2
+            // 验证通过
+            if (res) {
+              that.step = 2
+            }
           }).catch(() => {
             that.loading = false
           })
         } else {
-          console.log('error submit!!')
+          console.error('validate error !!!')
           return false
         }
       })
     },
     /** 重置密码 */
-    resetPwd(){
-      console.log('resetPwd!!')
-      let that = this
+    resetPwd() {
+      const that = this
       this.$refs.resetForm.validate(valid => {
         if (valid) {
           that.loading = true
-          getEmailCode(that.resetForm).then(res => {
-            console.log(res)
+          resetPwd(that.emailCodeForm.uuid, that.sha256(that.resetForm.password)).then(res => {
             that.loading = false
+            if (res) {
+              this.msgSuccess('重置密码成功')
+              this.$router.push(`/login`)
+            } else {
+              this.msgError('重置密码失败')
+            }
           }).catch(() => {
             that.loading = false
+            this.msgError('重置密码失败')
           })
         } else {
-          console.log('error submit!!')
+          console.error('validate error !!!')
           return false
         }
       })
@@ -229,7 +247,6 @@ export default {
   }
 }
 </script>
-
 
 <style lang="scss">
 $bg:#2d3a4b;

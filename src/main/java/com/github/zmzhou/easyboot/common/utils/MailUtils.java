@@ -33,49 +33,47 @@ public final class MailUtils {
 	private JavaMailSenderImpl mailSender;
 
 	/**
-	 * 发送邮件
-	 * @param mailVo 邮件信息
-	 * @return mailVo 邮件信息
-	 * @author zmzhou
-	 * @date 2020/12/30 16:02
-	 */
-	public void sendMail() {
-		//简单邮件
-		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-		simpleMailMessage.setFrom(getMailSendFrom());
-		simpleMailMessage.setTo("zmzhou8@gmail.com");
-		simpleMailMessage.setSubject("Happy New Year");
-		simpleMailMessage.setText("新年快乐！");
-		mailSender.send(simpleMailMessage);
-	}
-	/**
-	 * 发送邮件
+	 * 发送复杂邮件，邮件内容使用HTML邮件应用内容类型 “text/html”
 	 * @param mailVo 邮件信息
 	 * @return mailVo 邮件信息
 	 * @author zmzhou
 	 * @date 2020/12/30 16:19
 	 */
-	public MailVo sendMail(MailVo mailVo) {
+	public MailVo sendMail(@Validated MailVo mailVo) {
 		try {
 			// 发送邮件
 			sendMimeMail(mailVo);
-			// 保存邮件信息
-			return saveMail(mailVo);
 		} catch (MessagingException e) {
 			log.error("发送邮件失败:", e);
 			mailVo.setStatus(Constants.ZERO);
 			mailVo.setError(e.getMessage());
-			return mailVo;
 		}
+		// 保存邮件信息
+		return saveMail(mailVo);
 	}
 
+	/**
+	 * 发送简单邮件，邮件内容使用默认内容类型 "text/plain"
+	 * @param mailVo 邮件信息
+	 * @author zmzhou
+	 * @date 2020/12/30 16:02
+	 */
+	public void sendSimpleMail(@Validated MailVo mailVo) {
+		//简单邮件
+		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+		simpleMailMessage.setFrom(getMailSendFrom());
+		simpleMailMessage.setTo(mailVo.getTo().split(Constants.SEMICOLON));
+		simpleMailMessage.setSubject(mailVo.getSubject());
+		simpleMailMessage.setText(mailVo.getText());
+		mailSender.send(simpleMailMessage);
+	}
 	/**
 	 * 发送复杂邮件信息
 	 * @param mailVo 邮件信息
 	 * @author zmzhou
 	 * @date 2020/12/30 16:22
 	 */
-	private void sendMimeMail(@Validated MailVo mailVo) throws MessagingException {
+	private void sendMimeMail(MailVo mailVo) throws MessagingException {
 		//true表示支持复杂类型
 		MimeMessageHelper messageHelper = new MimeMessageHelper(mailSender.createMimeMessage(), true);
 		//邮件发信人从配置项读取
@@ -87,7 +85,7 @@ public final class MailUtils {
 		//邮件主题
 		messageHelper.setSubject(mailVo.getSubject());
 		//邮件内容
-		messageHelper.setText(mailVo.getText());
+		messageHelper.setText(mailVo.getText(), true);
 		//抄送
 		if (StringUtils.isNotBlank(mailVo.getCc())) {
 			messageHelper.setCc(mailVo.getCc().split(Constants.SEMICOLON));
@@ -123,7 +121,7 @@ public final class MailUtils {
 	 * @date 2020/12/30 17:40
 	 */
 	private MailVo saveMail(MailVo mailVo) {
-		//将邮件保存到数据库..
+		//将邮件保存到数据库
 		return mailVo;
 	}
 	/**

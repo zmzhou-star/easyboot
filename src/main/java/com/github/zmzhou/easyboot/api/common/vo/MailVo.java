@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -18,6 +19,7 @@ import lombok.Data;
  * @date 2020/12/30 16:16
  */
 @Data
+@Builder
 public class MailVo {
 	/** 邮件id */
 	private Long id;

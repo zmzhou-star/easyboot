@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <aside>
-      <i class="el-icon-s-opportunity"></i>
+      <i class="el-icon-s-opportunity" />
       引导页面对于某些首次进入该项目的人很有用，点击按钮可查看本系统的基本操作。演示基于
       <a href="https://github.com/kamranahmedse/driver.js" target="_blank">driver.js.</a>
     </aside>

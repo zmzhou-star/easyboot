@@ -121,7 +121,8 @@ const actions = {
    * @param avatar
    */
   setAvatar({ commit }, avatar) {
-    commit('SET_AVATAR', avatarPrefix + avatar)
+    // 加一个时间戳可以实时刷新所有引用到该资源的地方
+    commit('SET_AVATAR', avatarPrefix + avatar + '&date=' + new Date().getTime())
   }
 }
 

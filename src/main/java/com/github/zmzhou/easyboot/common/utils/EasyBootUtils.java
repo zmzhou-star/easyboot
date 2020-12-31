@@ -172,4 +172,14 @@ public final class EasyBootUtils {
 		}
 		return PageRequest.of(params.getPageNum() - 1, params.getPageSize(), sort);
 	}
+
+	/**
+	 * 生成6位随机数
+	 * @return 6位随机数
+	 * @author zmzhou
+	 * @date 2020/12/31 16:13
+	 */
+	public static String randomCode() {
+		return String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
+	}
 }

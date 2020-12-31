@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * The type Easy boot utils test.
  *
  * @author zmzhou
- * @version 1.0  date 2020/9/19 18:55
+ * @version 1.0 date 2020/9/19 18:55
  */
 @Slf4j
 class EasyBootUtilsTest {
@@ -81,6 +81,16 @@ class EasyBootUtilsTest {
 		Assertions.assertNotNull(res);
 		res = EasyBootUtils.jsonStringToMap("{'abc':[{'abc':1}]}");
 		log.info("{}", res);
+		Assertions.assertNotNull(res);
+	}
+
+	/**
+	 * Random code.
+	 */
+	@Test
+	void randomCode() {
+		String res = EasyBootUtils.randomCode();
+		log.info("res:{}", res);
 		Assertions.assertNotNull(res);
 	}
 }
