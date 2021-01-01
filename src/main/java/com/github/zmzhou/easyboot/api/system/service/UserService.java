@@ -200,7 +200,7 @@ public class UserService extends BaseService<SysUserParams> {
 		userRole.setUserId(userVo.getId());
 		// 新增用户不需要删除旧数据
 		if (null == userVo.getId()){
-			user = save(userVo.toEntity());
+			user = this.save(userVo.toEntity());
 			userRole.setUserId(user.getId());
 		} else {
 			// 更新用户信息，先删除角色关联数据，再保存
@@ -238,7 +238,11 @@ public class UserService extends BaseService<SysUserParams> {
 	@CachePut(key="#user.id")
 	public SysUser save(@Validated SysUser user) {
 		user.setCreateTime(new Date());
-		user.setCreateBy(SecurityUtils.getUsername());
+		try {
+			user.setCreateBy(SecurityUtils.getUsername());
+		} catch (BaseException e) {
+			log.error("", e);
+		}
 		user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
 		return userDao.saveAndFlush(user);
 	}

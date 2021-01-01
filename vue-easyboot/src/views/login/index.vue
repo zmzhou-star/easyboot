@@ -62,7 +62,16 @@
         </router-link>
       </div>
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-
+      <div style="line-height: 26px;">
+        <div class="third-party">
+          <span>第三方账号登录</span>
+          <svg-icon icon-class="wechat1" />
+          <svg-icon icon-class="qq1" />
+        </div>
+        <router-link to="/register" class="link-type2" style="font-size: 14px;float: right">
+          <span>注册账号</span>
+        </router-link>
+      </div>
       <div class="tips">
         <!-- <span style="margin-right:20px;">username: admin</span>
         <span> password: any</span> -->
@@ -257,6 +266,18 @@ $light_gray:#eee;
     overflow: hidden;
   }
 
+  .third-party {
+    float: left;
+    font-size: 14px;
+    span {
+      color: $light_gray;
+    }
+    svg {
+      margin-left: 15px;
+      font-size: 26px;
+      cursor: pointer;
+    }
+  }
   .tips {
     font-size: 14px;
     color: #fff;

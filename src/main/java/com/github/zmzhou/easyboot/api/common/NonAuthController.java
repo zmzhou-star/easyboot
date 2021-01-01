@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.zmzhou.easyboot.api.common.service.NonAuthService;
 import com.github.zmzhou.easyboot.api.common.vo.EmailCodeVo;
+import com.github.zmzhou.easyboot.api.system.vo.SysUserVo;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
@@ -72,5 +73,31 @@ public class NonAuthController extends BaseController {
 	public ApiResult<Boolean> resetPwd(@ApiParam(name = "uuid", value = "重置密码会话id", required = true) String uuid,
 						   @ApiParam(name = "password", value = "新密码", required = true) String password) {
 		return ok(service.resetPwd(uuid, password));
+	}
+
+	/**
+	 * 注册用户获取邮箱验证码
+	 * @param param 注册用户信息
+	 * @return ApiResult
+	 * @author zmzhou
+	 * @date 2020/12/29 17:17
+	 */
+	@ApiOperation(value = "注册用户获取邮箱验证码")
+	@GetMapping("getRegisterEmailCode")
+	public ApiResult<String> getRegisterEmailCode(SysUserVo param) {
+		return ok(service.sendRegisterMail(param));
+	}
+
+	/**
+	 * 注册账号
+	 * @param userVo 注册信息
+	 * @return 注册成功
+	 * @author zmzhou
+	 * @date 2021/1/1 20:21
+	 */
+	@ApiOperation(value = "注册账号")
+	@PostMapping("register")
+	public ApiResult<Boolean> register(@RequestBody SysUserVo userVo) {
+		return ok(service.register(userVo));
 	}
 }

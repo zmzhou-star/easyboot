@@ -12,6 +12,7 @@ import com.github.zmzhou.easyboot.api.common.vo.EmailCodeVo;
 import com.github.zmzhou.easyboot.api.common.vo.MailVo;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.api.system.service.UserService;
+import com.github.zmzhou.easyboot.api.system.vo.SysUserVo;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.ErrorCode;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
@@ -19,6 +20,7 @@ import com.github.zmzhou.easyboot.common.utils.EasyBootUtils;
 import com.github.zmzhou.easyboot.common.utils.MailUtils;
 import com.github.zmzhou.easyboot.common.utils.SecurityUtils;
 import com.github.zmzhou.easyboot.framework.redis.RedisUtils;
+import com.google.common.collect.Sets;
 
 import cn.hutool.core.util.IdUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +69,7 @@ public class NonAuthService {
 		redisUtils.set(emailKey, param, EMAIL_CAPTCHA_EXPIRATION, TimeUnit.MINUTES);
 		MailVo mailVo = MailVo.builder()
 				.to(param.getEmail())
-				.subject("Easy Boot 验证码")
+				.subject("Easy Boot 修改密码验证码")
 				.text("<html><body style='max-width: 750px;'>尊敬的用户：<br>\t我们收到了您的修改密码请求，您的验证码为：" +
 						"<div style=\"text-align: center;\">" +
 						"<p><strong style=\"font-weight: bold;text-align:center;font-size: 26px;\">" +
@@ -77,7 +79,7 @@ public class NonAuthService {
 						"<p><b>请勿将此验证码转发给或提供给任何人。</b></p>此致<br>敬上</body></html>")
 				.build();
 		mailVo = mailUtils.sendMail(mailVo);
-		log.info("发送邮件成功：{}", mailVo);
+		log.info("发送修改密码验证码邮件成功：{}", mailVo);
 		return uuid;
 	}
 
@@ -120,6 +122,8 @@ public class NonAuthService {
 		if (StringUtils.isBlank(user.getUsername())) {
 			throw new BaseException(ErrorCode.USER_NOT_EXISTS);
 		}
+		// 删除缓存
+		redisUtils.delete(emailKey);
 		// 设置新密码
 		user.setPassword(SecurityUtils.encryptPassword(password));
 		user.setUpdateBy(emailCodeVo.getUsername());
@@ -137,5 +141,69 @@ public class NonAuthService {
 	 */
 	private String emailCaptchaCodeKey(String uuid) {
 		return Constants.EMAIL_CAPTCHA_CODE_KEY + uuid;
+	}
+
+	/**
+	 * 注册用户获取邮箱验证码
+	 * @param userVo 注册用户信息
+	 * @return 注册验证码唯一标识
+	 * @author zmzhou
+	 * @date 2021/1/1 18:52
+	 */
+	public String sendRegisterMail(SysUserVo userVo) {
+		SysUser user = userService.getUser(userVo.getUsername());
+		// 用户已经存在
+		if (StringUtils.isNotBlank(user.getUsername())) {
+			throw new BaseException(ErrorCode.USER_EXISTS);
+		}
+		String uuid = IdUtil.simpleUUID();
+		// 生成6位随机数为验证码
+		String randomCode = EasyBootUtils.randomCode();
+		userVo.setRemark(randomCode);
+		String emailKey = this.emailCaptchaCodeKey(uuid);
+		redisUtils.set(emailKey, userVo, EMAIL_CAPTCHA_EXPIRATION, TimeUnit.MINUTES);
+		MailVo mailVo = MailVo.builder()
+				.to(userVo.getEmail())
+				.subject("Easy Boot 注册用户验证码")
+				.text("<html><body style='max-width: 750px;'>尊敬的用户：<br>\t我们收到了您的注册用户请求，您的验证码为：" +
+						"<div style=\"text-align: center;\">" +
+						"<p><strong style=\"font-weight: bold;text-align:center;font-size: 26px;\">" +
+						randomCode +
+						"</strong></p></div><b>有效期15分钟</b>，如果您并未请求此验证码，" +
+						"则可能是他人正在尝试用您的邮箱注册Easy Boot 账号：<b>" + userVo.getUsername() + "</b>。" +
+						"<p><b>请勿将此验证码转发给或提供给任何人。</b></p>此致<br>敬上</body></html>")
+				.build();
+		mailVo = mailUtils.sendMail(mailVo);
+		log.info("发送注册用户验证码邮件成功：{}", mailVo);
+		return uuid;
+	}
+
+	/**
+	 * 注册账号
+	 * @param userVo 注册信息
+	 * @return 注册成功
+	 * @author zmzhou
+	 * @date 2021/1/1 20:23
+	 */
+	public boolean register(SysUserVo userVo) {
+		String emailKey = emailCaptchaCodeKey(userVo.getNickName());
+		SysUserVo vo = redisUtils.get(emailKey);
+		// 判断会话是否超时
+		if (StringUtils.isBlank(userVo.getNickName()) || null == vo) {
+			throw new BaseException("本次注册账号会话已经超时，请重新操作");
+		}
+		if (!vo.getRemark().equals(userVo.getRemark())) {
+			throw new BaseException(ErrorCode.CAPTCHA_ERROR);
+		}
+		// 删除缓存
+		redisUtils.delete(emailKey);
+		vo.setNickName(vo.getUsername());
+		vo.setCreateBy(vo.getUsername());
+		vo.setStatus(Constants.ONE);
+		vo.setOnline(Constants.ZERO);
+		// 设置默认角色为‘普通角色’
+		vo.setRoles(Sets.newHashSet("3"));
+		userService.saveUserRole(vo);
+		return true;
 	}
 }

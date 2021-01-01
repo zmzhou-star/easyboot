@@ -46,3 +46,28 @@ export function resetPwd(uuid, password) {
     params: data
   })
 }
+
+/**
+ * 注册用户获取邮箱验证码
+ * @param params 注册用户信息
+ * @returns {AxiosPromise}
+ */
+export function getRegisterEmailCode(params) {
+  return request({
+    url: '/nonAuth/getRegisterEmailCode',
+    method: 'get',
+    params: params
+  })
+}
+/**
+ * 注册账号
+ * @param params 注册用户信息
+ * @returns {AxiosPromise}
+ */
+export function register(params) {
+  return request({
+    url: '/nonAuth/register',
+    method: 'post',
+    data: params
+  })
+}

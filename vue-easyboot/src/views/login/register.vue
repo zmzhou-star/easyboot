@@ -1,162 +1,158 @@
 <template>
-  <div class="login-container">
-    <el-form v-if="step === 1" ref="emailCodeForm" :model="emailCodeForm" :rules="emailCodeRules" class="login-form" auto-complete="on" label-position="left">
+  <div class="register-container">
+    <el-form ref="registerForm" :model="registerForm" :rules="registerRules" class="login-form" auto-complete="on" label-position="left">
       <div class="title-container">
-        <h3 class="top title">忘记密码</h3>
+        <h3 class="top title">注册账号</h3>
       </div>
-      <el-form-item prop="username">
+      <el-form-item prop="username" label="用户名" label-width="82px">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
           ref="username"
-          v-model="emailCodeForm.username"
-          placeholder="Username"
+          v-model="registerForm.username"
           name="username"
           type="text"
+          minlength="4"
           tabindex="1"
-          auto-complete="on"
+          placeholder="不可修改，长度4~20个字符"
         />
       </el-form-item>
-      <el-form-item prop="email">
-        <span class="svg-container">
-          <svg-icon icon-class="email" />
-        </span>
-        <el-input
-          ref="email"
-          v-model="emailCodeForm.email"
-          placeholder="email"
-          name="email"
-          type="text"
-          tabindex="2"
-          auto-complete="on"
-        />
-      </el-form-item>
-      <el-form-item prop="code">
-        <span class="svg-container">
-          <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
-        </span>
-        <el-input
-          v-model="emailCodeForm.code"
-          auto-complete="off"
-          maxlength="6"
-          type="text"
-          tabindex="3"
-          placeholder="邮箱验证码"
-          class="captcha"
-          @keyup.enter.native="checkEmailCode"
-        />
-        <el-button v-if="countdown !== 60" type="info" class="get-code">{{ countdown }}s</el-button>
-        <el-button v-if="countdown === 60" :loading="loadingEmailCode" type="primary" class="get-code" @click.native.prevent="getEmailCode">点击获取验证码</el-button>
-      </el-form-item>
-      <div style="margin:0 0 25px 0;">
-        <router-link to="/login" class="link-type2" style="font-size: 14px;">
-          <span>返回登录</span>
-        </router-link>
-      </div>
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="checkEmailCode">验证</el-button>
-    </el-form>
-    <!-- 重置密码 -->
-    <el-form v-if="step === 2" ref="resetForm" :model="resetForm" :rules="resetFormRules" class="login-form" auto-complete="on" label-position="left">
-      <div class="title-container">
-        <h3 class="top title">重置密码</h3>
-      </div>
-      <el-form-item prop="password">
+      <el-form-item prop="password" label="密码" label-width="82px">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
         <el-input
           :key="passwordType"
           ref="password"
-          v-model="resetForm.password"
+          v-model="registerForm.password"
           :type="passwordType"
-          placeholder="新密码"
           name="password"
-          tabindex="1"
           minlength="6"
           maxlength="20"
-          auto-complete="on"
+          tabindex="2"
+          placeholder="字母、数字和特殊字符，长度6~20个字符"
         />
         <span class="show-pwd" @mousedown="showPwd" @mouseup="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
-      <el-form-item prop="confirmPassword">
+      <el-form-item prop="confirmPassword" label="确认密码" label-width="82px">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
         <el-input
           :key="passwordType"
           ref="confirmPassword"
-          v-model="resetForm.confirmPassword"
+          v-model="registerForm.confirmPassword"
           :type="passwordType"
-          placeholder="确认密码"
           name="confirmPassword"
-          tabindex="2"
           minlength="6"
           maxlength="20"
-          auto-complete="on"
+          tabindex="3"
         />
         <span class="show-pwd" @mousedown="showPwd" @mouseup="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
-      <div style="margin:0 0 25px 0;">
+      <el-form-item prop="tel" label="手机号码" label-width="82px">
+        <span class="svg-container">
+          <svg-icon icon-class="tel" />
+        </span>
+        <el-input
+          ref="tel"
+          v-model="registerForm.tel"
+          name="tel"
+          type="text"
+          tabindex="4"
+          minlength="11"
+          maxlength="11"
+          auto-complete="on"
+        />
+      </el-form-item>
+      <el-form-item prop="email" label="邮 箱" label-width="82px">
+        <span class="svg-container">
+          <svg-icon icon-class="email" />
+        </span>
+        <el-input
+          ref="email"
+          v-model="registerForm.email"
+          name="email"
+          type="text"
+          tabindex="5"
+          auto-complete="on"
+        />
+      </el-form-item>
+      <el-form-item prop="remark" label="邮箱验证码" label-width="82px">
+        <span class="svg-container">
+          <svg-icon slot="prefix" icon-class="validCode" class="el-input__icon input-icon" />
+        </span>
+        <el-input
+          v-model="registerForm.remark"
+          auto-complete="off"
+          maxlength="6"
+          type="text"
+          tabindex="6"
+          class="captcha"
+          @keyup.enter.native="register"
+        />
+        <el-button v-if="countdown !== 60" type="info" class="get-code">{{ countdown }}s</el-button>
+        <el-button v-if="countdown === 60" :loading="loadingEmailCode" type="primary" class="get-code" @click.native.prevent="getRegisterEmailCode">点击获取验证码</el-button>
+      </el-form-item>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="register">注册</el-button>
+      <div>
         <router-link to="/login" class="link-type2" style="font-size: 14px;">
-          <span>返回登录</span>
+          <span>已有账号，返回登录</span>
         </router-link>
       </div>
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="resetPwd">重置密码</el-button>
     </el-form>
   </div>
 </template>
 
 <script>
-import { getEmailCode, checkEmailCode, resetPwd } from '@/api/nonAuth'
+import { getRegisterEmailCode, register } from '@/api/nonAuth'
 
 export default {
-  name: 'ForgetPassword',
+  name: 'Register',
   data() {
     const equalToPassword = (rule, value, callback) => {
-      if (this.resetForm.password !== value) {
+      if (this.registerForm.password !== value) {
         callback(new Error('两次输入的密码不一致'))
       } else {
         callback()
       }
     }
     return {
-      step: 1,
       countdown: 60,
-      emailCodeForm: {
-        username: '',
-        email: '',
-        code: '',
-        uuid: ''
+      registerForm: {
+        username: undefined,
+        nickName: undefined,
+        password: undefined,
+        tel: undefined,
+        email: undefined,
+        sex: '0',
+        remark: ''
       },
-      resetForm: {
-        password: '',
-        confirmPassword: ''
-      },
-      emailCodeRules: {
-        username: [{ required: true, trigger: 'blur', message: '用户名不能为空' }],
-        email: [{ required: true, message: '邮箱地址不能为空', trigger: 'blur' },
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
-        code: [{ required: false, trigger: 'change', message: '邮箱验证码不能为空' }]
-      },
-      resetFormRules: {
+      registerRules: {
+        username: [{ required: true, trigger: 'blur', message: '用户名不能为空，长度在4~20个字符', min: 4, max: 20 }],
         password: [
-          { required: true, message: '新密码不能为空', trigger: 'blur' },
+          { required: true, message: '用户密码不能为空', trigger: 'blur' },
           { pattern: /^.*(?=.{6,16})(?=.*[A-Za-z]{2,})(?=.*\d)(?=.*[!@#$%^&*?\.\(\)]).*$/,
-            min: 6, max: 20, message: '密码必需由字母、数字和特殊字符组成，长度在6~20个字符', trigger: 'blur' }
-        ],
+            min: 6, max: 20, message: '密码必需由字母、数字和特殊字符组成，长度在6~20个字符', trigger: 'blur' }],
         confirmPassword: [
           { required: true, message: '确认密码不能为空', trigger: 'blur' },
           { required: true, validator: equalToPassword, trigger: 'blur' }
-        ]
+        ],
+        tel: [
+          { required: true, message: '手机号码不能为空', trigger: 'blur' },
+          { pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号码', trigger: 'blur' }],
+        email: [{ required: true, message: '邮箱地址不能为空', trigger: 'blur' },
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
+        remark: [{ required: false, trigger: 'change', message: '邮箱验证码不能为空' }]
       },
       passwordType: 'password',
-      loading: false,
-      loadingEmailCode: false
+      loadingEmailCode: false,
+      loading: false
     }
   },
   mounted() {
@@ -174,14 +170,18 @@ export default {
       })
     },
     /** 获取邮箱验证码 */
-    getEmailCode() {
+    getRegisterEmailCode() {
       const that = this
-      this.emailCodeRules.code[0].required = false
-      this.$refs.emailCodeForm.validate(valid => {
+      this.registerRules.remark[0].required = false
+      this.$refs.registerForm.validate(valid => {
         if (valid) {
           that.loadingEmailCode = true
-          getEmailCode(that.emailCodeForm).then(res => {
-            that.emailCodeForm.uuid = res
+          // 密码加密
+          const param = that.deepClone(that.registerForm)
+          param.password = that.sha256(that.registerForm.password)
+          param.confirmPassword = undefined
+          getRegisterEmailCode(param).then(res => {
+            that.registerForm.nickName = res
             that.loadingEmailCode = false
             this.msgSuccess('验证码发送成功，请前往邮箱查看')
             // 已经成功发送了邮件，开始倒计时60秒内不允许再点获取邮箱验证码按钮
@@ -195,6 +195,9 @@ export default {
             }, 1000)
           }).catch(() => {
             that.loadingEmailCode = false
+            that.$nextTick(() => {
+              that.$refs.username.focus()
+            })
           })
         } else {
           console.error('validate error !!!')
@@ -202,45 +205,27 @@ export default {
         }
       })
     },
-    /** 验证用户名邮箱验证码 */
-    checkEmailCode() {
-      this.emailCodeRules.code[0].required = true
+    /** 注册账号 */
+    register() {
+      this.registerRules.remark[0].required = true
       const that = this
-      this.$refs.emailCodeForm.validate(valid => {
+      this.$refs.registerForm.validate(valid => {
         if (valid) {
           that.loading = true
-          checkEmailCode(that.emailCodeForm).then(res => {
-            that.loading = false
-            // 验证通过
-            if (res) {
-              that.step = 2
-            }
-          }).catch(() => {
-            that.loading = false
-          })
-        } else {
-          console.error('validate error !!!')
-          return false
-        }
-      })
-    },
-    /** 重置密码 */
-    resetPwd() {
-      const that = this
-      this.$refs.resetForm.validate(valid => {
-        if (valid) {
-          that.loading = true
-          resetPwd(that.emailCodeForm.uuid, that.sha256(that.resetForm.password)).then(res => {
+          // 密码加密
+          const param = that.deepClone(that.registerForm)
+          param.password = that.sha256(that.registerForm.password)
+          param.confirmPassword = undefined
+          register(param).then(res => {
             that.loading = false
             if (res) {
-              this.msgSuccess('重置密码成功')
-              this.$router.push(`/login`)
+              that.msgSuccess('注册账号成功')
+              that.$router.push(`/login`)
             } else {
-              this.msgError('重置密码失败')
+              that.msgError('注册账号失败')
             }
           }).catch(() => {
             that.loading = false
-            this.msgError('重置密码失败')
           })
         } else {
           console.error('validate error !!!')
@@ -259,13 +244,13 @@ $light_gray:#eee;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input {
+  .register-container .el-input input {
     color: $cursor;
   }
 }
 
 /* reset element-ui css */
-.login-container {
+.register-container {
   min-height: 100%;
   width: 100%;
   background-color: $bg;
@@ -275,6 +260,10 @@ $cursor: #fff;
   background-position: 50%;
   background-size: 100%;
 
+  label {
+    padding: 0;
+    line-height: 45px;
+  }
   .el-input {
     display: inline-block;
     height: 40px;
@@ -285,7 +274,7 @@ $cursor: #fff;
       border: 0;
       -webkit-appearance: none;
       border-radius: 0;
-      padding: 12px 5px 12px 15px;
+      padding: 0;
       color: $light_gray;
       height: 47px;
       caret-color: $cursor;
@@ -319,11 +308,12 @@ $cursor: #fff;
   }
 
   .svg-container {
-    padding: 6px 5px 6px 15px;
+    padding: 0;
     color: $dark_gray;
     vertical-align: middle;
     width: 30px;
     display: inline-block;
+    line-height: 43px;
   }
 
   .title-container {
