@@ -21,13 +21,13 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 /**
- * 未经登录授权的请求控制层，包括忘记密码，用户注册等
+ * 允许未经登录授权的请求控制层，包括忘记密码，用户注册等
  * @title NonAuthController
  * @author zmzhou
  * @version 1.0
  * @date 2020/12/29 16:53
  */
-@Api(tags = {"未经登录授权的请求"})
+@Api(tags = {"允许未经登录授权的请求"})
 @Validated
 @RequestMapping("/nonAuth")
 @RestController

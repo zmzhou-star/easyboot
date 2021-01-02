@@ -39,7 +39,7 @@ public final class SecurityUtils {
 	public static String getUsername() {
 		return getLoginUser().getUsername();
 	}
-	
+
 	/**
 	 * 获取用户
 	 * @return LoginUser
@@ -56,7 +56,7 @@ public final class SecurityUtils {
 		}
 		return loginUser;
 	}
-	
+
 	/**
 	 * 获取Authentication
 	 * @return Authentication
@@ -66,7 +66,7 @@ public final class SecurityUtils {
 	public static Authentication getAuthentication() {
 		return SecurityContextHolder.getContext().getAuthentication();
 	}
-	
+
 	/**
 	 * 生成BCryptPasswordEncoder密码
 	 *
@@ -82,7 +82,7 @@ public final class SecurityUtils {
 		}
 		return passwordEncoder.encode(password);
 	}
-	
+
 	/**
 	 * 判断密码是否相同
 	 *
@@ -94,7 +94,7 @@ public final class SecurityUtils {
 		BCryptPasswordEncoder passwordEncoder = SpringUtils.getBean(BCryptPasswordEncoder.class);
 		return passwordEncoder.matches(rawPassword, encodedPassword);
 	}
-	
+
 	/**
 	 * 是否为管理员
 	 *

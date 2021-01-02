@@ -1,6 +1,8 @@
 package com.github.zmzhou.easyboot.common.utils;
 
 import java.lang.reflect.Method;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +20,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.framework.vo.PageParams;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 工具类
  *
@@ -25,6 +29,7 @@ import com.github.zmzhou.easyboot.framework.vo.PageParams;
  * @version 1.0
  * date 2020/9/19 17:20
  */
+@Slf4j
 public final class EasyBootUtils {
 	/**
 	 * 构造器
@@ -34,6 +39,16 @@ public final class EasyBootUtils {
 	 */
 	private EasyBootUtils() {
 		// 构造器
+	}
+	/** SecureRandom is preferred to Random */
+	private static SecureRandom random = null;
+
+	static {
+		try {
+			random = SecureRandom.getInstanceStrong();
+		} catch (NoSuchAlgorithmException e) {
+			log.error("SecureRandom初始化失败", e);
+		}
 	}
 
 	/**
@@ -180,6 +195,6 @@ public final class EasyBootUtils {
 	 * @date 2020/12/31 16:13
 	 */
 	public static String randomCode() {
-		return String.valueOf((int) ((Math.random() * 9 + 1) * 100000));
+		return String.valueOf(random.nextInt(899999) + 100000);
 	}
 }

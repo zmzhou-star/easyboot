@@ -51,7 +51,7 @@ public class ScheduleUtils {
 		}
 	}
 	/**
-	 * 定时任务TriggerKey 
+	 * 定时任务TriggerKey
 	 * @param taskId 任务id
 	 * @param jobGroup 任务组
 	 * @return TriggerKey
@@ -63,7 +63,7 @@ public class ScheduleUtils {
 	}
 
 	/**
-	 * 定时任务JobKey 
+	 * 定时任务JobKey
 	 * @param taskId 任务id
 	 * @param jobGroup 任务组
 	 * @return JobKey
@@ -75,7 +75,7 @@ public class ScheduleUtils {
 	}
 
 	/**
-	 * 创建定时任务 
+	 * 创建定时任务
 	 * @param scheduler Scheduler
 	 * @param task 定时任务信息
 	 * @author zmzhou
@@ -138,5 +138,13 @@ public class ScheduleUtils {
 			default:
 				return cb;
 		}
+	}
+
+	/**
+	 * 私有构造器
+	 * @author zmzhou
+	 * @date 2021/1/2 17:53
+	 */
+	private ScheduleUtils() {
 	}
 }

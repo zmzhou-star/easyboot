@@ -17,6 +17,7 @@ spring boot、spring security、jwt token、redis、jpa + vue-admin-template
 #### 系统截图
 
 ![登录页面](docs/login.png)
+![首页](docs/dashboard.png)
 ![角色管理](docs/role.png)
 ![swagger+knife4j接口文档](docs/doc.png)
 

@@ -11,7 +11,7 @@
         <el-input
           ref="username"
           v-model="emailCodeForm.username"
-          placeholder="Username"
+          placeholder="用户名"
           name="username"
           type="text"
           tabindex="1"
@@ -25,7 +25,7 @@
         <el-input
           ref="email"
           v-model="emailCodeForm.email"
-          placeholder="email"
+          placeholder="邮箱"
           name="email"
           type="text"
           tabindex="2"

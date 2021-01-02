@@ -157,7 +157,7 @@ public final class VelocityUtils {
 	 * @return 包前缀名称 package prefix
 	 */
 	public static String getPackagePrefix(String packageName) {
-		int lastIndex = packageName.lastIndexOf(".");
+		int lastIndex = packageName.lastIndexOf(Constants.DOT);
 		return StringUtils.substring(packageName, 0, lastIndex);
 	}
 

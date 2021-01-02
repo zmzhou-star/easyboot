@@ -58,14 +58,21 @@ public final class MailUtils {
 	 * @author zmzhou
 	 * @date 2020/12/30 16:02
 	 */
-	public void sendSimpleMail(@Validated MailVo mailVo) {
+	public MailVo sendSimpleMail(@Validated MailVo mailVo) {
+		//邮件发信人从配置项读取
+		mailVo.setFrom(getMailSendFrom());
 		//简单邮件
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		simpleMailMessage.setFrom(getMailSendFrom());
 		simpleMailMessage.setTo(mailVo.getTo().split(Constants.SEMICOLON));
 		simpleMailMessage.setSubject(mailVo.getSubject());
 		simpleMailMessage.setText(mailVo.getText());
+		mailVo.setSendDate(new Date());
+		simpleMailMessage.setSentDate(mailVo.getSendDate());
 		mailSender.send(simpleMailMessage);
+		mailVo.setStatus(Constants.ONE);
+		// 保存邮件信息
+		return saveMail(mailVo);
 	}
 	/**
 	 * 发送复杂邮件信息

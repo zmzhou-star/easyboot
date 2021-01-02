@@ -2,6 +2,7 @@ package com.github.zmzhou.easyboot.common.utils;
 
 import javax.annotation.Resource;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +43,8 @@ class MailUtilsTest extends EasybootApplicationTests {
 	 */
 	@Test
 	void sendMail() {
-		mailUtils.sendMail(mailVo);
+		MailVo vo = mailUtils.sendMail(mailVo);
+		Assertions.assertNotNull(vo);
 	}
 
 	/**
@@ -50,6 +52,7 @@ class MailUtilsTest extends EasybootApplicationTests {
 	 */
 	@Test
 	void sendSimpleMail() {
-		mailUtils.sendSimpleMail(mailVo);
+		MailVo vo = mailUtils.sendSimpleMail(mailVo);
+		Assertions.assertNotNull(vo);
 	}
 }
