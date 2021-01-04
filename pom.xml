@@ -25,6 +25,18 @@
         <velocity.version>1.7</velocity.version>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!-- 激活指定环境的配置文件 application-{xx}.yml -->
+                <environment>dev</environment>
+            </properties>
+        </profile>
+    </profiles>
     <dependencies>
         <!-- 数据库文档生成工具 Database document generation tool -->
         <dependency>

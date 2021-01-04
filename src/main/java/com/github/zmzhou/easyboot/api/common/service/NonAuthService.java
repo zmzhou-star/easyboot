@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,9 @@ import lombok.extern.slf4j.Slf4j;
 public class NonAuthService {
 	/** 邮箱验证码有效期 */
 	private static final int EMAIL_CAPTCHA_EXPIRATION = 15;
+	/** 项目名称 */
+	@Value("${spring.application.name}")
+	private String applicationName;
 	@Resource
 	private MailUtils mailUtils;
 	@Resource
@@ -69,13 +73,13 @@ public class NonAuthService {
 		redisUtils.set(emailKey, param, EMAIL_CAPTCHA_EXPIRATION, TimeUnit.MINUTES);
 		MailVo mailVo = MailVo.builder()
 				.to(param.getEmail())
-				.subject("Easy Boot 修改密码验证码")
+				.subject(applicationName + " 修改密码验证码")
 				.text("<html><body style='max-width: 750px;'>尊敬的用户：<br>\t我们收到了您的修改密码请求，您的验证码为：" +
 						"<div style=\"text-align: center;\">" +
 						"<p><strong style=\"font-weight: bold;text-align:center;font-size: 26px;\">" +
 						randomCode +
 						"</strong></p></div><b>有效期15分钟</b>，如果您并未请求此验证码，" +
-						"则可能是他人正在尝试修改您的 Easy Boot 账号：<b>" + param.getUsername() + "</b>的密码。" +
+						"则可能是他人正在尝试修改您的 "+applicationName +" 账号：<b>" + param.getUsername() + "</b>的密码。" +
 						"<p><b>请勿将此验证码转发给或提供给任何人。</b></p>此致<br>敬上</body></html>")
 				.build();
 		mailVo = mailUtils.sendMail(mailVo);
@@ -164,13 +168,13 @@ public class NonAuthService {
 		redisUtils.set(emailKey, userVo, EMAIL_CAPTCHA_EXPIRATION, TimeUnit.MINUTES);
 		MailVo mailVo = MailVo.builder()
 				.to(userVo.getEmail())
-				.subject("Easy Boot 注册用户验证码")
+				.subject(applicationName + " 注册用户验证码")
 				.text("<html><body style='max-width: 750px;'>尊敬的用户：<br>\t我们收到了您的注册用户请求，您的验证码为：" +
 						"<div style=\"text-align: center;\">" +
 						"<p><strong style=\"font-weight: bold;text-align:center;font-size: 26px;\">" +
 						randomCode +
 						"</strong></p></div><b>有效期15分钟</b>，如果您并未请求此验证码，" +
-						"则可能是他人正在尝试用您的邮箱注册Easy Boot 账号：<b>" + userVo.getUsername() + "</b>。" +
+						"则可能是他人正在尝试用您的邮箱注册"+applicationName+ " 账号：<b>" + userVo.getUsername() + "</b>。" +
 						"<p><b>请勿将此验证码转发给或提供给任何人。</b></p>此致<br>敬上</body></html>")
 				.build();
 		mailVo = mailUtils.sendMail(mailVo);

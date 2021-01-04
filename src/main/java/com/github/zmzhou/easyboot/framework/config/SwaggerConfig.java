@@ -45,6 +45,9 @@ public class SwaggerConfig implements WebMvcConfigurer {
 	 */
 	@Value("${server.swagger.enabled}")
 	private boolean enabled;
+	/** 项目名称 */
+	@Value("${spring.application.name}")
+	private String applicationName;
 
 	/**
 	 * Add resource handlers.
@@ -100,7 +103,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
 		// 用ApiInfoBuilder进行定制
 		return new ApiInfoBuilder()
 				// 设置标题
-				.title("《easy boot接口文档》")
+				.title("《" + applicationName + "接口文档》")
 				// 描述
 				.description("spring boot、spring security、jwt token、redis、jpa + vue-admin-template" +
 						"实现前后端分离简单入门框架接口文档</br>***请点击Authorize按钮输入token***</br>" +

@@ -32,7 +32,8 @@ spring:
   application:
     name: @project.name@
   profiles:
-    active: dev
+#    active: dev
+    active: @environment@
   # 文件上传
   servlet:
      multipart:
