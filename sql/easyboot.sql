@@ -235,7 +235,6 @@ INSERT INTO sys_menu VALUES (1, '系统管理', 0, 1, 'system', '', '0', 'M', '1
 INSERT INTO sys_menu VALUES (2, '系统监控', 0, 2, 'monitor', '', '0', 'M', '1', '1', '', 'monitor', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '系统监控目录');
 INSERT INTO sys_menu VALUES (3, '系统工具', 0, 3, 'tool', '', '0', 'M', '1', '1', '', 'tool', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '系统工具目录');
 INSERT INTO sys_menu VALUES (4, '友情链接', 0, 4, 'link', NULL, '0', 'M', '1', '1', '', 'link', 'admin', '2020-09-09 22:01:48', 'admin', '2020-09-09 23:36:52', '项目参考文档链接地址');
-INSERT INTO sys_menu VALUES (5, '若依官网', 4, 4, 'https://vue.ruoyi.vip', '', '1', 'M', '1', '1', '', 'guide', 'admin', '2020-08-28 12:33:00', 'admin', '2020-11-16 20:36:07', '若依官网地址');
 INSERT INTO sys_menu VALUES (100, '用户管理', 1, 1, 'user', 'system/user/index', '0', 'C', '1', '1', 'system:user:list', 'user', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '用户管理菜单');
 INSERT INTO sys_menu VALUES (101, '角色管理', 1, 2, 'role', 'system/role/index', '0', 'C', '1', '1', 'system:role:list', 'peoples', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '角色管理菜单');
 INSERT INTO sys_menu VALUES (102, '菜单管理', 1, 3, 'menu', 'system/menu/index', '0', 'C', '1', '1', 'system:menu:list', 'tree-table', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '菜单管理菜单');
@@ -250,6 +249,11 @@ INSERT INTO sys_menu VALUES (112, '服务器监控', 2, 4, 'server', 'monitor/se
 INSERT INTO sys_menu VALUES (113, '表单构建', 3, 1, 'build', 'tool/build/index', '0', 'C', '1', '1', 'tool:build:list', 'build', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '表单构建菜单');
 INSERT INTO sys_menu VALUES (114, '代码生成', 3, 2, 'gen', 'tool/gen/index', '0', 'C', '1', '1', 'tool:gen:list', 'code', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '代码生成菜单');
 INSERT INTO sys_menu VALUES (115, '接口文档', 3, 3, 'swagger', 'tool/swagger/index', '0', 'C', '1', '1', 'tool:swagger:list', 'swagger', 'admin', '2020-08-28 12:33:00', 'admin', '2020-09-11 21:39:32', '系统接口文档');
+INSERT INTO sys_menu VALUES (116, '图标库', 3, 4, 'icons', 'tool/icons/index', '0', 'C', '1', '1', 'tool:icons:index', 'icon', 'admin', '2020-12-24 10:13:55', NULL, NULL, '图标库');
+INSERT INTO sys_menu VALUES (401, '项目Git地址', 4, 1, 'https://github.com/zmzhou-star/easyboot', '', '1', 'C', '1', '1', NULL, 'github', 'admin', '2020-09-09 23:12:23', 'admin', '2020-09-09 23:15:07', NULL);
+INSERT INTO sys_menu VALUES (402, 'vue文档地址', 4, 2, 'https://panjiachen.gitee.io/vue-element-admin-site/zh/', NULL, '1', 'C', '1', '1', NULL, 'documentation', 'admin', '2020-09-09 23:16:56', 'zmzhou', '2020-09-10 21:07:44', NULL);
+INSERT INTO sys_menu VALUES (403, '若依官网', 4, 4, 'https://vue.ruoyi.vip', '', '1', 'M', '1', '1', '', 'guide', 'admin', '2020-08-28 12:33:00', 'admin', '2020-11-16 20:36:07', '若依官网地址');
+INSERT INTO sys_menu VALUES (404, 'Element组件', 4, 4, 'https://element.eleme.cn/#/zh-CN/component/installation', '', '1', 'M', '1', '1', NULL, 'component', 'admin', '2021-01-04 18:00:12', 'admin', '2021-01-04 18:01:33', 'Element组件地址');
 INSERT INTO sys_menu VALUES (500, '操作日志', 108, 2, 'operLog', 'monitor/operLog/index', '0', 'C', '1', '1', 'monitor:operLog:list', 'form', 'admin', '2020-08-28 12:33:00', 'admin', '2020-11-12 20:38:00', '操作日志菜单');
 INSERT INTO sys_menu VALUES (501, '登录日志', 108, 1, 'loginLog', 'monitor/loginLog/index', '0', 'C', '1', '1', 'monitor:loginLog:list', 'logininfor', 'admin', '2020-08-28 12:33:00', 'admin', '2020-09-13 16:58:04', '登录日志菜单');
 INSERT INTO sys_menu VALUES (1001, '用户查询', 100, 1, '', '', '0', 'F', '1', '1', 'system:user:query', '#', 'admin', '2020-08-28 12:33:00', 'admin', '2020-09-14 22:12:02', '用户管理查询');
@@ -303,8 +307,6 @@ INSERT INTO sys_menu VALUES (1057, '生成删除', 114, 3, '#', '', '0', 'F', '1
 INSERT INTO sys_menu VALUES (1058, '导入代码', 114, 2, '#', '', '0', 'F', '1', '1', 'tool:gen:import', '#', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '');
 INSERT INTO sys_menu VALUES (1059, '预览代码', 114, 4, '#', '', '0', 'F', '1', '1', 'tool:gen:preview', '#', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '');
 INSERT INTO sys_menu VALUES (1060, '生成代码', 114, 5, '#', '', '0', 'F', '1', '1', 'tool:gen:code', '#', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-28 12:33:00', '');
-INSERT INTO sys_menu VALUES (2004, '项目Git地址', 4, 1, 'https://github.com/zmzhou-star/easyboot', '', '1', 'C', '1', '1', NULL, 'github', 'admin', '2020-09-09 23:12:23', 'admin', '2020-09-09 23:15:07', NULL);
-INSERT INTO sys_menu VALUES (2005, 'vue文档地址', 4, 2, 'https://panjiachen.gitee.io/vue-element-admin-site/zh/', NULL, '1', 'C', '1', '1', NULL, 'documentation', 'admin', '2020-09-09 23:16:56', 'zmzhou', '2020-09-10 21:07:44', NULL);
 INSERT INTO sys_menu VALUES (2006, '字典数据', 1, 5, 'dict/data/:dictId(\\d+)', 'system/dict/data', '0', 'C', '0', '1', 'system:dict:list', 'dict', 'zmzhou', '2020-11-18 11:24:27', 'admin', '2020-11-18 11:39:46', '字典数据菜单');
 INSERT INTO sys_menu VALUES (2008, '新增字典数据', 2006, 1, NULL, NULL, '0', 'F', '0', '1', 'system:dict:add', '', 'admin', '2020-11-18 11:51:39', NULL, NULL, NULL);
 INSERT INTO sys_menu VALUES (2009, '修改字典数据', 2006, 2, NULL, NULL, '0', 'F', '0', '1', 'system:dict:edit', '', 'admin', '2020-11-18 11:52:19', 'admin', '2020-11-18 11:52:55', NULL);
@@ -316,7 +318,6 @@ INSERT INTO sys_menu VALUES (2014, '查询定时任务日志', 2013, 1, NULL, NU
 INSERT INTO sys_menu VALUES (2015, '删除定时任务日志', 2013, 2, '#', NULL, '0', 'F', '1', '1', 'monitor:jobLog:remove', '#', 'admin', '2020-12-18 21:01:36', 'admin', '2020-12-18 21:05:32', NULL);
 INSERT INTO sys_menu VALUES (2016, '导出定时任务日志', 2013, 3, NULL, NULL, '0', 'F', '1', '1', 'monitor:jobLog:export', '#', 'admin', '2020-12-18 21:02:19', 'admin', '2020-12-18 21:04:23', NULL);
 INSERT INTO sys_menu VALUES (2017, '定时任务日志按钮', 110, 8, '#', '', '0', 'F', '1', '1', 'monitor:job:log', '#', 'admin', '2020-12-18 21:13:30', 'admin', '2020-12-18 21:16:27', '定时任务日志按钮');
-INSERT INTO sys_menu VALUES (2018, '图标库', 3, 4, 'icons', 'tool/icons/index', '0', 'C', '1', '1', 'tool:icons:index', 'icon', 'admin', '2020-12-24 10:13:55', NULL, NULL, '图标库');
 
 -- ----------------------------
 -- Table structure for sys_notice
