@@ -18,6 +18,7 @@ spring boot、spring security、jwt token、redis、jpa + vue-admin-template
 #### system screenshot
 
 ![login page](docs/login.png)
+![dashboard](docs/dashboard.png)
 ![role management](docs/role.png)
 ![swagger+knife4j Interface Documentation](docs/doc.png)
 

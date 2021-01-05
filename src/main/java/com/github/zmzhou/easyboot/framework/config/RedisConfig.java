@@ -16,6 +16,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;
@@ -26,14 +27,15 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ *  EnableRedisHttpSession注解用于Redis处理Session共享
  *  @title RedisConfig
- *  @Description 描述
  *  @author zmzhou
  *  @Date 2020/07/08 19:14
  */
 @Slf4j
 @EnableCaching
 @Configuration
+@EnableRedisHttpSession
 public class RedisConfig extends CachingConfigurerSupport {
 
     /**
