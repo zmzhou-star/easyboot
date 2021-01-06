@@ -36,7 +36,12 @@
         @row-click="clickRow"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" />
+        <el-table-column type="selection" width="50" />
+        <el-table-column label="序号" type="index" align="center">
+          <template slot-scope="scope">
+            <span>{{ (pageNum - 1) * pageSize + scope.$index + 1 }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="tableName" label="表名称" />
         <el-table-column prop="tableComment" label="表描述" />
         <el-table-column prop="createTime" label="创建时间" />
