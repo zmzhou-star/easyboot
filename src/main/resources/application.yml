@@ -112,7 +112,7 @@ captcha:
   expiration: 2
   width: 120
   height: 50
-  digit: 4
+  digit: 2
 # 高德地图 IP定位
 amap:
   ip-url: https://restapi.amap.com/v3/ip

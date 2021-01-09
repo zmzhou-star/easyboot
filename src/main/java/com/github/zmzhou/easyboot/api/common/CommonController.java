@@ -27,7 +27,7 @@ import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.redis.RedisUtils;
 import com.github.zmzhou.easyboot.framework.security.LoginBody;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
-import com.wf.captcha.SpecCaptcha;
+import com.wf.captcha.ArithmeticCaptcha;
 
 import cn.hutool.core.util.IdUtil;
 import io.swagger.annotations.Api;
@@ -93,7 +93,7 @@ public class CommonController extends BaseController {
 	@ApiOperation(value = "生成验证码")
 	public ApiResult<LoginBody> captcha() {
 		// png类型 https://gitee.com/whvse/EasyCaptcha
-		SpecCaptcha captcha = new SpecCaptcha(width, height, digit);
+		ArithmeticCaptcha captcha = new ArithmeticCaptcha(width, height, digit);
 		// 获取运算的结果
 		String result = captcha.text();
 		String uuid = IdUtil.simpleUUID();
@@ -105,9 +105,9 @@ public class CommonController extends BaseController {
 		log.info("生成验证码：{}", result);
 		return ok(body);
 	}
-	
+
 	/**
-	 * 通用文件上传 
+	 * 通用文件上传
 	 * @return 保存在服务器文件名称
 	 * @author zmzhou
 	 * @date 2020/11/19 15:37

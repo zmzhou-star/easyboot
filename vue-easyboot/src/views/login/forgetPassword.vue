@@ -181,6 +181,10 @@ export default {
         if (valid) {
           that.loadingEmailCode = true
           getEmailCode(that.emailCodeForm).then(res => {
+            if (!res) {
+              this.msgError('验证码发送失败')
+              return
+            }
             that.emailCodeForm.uuid = res
             that.loadingEmailCode = false
             this.msgSuccess('验证码发送成功，请前往邮箱查看')

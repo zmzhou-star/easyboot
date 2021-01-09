@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import javax.mail.MessagingException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.github.zmzhou.easyboot.api.common.vo.MailVo;
+import com.github.zmzhou.easyboot.api.monitor.service.SysMailService;
+import com.github.zmzhou.easyboot.api.monitor.vo.MailVo;
 import com.github.zmzhou.easyboot.common.Constants;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 public final class MailUtils {
 	@Resource
 	private JavaMailSenderImpl mailSender;
+	@Resource
+	private SysMailService sysMailService;
 
 	/**
 	 * 发送复杂邮件，邮件内容使用HTML邮件应用内容类型 “text/html”
@@ -43,7 +47,7 @@ public final class MailUtils {
 		try {
 			// 发送邮件
 			sendMimeMail(mailVo);
-		} catch (MessagingException e) {
+		} catch (MessagingException | MailException e) {
 			log.error("发送邮件失败:", e);
 			mailVo.setStatus(Constants.ZERO);
 			mailVo.setError(e.getMessage());
@@ -129,6 +133,7 @@ public final class MailUtils {
 	 */
 	private MailVo saveMail(MailVo mailVo) {
 		//将邮件保存到数据库
+		sysMailService.save(mailVo.toEntity());
 		return mailVo;
 	}
 	/**

@@ -181,6 +181,10 @@ export default {
           param.password = that.sha256(that.registerForm.password)
           param.confirmPassword = undefined
           getRegisterEmailCode(param).then(res => {
+            if (!res) {
+              this.msgError('验证码发送失败')
+              return
+            }
             that.registerForm.nickName = res
             that.loadingEmailCode = false
             this.msgSuccess('验证码发送成功，请前往邮箱查看')

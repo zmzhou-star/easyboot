@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.zmzhou.easyboot.api.common.vo.EmailCodeVo;
-import com.github.zmzhou.easyboot.api.common.vo.MailVo;
+import com.github.zmzhou.easyboot.api.monitor.vo.MailVo;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.api.system.service.UserService;
 import com.github.zmzhou.easyboot.api.system.vo.SysUserVo;
@@ -71,19 +71,21 @@ public class NonAuthService {
 		param.setUuid(uuid);
 		String emailKey = this.emailCaptchaCodeKey(uuid);
 		redisUtils.set(emailKey, param, EMAIL_CAPTCHA_EXPIRATION, TimeUnit.MINUTES);
-		MailVo mailVo = MailVo.builder()
-				.to(param.getEmail())
-				.subject(applicationName + " 修改密码验证码")
-				.text("<html><body style='max-width: 750px;'>尊敬的用户：<br>\t我们收到了您的修改密码请求，您的验证码为：" +
-						"<div style=\"text-align: center;\">" +
-						"<p><strong style=\"font-weight: bold;text-align:center;font-size: 26px;\">" +
-						randomCode +
-						"</strong></p></div><b>有效期15分钟</b>，如果您并未请求此验证码，" +
-						"则可能是他人正在尝试修改您的 "+applicationName +" 账号：<b>" + param.getUsername() + "</b>的密码。" +
-						"<p><b>请勿将此验证码转发给或提供给任何人。</b></p>此致<br>敬上</body></html>")
-				.build();
+		MailVo mailVo = new MailVo();
+		mailVo.setTo(param.getEmail());
+		mailVo.setSubject(applicationName + " 修改密码验证码");
+		mailVo.setText("<html><body style='max-width: 750px;'>尊敬的用户：<br>\t我们收到了您的修改密码请求，您的验证码为：" +
+				"<div style=\"text-align: center;\">" +
+				"<p><strong style=\"font-weight: bold;text-align:center;font-size: 26px;\">" +
+				randomCode +
+				"</strong></p></div><b>有效期15分钟</b>，如果您并未请求此验证码，" +
+				"则可能是他人正在尝试修改您的 "+applicationName +" 账号：<b>" + param.getUsername() + "</b>的密码。" +
+				"<p><b>请勿将此验证码转发给或提供给任何人。</b></p>此致<br>敬上</body></html>");
 		mailVo = mailUtils.sendMail(mailVo);
-		log.info("发送修改密码验证码邮件成功：{}", mailVo);
+		// 邮件发送失败
+		if (Constants.ZERO.equals(mailVo.getStatus())) {
+			uuid = null;
+		}
 		return uuid;
 	}
 
@@ -166,19 +168,21 @@ public class NonAuthService {
 		userVo.setRemark(randomCode);
 		String emailKey = this.emailCaptchaCodeKey(uuid);
 		redisUtils.set(emailKey, userVo, EMAIL_CAPTCHA_EXPIRATION, TimeUnit.MINUTES);
-		MailVo mailVo = MailVo.builder()
-				.to(userVo.getEmail())
-				.subject(applicationName + " 注册用户验证码")
-				.text("<html><body style='max-width: 750px;'>尊敬的用户：<br>\t我们收到了您的注册用户请求，您的验证码为：" +
-						"<div style=\"text-align: center;\">" +
-						"<p><strong style=\"font-weight: bold;text-align:center;font-size: 26px;\">" +
-						randomCode +
-						"</strong></p></div><b>有效期15分钟</b>，如果您并未请求此验证码，" +
-						"则可能是他人正在尝试用您的邮箱注册"+applicationName+ " 账号：<b>" + userVo.getUsername() + "</b>。" +
-						"<p><b>请勿将此验证码转发给或提供给任何人。</b></p>此致<br>敬上</body></html>")
-				.build();
+		MailVo mailVo = new MailVo();
+		mailVo.setTo(userVo.getEmail());
+		mailVo.setSubject(applicationName + " 注册用户验证码");
+		mailVo.setText("<html><body style='max-width: 750px;'>尊敬的用户：<br>\t我们收到了您的注册用户请求，您的验证码为：" +
+				"<div style=\"text-align: center;\">" +
+				"<p><strong style=\"font-weight: bold;text-align:center;font-size: 26px;\">" +
+				randomCode +
+				"</strong></p></div><b>有效期15分钟</b>，如果您并未请求此验证码，" +
+				"则可能是他人正在尝试用您的邮箱注册"+applicationName+ " 账号：<b>" + userVo.getUsername() + "</b>。" +
+				"<p><b>请勿将此验证码转发给或提供给任何人。</b></p>此致<br>敬上</body></html>");
 		mailVo = mailUtils.sendMail(mailVo);
-		log.info("发送注册用户验证码邮件成功：{}", mailVo);
+		// 邮件发送失败
+		if (Constants.ZERO.equals(mailVo.getStatus())) {
+			uuid = null;
+		}
 		return uuid;
 	}
 
