@@ -88,6 +88,9 @@ spring:
     host: 127.0.0.1
     password: Redis.127
     port: 6379
+#    cluster:
+#      nodes: 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003,127.0.0.1:7004,127.0.0.1:7005,127.0.0.1:7006
+#      max-redirects: 3
     # 连接池配置
     lettuce:
       pool:
@@ -99,6 +102,4 @@ spring:
         max-idle: 8
         # 连接池中的最小空闲连接
         min-idle: 0
-    timeout: 60000ms
-
-
+    timeout: 10000ms

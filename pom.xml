@@ -151,7 +151,7 @@
         <dependency>
             <groupId>io.github.yedaxia</groupId>
             <artifactId>japidocs</artifactId>
-            <version>[1.4.3,)</version>
+            <version>[1.4.4,)</version>
             <exclusions>
                 <exclusion>
                     <artifactId>fastjson</artifactId>
