@@ -25,6 +25,8 @@ public class EasybootApplication {
      * @date 2020/8/30 12:53
      */
     public static void main(String[] args) {
+        // log4j2全局异步日志配置 http://logging.apache.org/log4j/2.x/manual/async.html#AllAsync
+        System.setProperty("Log4jContextSelector", "org.apache.logging.log4j.core.async.AsyncLoggerContextSelector");
         SpringApplication.run(EasybootApplication.class, args);
     }
 
