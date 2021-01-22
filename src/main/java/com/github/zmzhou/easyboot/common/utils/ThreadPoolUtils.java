@@ -2,11 +2,9 @@ package com.github.zmzhou.easyboot.common.utils;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,9 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public final class ThreadPoolUtils {
 	/**
-	 * ThreadPoolExecutor
+	 * ThreadPoolTaskExecutor
 	 */
-	private static ThreadPoolExecutor threadPool = null;
+	private static ThreadPoolTaskExecutor threadPool = null;
 
 	/**
 	 * 工具类私有化构造器
@@ -58,11 +56,11 @@ public final class ThreadPoolUtils {
 
 	/**
 	 * 获取线程池对象
-	 * @return ThreadPoolExecutor
+	 * @return ThreadPoolTaskExecutor
 	 * @author zmzhou
 	 * @date 2020/9/13 18:21
 	 */
-	private static ThreadPoolExecutor get() {
+	private static ThreadPoolTaskExecutor get() {
 		if (threadPool != null) {
 			log.debug("线程池已创建");
 			return threadPool;
@@ -70,27 +68,22 @@ public final class ThreadPoolUtils {
 			synchronized (ThreadPoolUtils.class) {
 				//二次检查
 				if (threadPool == null) {
-					// 获取处理器数量
+					// 获取处理器数量 Ncpu = CPU核心数
 					int cpuNum = Runtime.getRuntime().availableProcessors();
 					// 根据cpu数量,计算出合理的线程并发数
+					// Nthreads = Ncpu x Ucpu x (1 + W/C)，其中 Ucpu = CPU使用率，0~1；W/C = 等待时间与计算时间的比率
 					int threadNum = cpuNum * 2;
 					// 创建线程池
-					threadPool = new ThreadPoolExecutor(
-							// 核心线程数
-							threadNum,
-							// 最大线程数
-							threadNum + 1,
-							// 闲置线程存活时间
-							Integer.MAX_VALUE,
-							// 时间单位
-							TimeUnit.MILLISECONDS,
-							// 线程队列
-							new LinkedBlockingDeque<>(Integer.MAX_VALUE),
-							// 线程工厂
-							new ThreadFactoryBuilder().setNameFormat("easy-thread-%d").build(),
-							// 队列已满,而且当前线程数已经超过最大线程数时的异常处理策略 来电运行政策
-							new ThreadPoolExecutor.CallerRunsPolicy()
-					);
+					threadPool = new ThreadPoolTaskExecutor();
+					threadPool.setThreadNamePrefix("easy-thread");
+					// 核心线程数
+					threadPool.setCorePoolSize(threadNum);
+					// 最大线程数
+					threadPool.setMaxPoolSize(threadNum + 1);
+					// 队列已满,而且当前线程数已经超过最大线程数时的异常处理策略 来电运行政策
+					threadPool.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+					// 初始化
+					threadPool.initialize();
 					log.info("创建线程池完成:{}", threadPool.toString());
 				}
 			}
