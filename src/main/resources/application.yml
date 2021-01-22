@@ -72,12 +72,12 @@ spring:
 #    nacos:
 #      discovery:
 #        server-addr: 127.0.0.1:8848
-#  boot:
-#    admin:
-#      client:
-#        url: http://192.168.137.67:8769/
-#        username: admin
-#        password: admin#8769
+  boot:
+    admin:
+      client:
+        url: http://192.168.163.1:8769/
+        username: admin
+        password: admin#8769
   jmx:
     enabled: true
   cache:
@@ -106,7 +106,7 @@ token:
   # Token前缀字符
   prefix: easybooy-
   # 配置不需要认证的接口
-  antMatchers: /index,/login/**,/nonAuth/**,/favicon.ico,/common/**,/druid/**,/swagger**/**,/doc.html,/webjars/**,/v2/api-docs
+  antMatchers: /actuator/**,/index,/login/**,/nonAuth/**,/favicon.ico,/common/**,/druid/**,/swagger**/**,/doc.html,/webjars/**,/v2/api-docs
 #登录页验证码有效时间(单位分钟)/宽度/高度/位数
 captcha:
   expiration: 2
@@ -153,13 +153,14 @@ logging:
 #  instance:
 #    leaseRenewalIntervalInSeconds: 10
 #    health-check-url-path: /actuator/health
+#    prefer-ip-address: true
 #  client:
 #    registryFetchIntervalSeconds: 5
 #    service-url:
-#      defaultZone: ${EUREKA_SERVICE_URL:http://192.168.137.67:8761}/eureka/
-#info:
-#  app:
-#    name: @project.name@
-#    version: @project.version@
-#    description: @project.description@
-#    spring-boot-version: @project.parent.version@
+#      defaultZone: ${EUREKA_SERVICE_URL:http://192.168.163.1:8761}/eureka/
+info:
+  app:
+    name: @project.name@
+    version: @project.version@
+    description: @project.description@
+    spring-boot-version: @project.parent.version@
