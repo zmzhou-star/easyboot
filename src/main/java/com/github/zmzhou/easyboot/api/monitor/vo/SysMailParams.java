@@ -1,7 +1,5 @@
 package com.github.zmzhou.easyboot.api.monitor.vo;
 
-import java.util.Date;
-
 import com.github.zmzhou.easyboot.framework.vo.PageParams;
 
 import io.swagger.annotations.ApiModel;
@@ -31,8 +29,4 @@ public class SysMailParams extends PageParams {
     /** 状态 */
     @ApiModelProperty(value = "状态")
     private String status;
-
-    /** 发送时间 */
-    @ApiModelProperty(value = "发送时间")
-    private Date sendDate;
 }

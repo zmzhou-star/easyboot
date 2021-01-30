@@ -52,6 +52,9 @@ public class SysMailService extends BaseService<SysMailParams> {
 	    // 构造查询条件
 	    Specification<SysMail> spec = new SimpleSpecificationBuilder<SysMail>()
 			    .and(Constants.STATUS, Operator.EQUAL, params.getStatus())
+			    .and("subject", Operator.LIKE, params.getSubject())
+			    .and("to", Operator.LIKE, params.getTo())
+				.between("sendDate", params.getBeginTime(), params.getEndTime())
 			    .build();
 	    return dao.findAll(spec, page);
     }

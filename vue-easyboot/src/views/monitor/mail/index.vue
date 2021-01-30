@@ -11,6 +11,16 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="接收人" prop="subject">
+        <el-input
+          v-model="queryParams.to"
+          placeholder="请输入接收人"
+          clearable
+          size="small"
+          style="width: 150px"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="queryParams.status" placeholder="请选择状态" clearable size="small" style="width: 150px">
           <el-option
@@ -21,15 +31,16 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="发送时间" prop="sendDate">
+      <el-form-item label="发送时间">
         <el-date-picker
-          v-model="queryParams.sendDate"
-          clearable
+          v-model="dateRange"
           size="small"
-          style="width: 200px"
-          type="date"
+          style="width: 240px"
           value-format="yyyy-MM-dd"
-          placeholder="选择发送时间"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
         />
       </el-form-item>
       <el-form-item>
@@ -39,25 +50,6 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          v-hasPermi="['monitor:mail:add']"
-          type="primary"
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          v-hasPermi="['monitor:mail:edit']"
-          type="success"
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-        >修改</el-button>
-      </el-col>
       <el-col :span="1.5">
         <el-button
           v-hasPermi="['monitor:mail:remove']"
@@ -100,8 +92,6 @@
       <el-table-column label="邮件接收人" align="center" prop="to" :show-overflow-tooltip="true" />
       <el-table-column label="邮件主题" align="center" prop="subject" :show-overflow-tooltip="true" />
       <el-table-column label="邮件内容" align="center" prop="text" :show-overflow-tooltip="true" />
-      <el-table-column label="抄送" align="center" prop="cc" :show-overflow-tooltip="true" />
-      <el-table-column label="密送" align="center" prop="bcc" :show-overflow-tooltip="true" />
       <el-table-column class-name="status-col" label="状态" width="110" prop="status" align="center">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status | statusFilter">{{ statusFormat(scope.row) }}</el-tag>
@@ -113,15 +103,17 @@
           <span>{{ parseTime(scope.row.sendDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="抄送" align="center" prop="cc" :show-overflow-tooltip="true" />
+      <el-table-column label="密送" align="center" prop="bcc" :show-overflow-tooltip="true" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
-            v-hasPermi="['monitor:mail:edit']"
+            v-hasPermi="['monitor:mail:query']"
             size="mini"
             type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-          >修改</el-button>
+            icon="el-icon-view"
+            @click="handleView(scope.row,scope.index)"
+          >详情</el-button>
           <el-button
             v-hasPermi="['monitor:mail:remove']"
             size="mini"
@@ -141,62 +133,48 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改系统邮件记录对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="780px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="邮件发送人" prop="from">
-          <el-input v-model="form.from" placeholder="请输入邮件发送人" />
-        </el-form-item>
-        <el-form-item label="邮件接收人" prop="to">
-          <el-input v-model="form.to" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="邮件主题" prop="subject">
-          <el-input v-model="form.subject" placeholder="请输入邮件主题" />
-        </el-form-item>
-        <el-form-item label="邮件内容" prop="text">
-          <el-input v-model="form.text" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="抄送" prop="cc">
-          <el-input v-model="form.cc" placeholder="请输入抄送" />
-        </el-form-item>
-        <el-form-item label="密送" prop="bcc">
-          <el-input v-model="form.bcc" placeholder="请输入密送" />
-        </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="form.status" placeholder="请选择状态">
-            <el-option
-              v-for="dict in statusOptions"
-              :key="dict.dictValue"
-              :label="dict.dictLabel"
-              :value="dict.dictValue"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="报错信息" prop="error">
-          <el-input v-model="form.error" placeholder="请输入报错信息" />
-        </el-form-item>
-        <el-form-item label="发送时间" prop="sendDate">
-          <el-date-picker
-            v-model="form.sendDate"
-            clearable
-            size="small"
-            style="width: 200px"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择发送时间"
-          />
-        </el-form-item>
+    <!-- 系统邮件记录详细 -->
+    <el-dialog title="系统邮件记录详细" :visible.sync="open" width="800px" append-to-body>
+      <el-form ref="form" :model="form" label-width="100px" size="mini">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="邮件发送人：">{{ form.from }}</el-form-item>
+            <el-form-item label="邮件主题：">{{ form.subject }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="邮件接收人：">{{ form.to }}</el-form-item>
+            <el-form-item label="抄送/密送：">{{ form.cc }}/{{ form.bcc }}</el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="操作状态：">
+              <template>
+                <el-tag :type="form.status | statusFilter">
+                  <div v-if="form.status === '1'">成功</div>
+                  <div v-else-if="form.status === '0'">失败</div>
+                </el-tag>
+              </template>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="邮件内容："><div v-html="form.text"></div></el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="发送时间：">{{ parseTime(form.sendDate) }}</el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item v-if="form.error" label="异常信息：">{{ form.error }}</el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button @click="open = false">关 闭</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { listMail, getMail, delMail, exportMail } from '@/api/monitor/mail'
+import { listMail, delMail, exportMail } from '@/api/monitor/mail'
 
 export default {
   name: 'Mail',
@@ -234,14 +212,15 @@ export default {
       open: false,
       // 状态字典
       statusOptions: [],
+      // 日期范围
+      dateRange: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
         to: null,
         subject: null,
-        status: null,
-        sendDate: null
+        status: null
       },
       // 表单参数
       form: {},
@@ -260,7 +239,7 @@ export default {
     /** 查询系统邮件记录列表 */
     getList() {
       this.loading = true
-      listMail(this.queryParams).then(response => {
+      listMail(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
         this.mailList = response.rows
         this.total = response.total
         this.loading = false
@@ -298,6 +277,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
+      this.dateRange = []
       this.resetForm('queryForm')
       this.handleQuery()
     },
@@ -313,16 +293,10 @@ export default {
       this.open = true
       this.title = '添加系统邮件记录'
     },
-    /** 修改按钮操作 */
-    handleUpdate(row) {
-      this.reset()
-      const id = row.id || this.ids
-      getMail(id).then(response => {
-        this.form = response
-
-        this.open = true
-        this.title = '修改系统邮件记录'
-      })
+    /** 详情按钮操作 */
+    handleView(row) {
+      this.open = true
+      this.form = row
     },
     /** 删除按钮操作 */
     handleDelete(row) {
