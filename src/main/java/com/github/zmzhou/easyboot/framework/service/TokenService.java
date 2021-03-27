@@ -76,8 +76,6 @@ public class TokenService {
         String token = getToken(request);
         if (StringUtils.isNotEmpty(token)) {
             Claims claims = parseToken(token);
-            // 更新失效时间
-            claims.setExpiration(new Date(System.currentTimeMillis() + expireTime * MILLIS_MINUTE));
             // 解析对应的权限以及用户信息
             String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
             String userKey = getTokenKey(uuid);

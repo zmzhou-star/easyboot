@@ -22,8 +22,8 @@
 
         <!--文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，这个也挺有用的，适合临时测试用 -->
         <!--append为TRUE表示消息增加到指定文件中，false表示消息覆盖指定的文件内容，默认值是true -->
-        <File name="log" fileName="${LOG_HOME}/log4j2.log" append="false">
-            <PatternLayout pattern="${console_pattern}"/>
+        <File name="log4j2" fileName="${LOG_HOME}/log4j2.log" append="false">
+            <PatternLayout pattern="${pattern}"/>
             <ThresholdFilter level="warn" onMatch="ACCEPT" onMismatch="DENY"/>
         </File>
 
@@ -71,7 +71,7 @@
         <logger name="org.springframework" level="INFO"/>
         <root level="INFO">
             <appender-ref ref="Console"/>
-            <appender-ref ref="log"/>
+            <appender-ref ref="log4j2"/>
             <appender-ref ref="infoRollingFile"/>
             <appender-ref ref="warnRollingFile"/>
             <appender-ref ref="errorRollingFile"/>

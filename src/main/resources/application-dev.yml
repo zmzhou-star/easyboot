@@ -20,13 +20,13 @@ spring:
       min-evictable-idle-time-millis: 300000
       #  用来检测连接是否有效的sql，要求是一个查询语句。如果validationQuery为null，testOnBorrow、testOnReturn、testWhileIdle都不会其作用。
       #  在mysql中通常为select 'x'，在oracle中通常为select 1 from dual
-      validation-query: select 'x'
+      validation-query: select 1
       # 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效.
       test-while-idle: true
       # 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
-      test-on-borrow: true
+      test-on-borrow: false
       # 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
-      test-on-return: true
+      test-on-return: false
       pool-prepared-statements: true
       # 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。
       #  在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100
