@@ -79,7 +79,7 @@ npm run lint -- --fix
 npm audit fix
 
 # 切换到淘宝镜像
-npm config set registry http://registry.npm.taobao.org
+npm config set registry https://registry.npm.taobao.org
 # 切换回原镜像
 npm config set registry https://registry.npmjs.org
 # 其他镜像地址查询

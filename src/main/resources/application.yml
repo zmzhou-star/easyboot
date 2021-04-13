@@ -72,12 +72,12 @@ spring:
 #    nacos:
 #      discovery:
 #        server-addr: 127.0.0.1:8848
-  boot:
-    admin:
-      client:
-        url: http://192.168.163.1:8769/
-        username: admin
-        password: admin#8769
+#  boot:
+#    admin:
+#      client:
+#        url: http://192.168.163.1:8769/
+#        username: admin
+#        password: admin#8769
   jmx:
     enabled: true
   cache:
@@ -158,9 +158,9 @@ logging:
 #    registryFetchIntervalSeconds: 5
 #    service-url:
 #      defaultZone: ${EUREKA_SERVICE_URL:http://192.168.163.1:8761}/eureka/
-info:
-  app:
-    name: @project.name@
-    version: @project.version@
-    description: @project.description@
-    spring-boot-version: @project.parent.version@
+#info:
+#  app:
+#    name: @project.name@
+#    version: @project.version@
+#    description: @project.description@
+#    spring-boot-version: @project.parent.version@
