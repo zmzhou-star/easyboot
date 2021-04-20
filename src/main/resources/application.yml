@@ -136,12 +136,13 @@ management:
       show-details: always
       enabled: true
     shutdown:
-      enabled: true
+      enabled: false
   endpoints:
     web:
       exposure:
-        # 暴漏的接口 - 所有接口
-        include: "*"
+        # 暴漏的接口 - 排除其他接口
+        include: health,info
+        exclude: "*"
 # 日志配置
 logging:
   config: classpath:log4j2.xml

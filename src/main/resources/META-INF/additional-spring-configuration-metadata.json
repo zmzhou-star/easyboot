@@ -3,22 +3,83 @@
     {
       "name": "captcha.expiration",
       "type": "java.lang.Integer",
-      "description": "验证码有效时间(单位分钟)."
+      "description": "验证码有效时间(单位分钟).",
+      "defaultValue": 2
     },
     {
       "name": "captcha.width",
       "type": "java.lang.Integer",
-      "description": "验证码宽度."
+      "description": "验证码宽度.",
+      "defaultValue": 120
     },
     {
       "name": "captcha.height",
       "type": "java.lang.Integer",
-      "description": "验证码高度."
+      "description": "验证码高度.",
+      "defaultValue": 50
     },
     {
       "name": "captcha.digit",
       "type": "java.lang.Integer",
       "description": "验证码位数."
+    },
+    {
+      "name": "server.file-path-avatar",
+      "type": "java.lang.String",
+      "description": "用户头像文件上传路径."
+    },
+    {
+      "name": "server.file-path-upload",
+      "type": "java.lang.String",
+      "description": "文件上传路径."
+    },
+    {
+      "name": "server.file-path-download",
+      "type": "java.lang.String",
+      "description": "文件下载路径."
+    },
+    {
+      "name": "server.file-path-temp",
+      "type": "java.lang.String",
+      "description": "临时文件路径."
+    },
+    {
+      "name": "server.swagger.enabled",
+      "type": "java.lang.Boolean",
+      "description": "swagger开关.",
+      "defaultValue": true
+    },
+    {
+      "name": "server.operate-log.enabled",
+      "type": "java.lang.Boolean",
+      "description": "操作日志记录开关.",
+      "defaultValue": true
+    },
+    {
+      "name": "token.header",
+      "type": "java.lang.String",
+      "description": "token令牌自定义标识."
+    },
+    {
+      "name": "token.secret",
+      "type": "java.lang.String",
+      "description": "token令牌秘钥."
+    },
+    {
+      "name": "token.expireTime",
+      "type": "java.lang.Integer",
+      "description": "令牌有效期.",
+      "defaultValue": 30
+    },
+    {
+      "name": "token.prefix",
+      "type": "java.lang.String",
+      "description": "token前缀字符."
+    },
+    {
+      "name": "token.antMatchers",
+      "type": "java.lang.String",
+      "description": "不需要认证的接口."
     }
   ]
 }
