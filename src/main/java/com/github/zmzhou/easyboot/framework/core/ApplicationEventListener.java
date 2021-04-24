@@ -7,12 +7,13 @@ import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEven
 import org.springframework.boot.context.event.ApplicationFailedEvent;
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.boot.context.event.ApplicationStartingEvent;
+import org.springframework.boot.web.servlet.context.ServletWebServerInitializedEvent;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.ContextStartedEvent;
 import org.springframework.context.event.ContextStoppedEvent;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,25 +38,24 @@ public class ApplicationEventListener implements ApplicationListener<Application
 			log.info("ApplicationContext初始化完成");
 		} else if (event instanceof ApplicationPreparedEvent) {
 			log.info("Spring容器执行refresh前触发");
+		} else if (event instanceof ServletWebServerInitializedEvent) {
+			log.info("Servlet Web服务器初始化");
 		} else if (event instanceof ContextRefreshedEvent) {
-			log.info("应用刷新");
+			log.info("应用Context刷新");
+		} else if (event instanceof ApplicationStartedEvent) {
+			log.info("应用程序启动好了");
 		} else if (event instanceof ApplicationReadyEvent) {
-			log.info("应用已启动完成");
-		} else if (event instanceof ContextStartedEvent) {
-			// 应用启动，Spring2.5新增的事件，当容器调用ConfigurableApplicationContext的Start()方法开始/重新开始容器时触发该事件。
-			log.info("应用启动好了");
+			log.info("应用已准备完成");
 		} else if (event instanceof AvailabilityChangeEvent) {
 			log.info("应用已处于活动状态");
 		} else if (event instanceof ApplicationFailedEvent) {
 			log.info("应用启动失败");
-		} else if (event instanceof ContextStoppedEvent) {
-			// 应用停止，Spring2.5新增的事件，当容器调用ConfigurableApplicationContext的Stop()方法停止容器时触发该事件。
-			log.info("应用停止");
-		} else if (event instanceof ContextClosedEvent) {
-			// 应用关闭，当ApplicationContext被关闭时触发该事件。容器被关闭时，其管理的所有单例Bean都被销毁。
-			log.info("应用关闭");
 		} else if (event instanceof DataSourceSchemaCreatedEvent) {
 			log.info("数据源架构创建的事件");
+		} else if (event instanceof ContextStoppedEvent) {
+			log.info("应用停止");
+		} else if (event instanceof ContextClosedEvent) {
+			log.info("应用关闭");
 		} else {
 			log.info("其他事件:{}", event);
 		}
