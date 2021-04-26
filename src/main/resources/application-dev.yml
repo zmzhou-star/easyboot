@@ -100,7 +100,7 @@ spring:
 #    out-of-order: true # 是否容许不按顺序迁移 开发建议 true  生产建议 false
     # 如果指定 schema 包含了其他表,但没有 flyway schema history 表的话, 在执行 flyway migrate 命令之前, 必须先执行 flyway baseline 命令.
     # 设置 spring.flyway.baseline-on-migrate 为 true 后, flyway 将在需要 baseline 的时候, 自动执行一次 baseline.
-#    baselineOnMigrate: true
+    baselineOnMigrate: true
 #    table: flyway_schema_history
   redis:
     host: 127.0.0.1

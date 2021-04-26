@@ -1,20 +1,20 @@
 # easyboot
 
 #### Description
-spring boot、spring security、jwt token、redis、jpa + vue-admin-template实现前后端分离简单入门框架
+spring boot、spring security、jwt token、redis、jpa + vue-admin-template A simple entry framework for separating front and back ends
 
-#数据库文档生成工具
+#database document generation tool
 `src\test\java\com\github\zmzhou\easyboot\DBGenerationTool.java`    
-参考：[screw](https://gitee.com/leshalv/screw/tree/master/)
+reference：[screw](https://gitee.com/leshalv/screw/tree/master/)
 
-#sonar扫描命令
+#sonar scan command
 ```bash
 mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true install sonar:sonar -X
 ```
 #### Software Architecture
 Software architecture description
 
-spring boot、spring security、jwt token、redis、jpa + vue-admin-template
+spring boot、spring security、jwt token、redis、jpa + vue-admin-template、flyway
 #### system screenshot
 
 ![login page](docs/login.png)
@@ -25,10 +25,25 @@ spring boot、spring security、jwt token、redis、jpa + vue-admin-template
 ![sonar scan report](docs/sonar.png)
 
 #### Installation
+1. `package`
+```
+mvn clean install -X -DskipTests
+```
+2. `run（Windows or Linux）`
+```
+java -jar -server easyboot-0.0.1-SNAPSHOT.jar
+```
+The current ssh window is locked, you can press CTRL + C to interrupt the program running, or directly close the window, the program exits.
+3. `run（Linux daemon）`
+```
+nohup java -jar -server easyboot-0.0.1-SNAPSHOT.jar > easyboot.out 2>&1 &
+```
+nohup It means to run the command without hanging up, and the program will still run when the account is exited or the terminal is closed.
+&represents running in the background
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+
+#### License
+[The Apache-2.0 License](http://www.apache.org/licenses/LICENSE-2.0)
 
 #### Instructions
 

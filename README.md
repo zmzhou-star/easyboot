@@ -13,7 +13,7 @@ mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.igno
 ```
 #### 软件架构
 软件架构说明  
-spring boot、spring security、jwt token、redis、jpa + vue-admin-template
+spring boot、spring security、jwt token、redis、jpa + vue-admin-template、flyway
 #### 系统截图
 
 ![登录页面](docs/login.png)
@@ -24,10 +24,26 @@ spring boot、spring security、jwt token、redis、jpa + vue-admin-template
 ![sonar扫描报告](docs/sonar.png)
 
 #### 安装教程
+1. `打包`
+```
+mvn clean install -X -DskipTests
+```
+2. `运行（Windows或Linux）`
+```
+java -jar -server easyboot-0.0.1-SNAPSHOT.jar
+```
+当前ssh窗口被锁定，可按CTRL + C打断程序运行，或直接关闭窗口，程序退出。
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+3. `运行（Linux后台运行）`
+```
+nohup java -jar -server easyboot-0.0.1-SNAPSHOT.jar > easyboot.out 2>&1 &
+```
+nohup 意思是不挂断运行命令,当账户退出或终端关闭时,程序仍然运行。
+&代表在后台运行
+
+
+#### License
+[The Apache-2.0 License](http://www.apache.org/licenses/LICENSE-2.0)
 
 #### 使用说明
 ```
