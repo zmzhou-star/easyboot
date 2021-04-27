@@ -4,7 +4,7 @@ CREATE DATABASE easyboot;
 -- 创建用户
 create user 'easyboot'@'%' identified by 'Zmzhou.V587';
 -- 授权
-grant select,insert,update,delete,create,process on `easyboot`.* to 'easyboot'@'%';
+grant select,insert,update,delete,create on `easyboot`.* to 'easyboot'@'%';
 -- 或者赋所有权限 grant all privileges on `easyboot`.* to 'easyboot'@'%';
 -- 查看一下用户列表
 select host,user,authentication_string from mysql.user;
@@ -12,7 +12,7 @@ select host,user,authentication_string from mysql.user;
 flush privileges;
 
 -- 取消用户所有数据库（表）的所有权限
-revoke all on `easyboot`.* from easyboot;
+revoke all on `easyboot`.* from 'easyboot'@'%';
 -- 删除用户
 delete from mysql.user where user = 'easyboot';
 -- 删除数据库
