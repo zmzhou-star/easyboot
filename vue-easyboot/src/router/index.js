@@ -135,7 +135,7 @@ export const constantRoutes = [
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support 去掉url中的#
+  mode: process.env.NODE_ENV === 'production' ? 'history' : 'hash', // require service support 去掉url中的#
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })
