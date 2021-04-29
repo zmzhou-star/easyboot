@@ -490,6 +490,7 @@ INSERT INTO sys_user_role VALUES (3, 4);
 INSERT INTO sys_user_role VALUES (5, 4);
 INSERT INTO sys_user_role VALUES (35, 5);
 
+DROP TABLE IF EXISTS sys_mail;
 create table sys_mail(
     id        int auto_increment comment '邮件ID' primary key,
     send_from varchar(64)  null comment '邮件发送人',
