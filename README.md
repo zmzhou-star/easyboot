@@ -41,10 +41,6 @@ nohup java -jar -server easyboot-0.0.1-SNAPSHOT.jar > easyboot.out 2>&1 &
 nohup 意思是不挂断运行命令,当账户退出或终端关闭时,程序仍然运行。
 &代表在后台运行
 
-
-#### License
-[The Apache-2.0 License](http://www.apache.org/licenses/LICENSE-2.0)
-
 #### 使用说明
 ```
 1. @EnableCaching常用注解说明
@@ -54,6 +50,23 @@ nohup 意思是不挂断运行命令,当账户退出或终端关闭时,程序仍
 @Caching       重新组合要在方法上应用的多个缓存操作
 @CacheConfig   在类级别共享一些常见的缓存相关设置
 ```
+
+#### License
+[The Apache-2.0 License](https://www.apache.org/licenses/LICENSE-2.0)
+
+请自由地享受和参与开源
+
+#### 捐赠
+开源不易，请多鼓励！（注：如果该项目对您有帮助，请捐赠以表示支持，谢谢！捐赠请备注easyboot捐赠和称呼哦，谢谢！）
+
+| 支付宝 | 微信 |
+| :------------: | :------------: |
+| ![Alipay](https://gitee.com/zmzhou-star/learnotes/raw/master/docs/alipay.png) | ![Wechat](https://gitee.com/zmzhou-star/learnotes/raw/master/docs/wechatpay.png) |
+
+#### 联系作者
+email：<a href="mailto:zmzhou-star@foxmail.com">Contact zmzhou-star</a>
+
+微信公众号：![微信公众号](https://gitee.com/zmzhou-star/learnotes/raw/master/docs/wechat-zmzhou-star.png)
 
 #### 参与贡献
 

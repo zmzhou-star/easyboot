@@ -45,11 +45,19 @@ nohup It means to run the command without hanging up, and the program will still
 #### License
 [The Apache-2.0 License](http://www.apache.org/licenses/LICENSE-2.0)
 
-#### Instructions
+Please feel free to enjoy and participate in open source
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+#### Donate
+Open source is not easy, please encourage! (Note: If this project is helpful to you, please donate to show your support, thank you! Please note the web-shell donation and title for donation, thank you!)
+
+| Alipay  | Wechat  |
+| :------------: | :------------: |
+| ![Alipay](https://gitee.com/zmzhou-star/learnotes/raw/master/docs/alipay.png) | ![Wechat](https://gitee.com/zmzhou-star/learnotes/raw/master/docs/wechatpay.png) |
+
+#### contact me
+email：<a href="mailto:zmzhou-star@foxmail.com">Contact zmzhou-star</a>
+
+WeChat：![WeChat](https://gitee.com/zmzhou-star/learnotes/raw/master/docs/wechat-zmzhou-star.png)
 
 #### Contribution
 
