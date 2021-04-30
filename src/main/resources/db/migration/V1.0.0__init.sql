@@ -490,6 +490,20 @@ INSERT INTO sys_user_role VALUES (3, 4);
 INSERT INTO sys_user_role VALUES (5, 4);
 INSERT INTO sys_user_role VALUES (35, 5);
 
+DROP TABLE IF EXISTS sys_mail;
+create table sys_mail(
+    id        int auto_increment comment '邮件ID' primary key,
+    send_from varchar(64)  null comment '邮件发送人',
+    send_to   varchar(511) null comment '邮件接收人（多个邮箱则用分号";"隔开）',
+    subject   varchar(255) null comment '邮件主题',
+    MAIL_TEXT varchar(512) null comment '邮件内容',
+    cc        varchar(255) null comment '抄送',
+    bcc       varchar(255) null comment '密送',
+    status    varchar(1)   null comment '状态',
+    error     varchar(255) null comment '报错信息',
+    send_date datetime     null comment '发送时间'
+)comment '系统邮件记录表';
+
 commit;
 
 SET FOREIGN_KEY_CHECKS = 1;

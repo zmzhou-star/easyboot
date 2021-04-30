@@ -36,7 +36,7 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     // state.avatar = avatar || 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
-    state.avatar = avatar || '/avatar.gif'
+    state.avatar = avatar || process.env.VUE_APP_BASE_API + 'avatar.gif'
   }
 }
 // 用户头像访问路径前缀
