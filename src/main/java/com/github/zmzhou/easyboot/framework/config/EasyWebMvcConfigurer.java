@@ -51,11 +51,15 @@ public class EasyWebMvcConfigurer implements WebMvcConfigurer {
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+		// Add more mappings... 可以添加多个mapping
         registry.addMapping("/**")
+				// 服务器支持的所有头信息字段
                 .allowedHeaders("*")
-                .allowedMethods("POST", "GET", "PUT", "DELETE")
-                // 允许凭证
+				// 服务器支持的所有跨域请求的方法
+                .allowedMethods("POST", "GET", "PUT", "DELETE", "OPTIONS", "HEAD")
+                // 是否允许发送Cookie
                 .allowCredentials(true)
+				// 指定本次预检请求的有效期
                 .maxAge(1800)
                 // 设置允许跨域请求的域名
                 .allowedOriginPatterns("*");
