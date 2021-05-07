@@ -10,13 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.github.zmzhou.easyboot.api.system.entity.SysUser;
 import com.github.zmzhou.easyboot.common.Constants;
-import com.github.zmzhou.easyboot.common.exception.BaseException;
 import com.github.zmzhou.easyboot.common.utils.AmapUtils;
 import com.github.zmzhou.easyboot.common.utils.IpUtils;
 import com.github.zmzhou.easyboot.common.utils.SpringUtils;
@@ -196,10 +194,10 @@ public class TokenService {
         user.setLoginDate(new Date());
         if (null != ipInfo) {
             // 判断用户网络环境是否变化
-            if (Constants.ONE.equals(user.getOnline()) &&
-                    StringUtils.isNotBlank(user.getLoginIp()) && !user.getLoginIp().equals(ipInfo.getIp())) {
-                throw new BaseException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "网络环境变化，请重新登录！");
-            }
+//            if (Constants.ONE.equals(user.getOnline()) &&
+//                    StringUtils.isNotBlank(user.getLoginIp()) && !user.getLoginIp().equals(ipInfo.getIp())) {
+//                throw new BaseException(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "网络环境变化，请重新登录！");
+//            }
             loginUser.setIpAddr(ipInfo.getIp());
             loginUser.setLoginLocation(ipInfo.getAddr());
             // 更新redis缓存和内存中的用户登录信息
