@@ -59,7 +59,7 @@ public class EasyWebMvcConfigurer implements WebMvcConfigurer {
                 .allowedMethods("POST", "GET", "PUT", "DELETE", "OPTIONS", "HEAD")
                 // 是否允许发送Cookie
                 .allowCredentials(true)
-				// 指定本次预检请求的有效期
+				// 指定本次请求的有效期
                 .maxAge(1800)
                 // 设置允许跨域请求的域名
                 .allowedOriginPatterns("*");
