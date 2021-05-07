@@ -101,9 +101,9 @@ public final class ThreadPoolUtils {
 	 * @since 2021/5/7 17:12
 	 */
 	public static void shutdown() {
-		log.info("关闭线程池");
 		if (threadPool != null) {
 			threadPool.shutdown();
+			log.info("关闭线程池");
 		}
 	}
 }
