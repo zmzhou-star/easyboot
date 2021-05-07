@@ -4,6 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 
+import com.github.zmzhou.easyboot.common.utils.ThreadPoolUtils;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -28,6 +30,8 @@ public class EasybootApplication {
         // log4j2全局异步日志配置 http://logging.apache.org/log4j/2.x/manual/async.html#AllAsync
         System.setProperty("Log4jContextSelector", "org.apache.logging.log4j.core.async.AsyncLoggerContextSelector");
         SpringApplication.run(EasybootApplication.class, args);
+		// 停止应用时，关闭线程池钩子，或者使用 @PreDestroy 注解执行一系列操作
+		Runtime.getRuntime().addShutdownHook(new Thread(ThreadPoolUtils::shutdown, "ShutdownThreadPoolHook"));
     }
 
 }
