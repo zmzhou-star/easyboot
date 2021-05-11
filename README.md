@@ -27,6 +27,7 @@ spring boot、spring security、jwt token、redis、jpa + vue-admin-template、f
 1. `打包`
 ```
 mvn clean install -X -DskipTests
+mvn clean install -X -Dmaven.test.skip=true
 ```
 2. `运行（Windows或Linux）`
 ```

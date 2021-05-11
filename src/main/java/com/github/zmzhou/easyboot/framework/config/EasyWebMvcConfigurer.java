@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.DispatcherType;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.github.zmzhou.easyboot.common.utils.DateUtils;
+import com.github.zmzhou.easyboot.framework.filter.MyCsrfFilter;
 import com.github.zmzhou.easyboot.framework.security.filter.XssFilter;
 
 /**
@@ -29,6 +31,9 @@ import com.github.zmzhou.easyboot.framework.security.filter.XssFilter;
  */
 @Configuration
 public class EasyWebMvcConfigurer implements WebMvcConfigurer {
+	@Autowired
+	private CorsConfig corsConfig;
+
     /**
      * 解决静态资源无法访问
      * @param registry ResourceHandlerRegistry
@@ -44,7 +49,8 @@ public class EasyWebMvcConfigurer implements WebMvcConfigurer {
     }
 
     /**
-     * 允许所有跨站请求
+     * 跨站资源共享配置
+	 * Cross Origin Resourse-Sharing - 跨站资源共享
      * @param registry CorsRegistry
      * @author zmzhou
      * @date 2020/07/03 15:09
@@ -54,15 +60,15 @@ public class EasyWebMvcConfigurer implements WebMvcConfigurer {
 		// Add more mappings... 可以添加多个mapping
         registry.addMapping("/**")
 				// 服务器支持的所有头信息字段
-                .allowedHeaders("*")
+                .allowedHeaders(corsConfig.getAllowedHeaders())
 				// 服务器支持的所有跨域请求的方法
-                .allowedMethods("POST", "GET", "PUT", "DELETE", "OPTIONS", "HEAD")
+                .allowedMethods(corsConfig.getAllowedMethods())
                 // 是否允许发送Cookie
-                .allowCredentials(true)
+                .allowCredentials(corsConfig.isAllowCredentials())
 				// 指定本次请求的有效期
-                .maxAge(1800)
+                .maxAge(corsConfig.getMaxAge())
                 // 设置允许跨域请求的域名
-                .allowedOriginPatterns("*");
+                .allowedOriginPatterns(corsConfig.getAllowedOriginPatterns());
     }
 
     /**
@@ -108,6 +114,24 @@ public class EasyWebMvcConfigurer implements WebMvcConfigurer {
         // 拦截所有请求
         registration.addUrlPatterns("/*");
         registration.setName("xssFilter");
+        // 最高等级注册
+        registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return registration;
+    }
+
+    /**
+     * 权限控制过滤器
+     * @author zmzhou
+     * @since 2021/5/7 17:59
+     */
+    @Bean
+    public FilterRegistrationBean<MyCsrfFilter> csrfFilterRegistration() {
+        FilterRegistrationBean<MyCsrfFilter> registration = new FilterRegistrationBean<>();
+        registration.setDispatcherTypes(DispatcherType.REQUEST);
+        registration.setFilter(new MyCsrfFilter(corsConfig));
+        // 拦截所有请求
+        registration.addUrlPatterns("/*");
+        registration.setName("csrfFilter");
         // 最高等级注册
         registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return registration;

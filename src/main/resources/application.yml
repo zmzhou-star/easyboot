@@ -48,7 +48,7 @@ spring:
   devtools:
     restart:
       # 热部署开关
-      enabled: true
+      enabled: false
   mvc:
     static-path-pattern: /static/**
     view:
@@ -95,6 +95,8 @@ spring:
     password: 123456 #登陆密码（或授权码）
     properties:
       from: zmzhou8@qq.com #邮件发信人（即真实邮箱）
+cors:
+  allowed-origin-patterns: http://localhost:8086,http://127.0.0.1:8086
 # token配置
 token:
   # 令牌自定义标识
