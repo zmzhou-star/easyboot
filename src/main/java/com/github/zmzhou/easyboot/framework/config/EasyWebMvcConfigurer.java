@@ -120,7 +120,7 @@ public class EasyWebMvcConfigurer implements WebMvcConfigurer {
     }
 
     /**
-     * 权限控制过滤器
+     * 跨站请求伪造 过滤器
      * @author zmzhou
      * @since 2021/5/7 17:59
      */
