@@ -1,6 +1,7 @@
 package com.github.zmzhou.easyboot.framework.filter;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -18,8 +19,8 @@ import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * CSRF - Cross-Site Request Forgery - 跨站请求伪造 过滤器
- * 验证 HTTP Referer 字段
+ * CSRF(Cross-Site Request Forgery) - 跨站请求伪造过滤器
+ * 验证 HTTP Referer 字段是否以 允许跨域请求的域名 开头
  *
  * @author zmzhou
  * @version 1.0
@@ -37,12 +38,15 @@ public class MyCsrfFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 									FilterChain chain) throws ServletException, IOException {
+		// 设置编码集
+		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 		// 从 HTTP 头中取得 Referer 值
 		final String referer = request.getHeader("Referer");
 		// 判断 Referer 是否以 允许跨域请求的域名 开头
 		final boolean anyMatch = Optional.ofNullable(referer).map(i ->
 			Arrays.stream(corsConfig.getAllowedOriginPatterns())
-				.anyMatch(origin -> ("*".equals(origin) || i.startsWith(origin)))).orElse(false);
+				.anyMatch(origin -> ("*".equals(origin) || i.startsWith(origin))))
+				.orElse(Arrays.asList(corsConfig.getAllowedOriginPatterns()).contains("*"));
 		if (anyMatch) {
 			chain.doFilter(request, response);
 		} else {

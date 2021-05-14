@@ -15,11 +15,13 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.ContextStoppedEvent;
+import org.springframework.web.context.support.ServletRequestHandledEvent;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * springboot生命周期
+ *
  * @author zmzhou
  * @version 1.0
  * date 2021/4/20 13:54
@@ -56,6 +58,8 @@ public class ApplicationEventListener implements ApplicationListener<Application
 			log.info("应用停止");
 		} else if (event instanceof ContextClosedEvent) {
 			log.info("应用关闭");
+		} else if (event instanceof ServletRequestHandledEvent) {
+			log.debug("接收前端请求事件:{}", event);
 		} else {
 			log.info("其他事件:{}", event);
 		}

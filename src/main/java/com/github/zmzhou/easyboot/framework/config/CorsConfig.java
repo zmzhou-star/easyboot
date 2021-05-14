@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import lombok.Data;
 
 /**
- * CORS - Cross Origin Resourse-Sharing - 跨站资源共享
- * CSRF - Cross-Site Request Forgery - 跨站请求伪造
+ * CORS(Cross Origin Resourse-Sharing) - 跨站资源共享
+ * CSRF(Cross-Site Request Forgery) - 跨站请求伪造
  *
  * @author zmzhou
  * @version 1.0

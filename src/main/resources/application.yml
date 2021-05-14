@@ -10,7 +10,7 @@ server:
   tomcat:
     # tomcat的URI编码
     uri-encoding: UTF-8
-    connection-timeout: 60000
+    connection-timeout: 60S
     # tomcat最大线程数，默认为200
     # Tomcat启动初始化的线程数，默认值10
     threads:
@@ -47,7 +47,7 @@ spring:
   # 服务模块
   devtools:
     restart:
-      # 热部署开关
+      # 热部署重启开关，不重启实现快速热部署
       enabled: false
   mvc:
     static-path-pattern: /static/**
@@ -95,6 +95,7 @@ spring:
     password: 123456 #登陆密码（或授权码）
     properties:
       from: zmzhou8@qq.com #邮件发信人（即真实邮箱）
+# 允许跨域请求的域名
 cors:
   allowed-origin-patterns: http://localhost:8086,http://127.0.0.1:8086
 # token配置
@@ -135,7 +136,7 @@ gen:
 management:
   endpoint:
     health:
-      show-details: always
+      show-details: when_authorized
       enabled: true
     shutdown:
       enabled: false
