@@ -91,13 +91,13 @@ spring:
     timeout: 30M
   mail:
     host: smtp.qq.com #SMTP服务器地址
-    username: zmzhou8 #登陆账号
+    username: zmzhou818 #登陆账号
     password: 123456 #登陆密码（或授权码）
     properties:
-      from: zmzhou8@qq.com #邮件发信人（即真实邮箱）
+      from: zmzhou818@qq.com #邮件发信人（即真实邮箱）
 # 允许跨域请求的域名
 cors:
-  allowed-origin-patterns: http://localhost:8086,http://127.0.0.1:8086
+  allowed-origin-patterns: http://localhost:8086,http://127.0.0.1:8086,http://127.0.0.1:8089
 # token配置
 token:
   # 令牌自定义标识

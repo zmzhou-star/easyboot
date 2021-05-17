@@ -209,7 +209,7 @@ public class NonAuthService {
 		vo.setCreateBy(vo.getUsername());
 		vo.setStatus(Constants.ONE);
 		vo.setOnline(Constants.ZERO);
-		// 设置默认角色为‘普通角色’
+		// 设置默认角色为‘游客角色’
 		vo.setRoles(Sets.newHashSet("3"));
 		userService.saveUserRole(vo);
 		return true;

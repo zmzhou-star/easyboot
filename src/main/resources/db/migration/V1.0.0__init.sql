@@ -362,7 +362,7 @@ CREATE TABLE sys_role  (
 -- ----------------------------
 INSERT INTO sys_role VALUES (1, 'admin', '系统管理员', 1, '1', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-08-30 18:46:08', '管理员');
 INSERT INTO sys_role VALUES (2, 'super', '超级管理员', 2, NULL, '1', 'admin', '2020-08-30 00:14:10', 'admin', '2020-11-16 20:37:20', '超级管理员');
-INSERT INTO sys_role VALUES (3, 'common', '普通角色', 3, '2', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-12-18 21:12:02', '普通角色');
+INSERT INTO sys_role VALUES (3, 'guest', '游客角色', 3, '2', '1', 'admin', '2020-08-28 12:33:00', 'admin', '2020-12-18 21:12:02', '游客角色');
 INSERT INTO sys_role VALUES (4, 'develop', '开发人员', 4, NULL, '1', 'admin', '2020-08-29 22:05:57', 'admin', '2020-12-18 21:10:19', '开发人员');
 INSERT INTO sys_role VALUES (5, 'test', '测试人员', 5, NULL, '1', 'admin', '2020-08-29 22:09:00', 'admin', '2020-09-14 22:19:40', '测试人员角色');
 

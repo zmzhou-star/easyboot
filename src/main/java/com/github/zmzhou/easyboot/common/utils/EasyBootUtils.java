@@ -185,7 +185,12 @@ public final class EasyBootUtils {
 			}
 			sort = Sort.by(direct, params.getProp());
 		}
-		return PageRequest.of(params.getPageNum() - 1, params.getPageSize(), sort);
+		int pageNum = params.getPageNum() - 1;
+		// 避免报错 Page index must not be less than zero!
+		if (pageNum < 0) {
+			pageNum = 0;
+		}
+		return PageRequest.of(pageNum, params.getPageSize(), sort);
 	}
 
 	/**
