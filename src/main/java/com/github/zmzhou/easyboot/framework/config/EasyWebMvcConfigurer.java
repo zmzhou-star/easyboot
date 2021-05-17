@@ -21,6 +21,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.github.zmzhou.easyboot.common.utils.DateUtils;
+import com.github.zmzhou.easyboot.framework.filter.AccessControlFilter;
 import com.github.zmzhou.easyboot.framework.filter.MyCsrfFilter;
 import com.github.zmzhou.easyboot.framework.security.filter.XssFilter;
 
@@ -133,7 +134,25 @@ public class EasyWebMvcConfigurer implements WebMvcConfigurer {
         registration.addUrlPatterns("/*");
         registration.setName("csrfFilter");
         // 最高等级注册
-        registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        registration.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
         return registration;
     }
+
+	/**
+	 * 权限控制过滤器
+	 * @author zmzhou
+	 * @since 2021/5/7 17:59
+	 */
+	@Bean
+	public FilterRegistrationBean<AccessControlFilter> accessControlFilterRegistration() {
+		FilterRegistrationBean<AccessControlFilter> registration = new FilterRegistrationBean<>();
+		registration.setDispatcherTypes(DispatcherType.REQUEST);
+		registration.setFilter(new AccessControlFilter());
+		// 拦截所有请求
+		registration.addUrlPatterns("/*");
+		registration.setName("accessControlFilter");
+		// 最高等级注册
+		registration.setOrder(-1);
+		return registration;
+	}
 }
