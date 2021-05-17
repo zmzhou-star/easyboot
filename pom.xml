@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.github.zmzhou-star</groupId>
     <artifactId>easyboot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>easyboot</name>
     <description>easyboot project for Spring Boot</description>
 
@@ -34,6 +34,12 @@
             <properties>
                 <!-- 激活指定环境的配置文件 application-{xx}.yml -->
                 <environment>dev</environment>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <environment>prod</environment>
             </properties>
         </profile>
     </profiles>
