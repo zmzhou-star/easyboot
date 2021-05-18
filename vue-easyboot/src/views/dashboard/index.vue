@@ -2,7 +2,9 @@
   <div class="dashboard-container">
     <github-corner class="github-corner" />
 
-    <div v-if="roles[0] !== 'admin'" class="dashboard-text">name: {{ name }} </div>
+    <div v-if="roles[0] !== 'admin'">
+      <div class="dashboard-text"> {{ name }} 你好！</div>
+    </div>
     <!-- cardList -->
     <div v-hasRole="['admin']">
       <el-row class="infoCards">

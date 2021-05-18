@@ -14,9 +14,30 @@
         </div>
         <div class="bullshit__headline">{{ message }}</div>
         <div class="bullshit__info">Please check that the URL you entered is correct, or click the button below to return to the homepage.</div>
-        <a href="/" class="bullshit__return-home">Back to home</a>
+        <div class="link-type bullshit__return-home">
+          <router-link to="/dashboard">
+            Back to home
+          </router-link>
+        </div>
       </div>
     </div>
+    <ul class="list-ul">
+      <li>或者你可以去:</li>
+      <li class="link-type">
+        <router-link to="/dashboard">
+          回首页
+        </router-link>
+      </li>
+      <li class="link-type">
+        <a href="https://gitee.com/zmzhou-star/easyboot">Gitee</a>
+      </li>
+      <li class="link-type">
+        <a href="https://github.com/zmzhou-star/easyboot">Github</a>
+      </li>
+      <li class="link-type">
+        <a href="https://zmzhou-star.github.io/learnotes/#/">learnotes</a>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -38,6 +59,12 @@ export default {
   position: absolute;
   top: 40%;
   left: 50%;
+}
+.list-ul {
+  margin-left: 50%;
+}
+.list-ul li {
+  margin: 10px 0;
 }
 .wscn-http404 {
   position: relative;
