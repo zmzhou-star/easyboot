@@ -125,3 +125,7 @@ spring:
 # 允许跨域请求的域名
 cors:
   allowed-origin-patterns: http://47.119.196.11:8086,http://47.119.196.11:8089,http://47.119.196.11
+
+swagger:
+  terms-of-service-url: https://zmzhou-star.github.io/learnotes/
+  contact-url: http://47.119.196.11/eboot/

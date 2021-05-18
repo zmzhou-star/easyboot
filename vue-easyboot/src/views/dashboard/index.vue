@@ -188,13 +188,6 @@ export default {
     padding: 30px;
     position: relative;
     background-color: #f0f2f5;
-    .github-corner {
-      position: absolute;
-      top: 0;
-      border: 0;
-      right: 0;
-      z-index: 9;
-    }
   }
   &-text {
     font-size: 30px;

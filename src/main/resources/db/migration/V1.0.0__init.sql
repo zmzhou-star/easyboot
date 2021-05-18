@@ -96,7 +96,7 @@ CREATE TABLE sys_config  (
 -- Records of sys_config
 -- ----------------------------
 INSERT INTO sys_config VALUES (1, '主框架页-默认皮肤样式名称', 'sys.index.skin', '#1890ff', 'Y', 'admin', '2020-11-16 11:33:00', 'admin', '2020-12-19 15:41:36', '蓝色 skin-blue、绿色 skin-green、紫色 skin-purple、红色 skin-red、黄色 skin-yellow');
-INSERT INTO sys_config VALUES (2, '用户管理-账号初始密码', 'sys.user.initPassword', 'Zmzhou.1324', 'Y', 'admin', '2020-11-16 11:33:00', 'admin', '2020-12-14 17:02:09', '初始化密码 Zmzhou.1324');
+INSERT INTO sys_config VALUES (2, '用户管理-账号初始密码', 'sys.user.initPassword', 'Guest.132', 'Y', 'admin', '2020-11-16 11:33:00', 'admin', '2020-12-14 17:02:09', '初始化密码 Guest.132');
 INSERT INTO sys_config VALUES (3, '主框架页-侧边栏主题', 'sys.index.sideTheme', 'theme-dark', 'Y', 'admin', '2020-11-16 11:33:00', 'admin', '2020-11-16 23:11:22', '深色主题theme-dark，浅色主题theme-light');
 
 -- ----------------------------

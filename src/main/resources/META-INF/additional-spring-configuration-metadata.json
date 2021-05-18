@@ -44,12 +44,6 @@
       "description": "临时文件路径."
     },
     {
-      "name": "server.swagger.enabled",
-      "type": "java.lang.Boolean",
-      "description": "swagger开关.",
-      "defaultValue": true
-    },
-    {
       "name": "server.operate-log.enabled",
       "type": "java.lang.Boolean",
       "description": "操作日志记录开关.",

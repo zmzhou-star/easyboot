@@ -52,6 +52,7 @@ public class MyCsrfFilter extends OncePerRequestFilter {
 		} else {
 			// 否则，抛出跨站请求伪造攻击异常
 			SpringUtils.response(response, new ApiResult<>().error(50010,"Cross-Site Request Forgery Attack !!!"));
+			log.warn("遭到跨站请求攻击referer：{} url:[{}] {}", referer, request.getMethod(), request.getRequestURI());
 		}
 	}
 }

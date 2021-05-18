@@ -76,7 +76,7 @@ public class AmapAddressInfo implements Serializable {
 	 * @date 2020/9/16 21:42
 	 */
 	public String getCenterCoordinates() {
-		if (StringUtils.isBlank(this.rectangle)){
+		if (StringUtils.isBlank(this.rectangle) || "[]".equals(this.rectangle)){
 			return "";
 		}
 		String[] coors = this.rectangle.split(Constants.SEMICOLON);

@@ -1,5 +1,6 @@
 <template>
   <div class="login-container">
+    <github-corner class="github-corner" />
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <div class="title-container">
         <h3 class="top title">Easy Boot</h3>
@@ -62,8 +63,8 @@
         </router-link>
       </div>
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
-      <div style="line-height: 26px;">
-        <div class="third-party">
+      <div style="line-height: 26px;height: 26px;">
+        <div class="third-party" @click="thirdTips">
           <span>第三方账号登录</span>
           <svg-icon icon-class="wechat1" />
           <svg-icon icon-class="qq1" />
@@ -73,10 +74,9 @@
         </router-link>
       </div>
       <div class="tips">
-        <!-- <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span> -->
+        <span style="margin-right:20px;">username: guest</span>
+        <span> password: Guest.132</span>
       </div>
-
     </el-form>
   </div>
 </template>
@@ -84,15 +84,19 @@
 <script>
 import { getCaptcha } from '@/api/login'
 import Cookies from 'js-cookie'
+import GithubCorner from '@/components/GithubCorner'
 
 export default {
   name: 'Login',
+  components: {
+    GithubCorner
+  },
   data() {
     return {
       codeUrl: '',
       loginForm: {
-        username: 'admin',
-        password: 'Zmzhou.123',
+        username: 'guest',
+        password: 'Guest.132',
         rememberMe: true,
         code: '',
         uuid: ''
@@ -149,6 +153,9 @@ export default {
       this.$nextTick(() => {
         this.$refs.password.focus()
       })
+    },
+    thirdTips() {
+      this.msgInfo('程序猿正在加班开发中……')
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
@@ -280,8 +287,8 @@ $light_gray:#eee;
   }
   .tips {
     font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
+    color: $dark_gray;
+    margin: 15px 0;
 
     span {
       &:first-of-type {

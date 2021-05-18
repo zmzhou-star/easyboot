@@ -3,8 +3,11 @@ package com.github.zmzhou.easyboot.framework.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -13,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.github.zmzhou.easyboot.common.Constants;
 
 import io.swagger.annotations.Api;
+import lombok.Data;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -41,10 +45,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ConditionalOnClass(SpringfoxWebMvcConfiguration.class)
 public class SwaggerConfig implements WebMvcConfigurer {
 	/**
-	 * swagger开关
+	 * swagger配置
 	 */
-	@Value("${server.swagger.enabled}")
-	private boolean enabled;
+	@Resource
+	private SwaggerProperties properties;
 	/** 项目名称 */
 	@Value("${spring.application.name}")
 	private String applicationName;
@@ -77,7 +81,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
 	public Docket createRestApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				// 是否启用Swagger
-				.enable(enabled)
+				.enable(properties.isEnabled())
 				// 用来创建该API的基本信息，展示在文档的页面中（自定义展示的信息）
 				.apiInfo(apiInfo())
 				// 设置哪些接口暴露给Swagger展示
@@ -109,12 +113,12 @@ public class SwaggerConfig implements WebMvcConfigurer {
 						"实现前后端分离简单入门框架接口文档</br>***请点击Authorize按钮输入token***</br>" +
 						"官方注解文档：https://github.com/swagger-api/swagger-core/wiki/Swagger-2.X---Annotations")
 				// 作者信息
-				.termsOfServiceUrl("https://github.com/zmzhou-star/easyboot")
-				.contact(new Contact("zmzhou", "http://127.0.0.1:8089/eboot", "zmzhou8@qq.com"))
+				.termsOfServiceUrl(properties.getTermsOfServiceUrl())
+				.contact(new Contact(properties.getContactName(), properties.getContactUrl(), properties.getContactEmail()))
 				.license("Apache 2.0")
-				.licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
+				.licenseUrl("https://www.apache.org/licenses/LICENSE-2.0.html")
 				// 版本
-				.version("1.0")
+				.version(properties.getVersion())
 				.build();
 	}
 
@@ -163,4 +167,29 @@ public class SwaggerConfig implements WebMvcConfigurer {
 		securityReferences.add(new SecurityReference(Constants.AUTHORIZATION, authorizationScopes));
 		return securityReferences;
 	}
+}
+/**
+ * swagger自定义配置
+ * @author zmzhou
+ * @version 1.0
+ * @since 2021/5/18 11:25
+ */
+@Data
+@Configuration
+@ConfigurationProperties(prefix = "swagger")
+class SwaggerProperties {
+	/**
+	 * swagger开关，默认开启
+	 */
+	private boolean enabled = true;
+	/** 服务条款网址 */
+	private String termsOfServiceUrl = "https://github.com/zmzhou-star/easyboot";
+	/** 联系人姓名 */
+	private String contactName = "zmzhou-star";
+	/** 联系网址 */
+	private String contactUrl = "http://127.0.0.1:8089/eboot";
+	/** 联系人邮箱 */
+	private String contactEmail = "zmzhou8@qq.com";
+	/** 版本 */
+	private String version = "1.0";
 }
