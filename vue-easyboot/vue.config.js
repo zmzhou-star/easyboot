@@ -15,6 +15,9 @@ const name = defaultSettings.title || 'vue easy boot' // page title
 // port = 9528 npm run dev OR npm run dev --port = 9528
 const port = process.env.port || process.env.npm_config_port || 8086 // dev port
 
+const CompressionPlugin = require('compression-webpack-plugin');
+const productionGzipExtensions = /\.(js|css|json|txt|html|ico|svg)(\?.*)?$/i;
+
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
   /**
@@ -104,6 +107,16 @@ module.exports = {
               inline: /runtime\..*\.js$/
             }])
             .end()
+          // 提供带 Content-Encoding 编码的压缩版的资源
+          config.plugin('compressionPlugin')
+            .use(new CompressionPlugin({
+              filename: '[path].gz[query]', // 目标文件名
+              algorithm: 'gzip',  // 压缩算法
+              test: productionGzipExtensions, // 满足正则表达式的文件会被压缩
+              threshold: 10240, // 只处理比这个值大的资源。按字节计算 10240=10KB
+              minRatio: 0.8, // 只有压缩率比这个值小的资源才会被处理
+              deleteOriginalAssets: true // 是否删除原资源
+            }));
           config
             .optimization.splitChunks({
               chunks: 'all',

@@ -18,6 +18,7 @@
     "axios": "0.21.1",
     "bcryptjs": "^2.4.3",
     "clipboard": "^2.0.6",
+    "compression-webpack-plugin": "^5.0.2",
     "core-js": "3.6.5",
     "driver.js": "^0.9.8",
     "element-ui": "2.13.2",
