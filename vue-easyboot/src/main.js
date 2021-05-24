@@ -88,5 +88,8 @@ new Vue({
   el: '#app',
   router,
   store,
+  mounted () {
+    document.dispatchEvent(new Event('render-event'))
+  },
   render: h => h(App)
 })
