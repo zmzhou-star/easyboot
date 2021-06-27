@@ -17,9 +17,10 @@ import lombok.ToString;
 
 /**
  * 封装Specification工具类
+ *
  * @author zmzhou
- * @title SimpleSpecification
- * @Date 2020/07/07 18:29
+ * @version 1.0
+ * @since 2020/07/07 18:29
  */
 @ToString
 public class SimpleSpecification<T> implements Specification<T> {
@@ -29,7 +30,7 @@ public class SimpleSpecification<T> implements Specification<T> {
 	 * 查询的条件列表，是一组列表
 	 */
 	private final List<SpecificationOperator> operators;
-	
+
 	/**
 	 * 构造器
 	 *
@@ -40,7 +41,7 @@ public class SimpleSpecification<T> implements Specification<T> {
 	public SimpleSpecification(List<SpecificationOperator> operators) {
 		this.operators = operators;
 	}
-	
+
 	@Override
 	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
 		//通过resultPre来组合多个条件
@@ -58,7 +59,7 @@ public class SimpleSpecification<T> implements Specification<T> {
 		}
 		return criteriaQuery.where(resultPre).getRestriction();
 	}
-	
+
 	/**
 	 * 根据不同的操作符返回特定的查询
 	 *
@@ -106,5 +107,5 @@ public class SimpleSpecification<T> implements Specification<T> {
 		}
 		return null;
 	}
-	
+
 }

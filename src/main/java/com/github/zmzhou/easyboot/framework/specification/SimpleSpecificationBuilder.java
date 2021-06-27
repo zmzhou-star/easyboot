@@ -8,19 +8,22 @@ import org.apache.commons.lang3.StringUtils;
 import com.github.zmzhou.easyboot.common.Constants;
 
 import lombok.ToString;
+
 /**
- *  @title SimpleSpecificationBuilder
- *  @Description SimpleSpecification构造器
- *  @author zmzhou
- *  @Date 2020/07/08 9:40
+ * SimpleSpecification构造器
+ *
+ * @author zmzhou
+ * @version 1.0
+ * @since 2020/07/08 9:40
  */
 @ToString
 public class SimpleSpecificationBuilder<T> {
 	/** 查询操作符集合 */
 	private final List<SpecificationOperator> operators;
-	
+
 	/**
 	 * 查询规范构造函数，初始化的条件是and
+	 *
 	 * @author zmzhou
 	 * @date 2020/08/27 11:51
 	 */
@@ -35,13 +38,14 @@ public class SimpleSpecificationBuilder<T> {
 	}
 	/**
 	 * 查询条件构造函数
+	 *
 	 * @author zmzhou
 	 * @date 2020/08/27 11:50
 	 */
 	public SimpleSpecificationBuilder() {
 		operators = new ArrayList<>();
 	}
-	
+
 	/**
 	 * 完成条件的添加
 	 *
@@ -64,7 +68,7 @@ public class SimpleSpecificationBuilder<T> {
 		operators.add(so);
 		return this;
 	}
-	
+
 	/**
 	 * 添加and的条件
 	 *
@@ -75,7 +79,7 @@ public class SimpleSpecificationBuilder<T> {
 	public SimpleSpecificationBuilder<T> and(String key, Operator operator, Object value) {
 		return this.add("and", key, operator, value);
 	}
-	
+
 	/**
 	 * 添加or条件的重载
 	 *
@@ -86,9 +90,10 @@ public class SimpleSpecificationBuilder<T> {
 	public SimpleSpecificationBuilder<T> or(String key, Operator operator, Object value) {
 		return this.add("or", key, operator, value);
 	}
-	
+
 	/**
 	 * between
+	 *
 	 * @param key 字段名
 	 * @param min 小数值
 	 * @param max 大数值
@@ -99,9 +104,10 @@ public class SimpleSpecificationBuilder<T> {
 	public SimpleSpecificationBuilder<T> between(String key, Object min, Object max) {
 		return between("and", key, min, max);
 	}
-	
+
 	/**
 	 * between
+	 *
 	 * @param join 连接符
 	 * @param key 字段名
 	 * @param min 小数值
@@ -125,9 +131,10 @@ public class SimpleSpecificationBuilder<T> {
 		}
 		return this.add(join, key, Operator.BETWEEN, value1 + Constants.COMMA + value2);
 	}
-	
+
 	/**
 	 * 查询规范构建
+	 *
 	 * @return SimpleSpecification<T>
 	 * @author zmzhou
 	 * @date 2020/08/27 11:51

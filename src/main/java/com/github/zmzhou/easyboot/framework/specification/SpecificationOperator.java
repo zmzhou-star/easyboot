@@ -5,12 +5,12 @@ import java.io.Serializable;
 import lombok.Data;
 
 /**
- *  @title SpecificationOperator
- *  @Description 操作符类，这个类中存储了键值对和操作符号，连接的条件类型是and还是or
- * 创建时通过 id>=7,其中id就是key,>=就是operator操作符，7就是value
- * 特殊的自定义几个操作符(:表示like %v%，b:表示v%,:b表示%v)
+ *  操作符类，这个类中存储了键值对和操作符号，连接的条件类型是and还是or
+ *  创建时通过 id>=7,其中id就是key,>=就是operator操作符，7就是value
+ *  特殊的自定义几个操作符(:表示like %v%，b:表示v%,:b表示%v)
+ *
  *  @author zmzhou
- *  @Date 2020/07/07 18:26
+ *  @since 2020/07/07 18:26
  */
 @Data
 public class SpecificationOperator implements Serializable {

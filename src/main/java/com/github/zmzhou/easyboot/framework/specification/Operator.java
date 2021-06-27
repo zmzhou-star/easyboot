@@ -1,9 +1,9 @@
 package com.github.zmzhou.easyboot.framework.specification;
 /**
- *  @title Operator
- *  @Description 运算符枚举
- *  @author zmzhou
- *  @Date 2020/07/08 9:47
+ * 运算符枚举
+ *
+ * @author zmzhou
+ * @since 2020/07/08 9:47
  */
 public enum Operator {
 	/** 等于 = */
