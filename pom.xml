@@ -46,7 +46,7 @@
         </profile>
     </profiles>
     <dependencies>
-        <!-- 数据库文档生成工具 Database document generation tool -->
+        <!-- 数据库文档生成工具 Database document generation tool https://gitee.com/leshalv/screw -->
         <dependency>
             <groupId>cn.smallbun.screw</groupId>
             <artifactId>screw-core</artifactId>
