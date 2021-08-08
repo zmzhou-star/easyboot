@@ -21,8 +21,8 @@ import com.github.zmzhou.easyboot.framework.vo.PageParams;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 数据导出接口抽象service 
- * @title BaseService
+ * 数据导出接口抽象service
+ *
  * @author zmzhou
  * @version 1.0
  * @date 2020/9/3 22:53
@@ -30,7 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public abstract class BaseService<P> {
-
    /**
     * The Excel utils.
     */

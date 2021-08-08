@@ -16,18 +16,22 @@ import lombok.Data;
 public class SpecificationOperator implements Serializable {
     /** serialVersionUID */
     private static final long serialVersionUID = 837938919256998640L;
+
     /**
      * 属性，如查询的name,id之类
      */
     private String key;
+
     /**
      * 具体的查询条件
      */
     private transient Object value;
+
     /**
      * 操作符，自己定义的一组操作符，用来方便查询
      */
     private Operator operator;
+
     /**
      * 连接的方式：and或者or
      */

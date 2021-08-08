@@ -20,7 +20,6 @@ import com.github.zmzhou.easyboot.framework.vo.PageParams;
  * @date 2020/07/02 16:59
  */
 public class BaseController {
-
     /**
      * 将前台传递过来的日期格式的字符串，自动转化为Date类型
      */
@@ -44,7 +43,7 @@ public class BaseController {
     protected Pageable getPageable(PageParams params) {
         return EasyBootUtils.getPageable(params);
     }
-    
+
     /**
      * 组装返回结果
      * @param data 返回数据

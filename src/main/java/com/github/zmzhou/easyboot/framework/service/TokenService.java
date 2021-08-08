@@ -30,14 +30,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 /**
+ *  token验证处理
  *  @title TokenService
- *  @Description token验证处理
  *  @author zmzhou
  *  @Date 2020/07/03 15:20
  */
 @Component
 public class TokenService {
-
     /**
      * The constant MILLIS_MINUTE. 一分钟
      */
