@@ -1,13 +1,9 @@
 package com.github.zmzhou.easyboot.framework.aop;
 
-import java.util.Date;
-import java.util.Locale;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -22,6 +18,7 @@ import com.alibaba.fastjson.JSON;
 import com.github.zmzhou.easyboot.api.monitor.service.SysOperLogService;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.exception.BaseException;
+import com.github.zmzhou.easyboot.common.utils.DateUtils;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.security.LoginUser;
 import com.github.zmzhou.easyboot.framework.service.TokenService;
@@ -98,10 +95,9 @@ public class WebLogAspect {
             long execTimeMillis = System.currentTimeMillis() - startTimeMillis;
             StringBuilder sb = new StringBuilder(1000);
             sb.append(System.lineSeparator()).append("-----------------------")
-                .append(DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss", Locale.SIMPLIFIED_CHINESE))
+                .append(DateUtils.getTime())
                 .append("-----------------------").append(System.lineSeparator())
-                .append("Class  : ").append(clazz.getName())
-                .append(System.lineSeparator())
+                .append("Class  : ").append(clazz.getName()).append(System.lineSeparator())
                 .append("Method : ").append(method).append("\t remote ip : ").append(ip)
                 .append(System.lineSeparator())
                 .append("Params : ").append(request.getMethod()).append(" ").append(request.getRequestURL())
@@ -129,6 +125,4 @@ public class WebLogAspect {
         }
         return ApiResult.badRequest();
     }
-
-
 }

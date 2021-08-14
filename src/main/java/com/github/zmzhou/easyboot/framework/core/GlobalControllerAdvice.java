@@ -65,18 +65,24 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 							 Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request,
 							 ServerHttpResponse response) {
 		HttpServletResponse res = SpringUtils.getRequestAttributes().getResponse();
-		if (null != res){
-			HttpSession session = SpringUtils.getSession();
-			// 设置Cookie;Secure;HttpOnly
-			res.setHeader( "Set-Cookie", "JSESSIONID=" + session.getId() + "; Secure; HttpOnly");
-			// 设置X-Frame-Options 只要包含在框架中的站点与为页面提供服务的站点相同，仍然可以在框架中使用该页面
-			res.setHeader("X-Frame-Options", "DENY");
-			// 当检测到反射的XSS攻击时阻止加载页面：
-			res.setHeader("X-XSS-Protection", "1; mode=block");
-		}
+		if (null != res) {
+            HttpSession session = SpringUtils.getSession();
+            // 设置Cookie;Secure;HttpOnly
+            res.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Secure; HttpOnly");
+            // 设置X-Frame-Options 只要包含在框架中的站点与为页面提供服务的站点相同，仍然可以在框架中使用该页面
+            res.setHeader("X-Frame-Options", "DENY");
+            //1; mode=block：启用XSS保护，并在检查到XSS攻击时，停止渲染页面
+            res.setHeader("X-XSS-Protection", "1; mode=block");
+            //简称为HSTS。它允许一个HTTPS网站，要求浏览器总是通过HTTPS来访问它
+            res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+            //这个响应头主要是用来定义页面可以加载哪些资源，减少XSS的发生
+            res.setHeader("Content-Security-Policy", "default-src 'self'");
+            //互联网上的资源有各种类型，通常浏览器会根据响应头的Content-Type字段来分辨它们的类型。通过这个响应头可以禁用浏览器的类型猜测行为
+            res.setHeader("X-Content-Type-Options", "nosniff");
+        }
 		return body;
 	}
-	
+
 	/**
 	 * 自定义异常
 	 */
@@ -112,7 +118,7 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 		saveFailOperLog(e, e.getMessage());
 		return ApiResult.badRequest();
 	}
-	
+
 	/**
 	 * 参数验证异常
 	 */
@@ -125,9 +131,9 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 		saveFailOperLog(e, message);
 		return new ApiResult<>().error(message);
 	}
-	
+
 	/**
-	 * 接口访问权限异常 
+	 * 接口访问权限异常
 	 * @param e AccessDeniedException
 	 * @return ApiResult<Object>
 	 * @author zmzhou
@@ -142,7 +148,7 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
 		saveFailOperLog(e, message);
 		return new ApiResult<>().error(message);
 	}
-	
+
 	/**
 	 * 参数验证异常
 	 */
