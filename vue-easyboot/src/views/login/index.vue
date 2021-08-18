@@ -78,6 +78,15 @@
         <span> password: Guest.132</span>
       </div>
     </el-form>
+    <div class="beian-wrap">
+      <a class="beian-link" href="https://beian.miit.gov.cn/#/Integrated/index?unitName=湘ICP备2021013044号" target="_blank">
+        <img data-src="//img.alicdn.com/tfs/TB1..50QpXXXXX7XpXXXXXXXXXX-40-40.png" class="beian-img" src="//img.alicdn.com/tfs/TB1..50QpXXXXX7XpXXXXXXXXXX-40-40.png" alt="">
+        <span class="beian-link-text">湘ICP备2021013044号</span>
+      </a>
+      <a class="beian-link" href="https://gitee.com/zmzhou-star/easyboot" target="_blank">
+        <span class="beian-Copyright-text">Copyright © 2020-present zmzhou-star. All Rights Reserved.</span>
+      </a>
+    </div>
   </div>
 </template>
 
@@ -192,6 +201,28 @@ export default {
 </script>
 
 <style lang="scss">
+.beian-wrap img, .beian-wrap span {
+  vertical-align: middle;
+  display: inline-block;
+}
+.beian-wrap {
+  bottom: 10px;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+}
+.beian-img {
+  width: 20px;
+  height: 20px;
+}
+.beian-link-text {
+  color: white;
+  margin: 0 15px;
+}
+.beian-Copyright-text {
+  color: white;
+
+}
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
