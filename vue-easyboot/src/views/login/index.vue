@@ -221,7 +221,6 @@ export default {
 }
 .beian-Copyright-text {
   color: white;
-
 }
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
