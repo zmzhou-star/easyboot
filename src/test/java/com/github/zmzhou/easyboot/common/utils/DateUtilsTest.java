@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
  * The type Date utils test.
  *
  * @author zmzhou
- * @version 1.0  date 2020/9/19 19:00
+ * @version 1.0 date 2020/9/19 19:00
  */
 class DateUtilsTest {
 

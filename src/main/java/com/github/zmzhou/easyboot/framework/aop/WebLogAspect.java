@@ -79,7 +79,7 @@ public class WebLogAspect {
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
         String method = joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
-        long startTimeMillis = System.currentTimeMillis();
+        long startTimeMillis = DateUtils.currentTimeMillis();
         // 获取用户身份信息
         LoginUser loginUser = tokenService.getLoginUser(request);
         String ip = "";
@@ -92,7 +92,7 @@ public class WebLogAspect {
         try {
             // 调用 proceed() 方法才会真正的执行实际被代理的方法
             result = joinPoint.proceed();
-            long execTimeMillis = System.currentTimeMillis() - startTimeMillis;
+            long execTimeMillis = DateUtils.currentTimeMillis() - startTimeMillis;
             StringBuilder sb = new StringBuilder(1000);
             sb.append(System.lineSeparator()).append("-----------------------")
                 .append(DateUtils.getTime())
@@ -103,7 +103,7 @@ public class WebLogAspect {
                 .append("Params : ").append(request.getMethod()).append(" ").append(request.getRequestURL())
                 .append(" ").append(JSON.toJSONString(args)).append(System.lineSeparator())
                 .append("Return : ").append(JSON.toJSONString(result)).append(System.lineSeparator())
-                .append("Cost   : ").append(execTimeMillis);
+                .append("Cost   : ").append(execTimeMillis).append("ms");
             log.info("{}", sb);
             // 记录操作日志
             operLogService.saveOperLog(request, clazz, method, args, result, Constants.ONE, "");
