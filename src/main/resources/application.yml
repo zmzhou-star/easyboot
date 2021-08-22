@@ -94,7 +94,7 @@ spring:
     username: zmzhou818 #登陆账号
     password: 123456 #登陆密码（或授权码）
     properties:
-      from: zmzhou818@qq.com #邮件发信人（即真实邮箱）
+      from: zmzhou8@foxmail.com #邮件发信人（即真实邮箱）
       # 设置开启ssl
       mail:
         stmp:

@@ -52,6 +52,7 @@ public class EasyWebMvcConfigurer implements WebMvcConfigurer {
     /**
      * 跨站资源共享配置
 	 * Cross Origin Resourse-Sharing - 跨站资源共享
+     *
      * @param registry CorsRegistry
      * @author zmzhou
      * @date 2020/07/03 15:09
