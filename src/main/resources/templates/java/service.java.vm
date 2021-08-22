@@ -1,3 +1,7 @@
+/*
+ * Copyright © 2020-present zmzhou-star. All Rights Reserved.
+ */
+
 package ${packageName}.service;
 
 import java.util.ArrayList;
@@ -28,10 +32,10 @@ import com.github.zmzhou.easyboot.framework.specification.SimpleSpecificationBui
 
 /**
  * ${functionName}Service接口
- * 
+ *
  * @author ${author}
  * @version 1.0
- * date ${datetime}
+ * @since ${datetime}
  */
 @Service
 @CacheConfig(cacheNames = {"${moduleName}:${ClassName}"})
@@ -62,7 +66,7 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
 
     /**
      * 根据id查询${functionName}
-     * 
+     *
      * @param id ${functionName}id
      * @return ${ClassName}对象
      * @author ${author}
@@ -77,7 +81,7 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
 
     /**
      * 新增${functionName}
-     * 
+     *
      * @param entity ${functionName}
      * @return ${ClassName} 新增结果
      * @author ${author}
@@ -91,7 +95,7 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
 
     /**
      * 修改${functionName}
-     * 
+     *
      * @param entity ${functionName}
      * @return ${ClassName} 修改结果
      * @author ${author}
@@ -105,7 +109,7 @@ public class ${ClassName}Service extends BaseService<${ClassName}Params> {
 
     /**
      * 批量删除${functionName}
-     * 
+     *
      * @param ${pkColumn.javaField}s 需要删除的${functionName}ID
      * @author ${author}
      * date ${datetime}

@@ -347,6 +347,7 @@ public class CodeGenTableService {
 	 * @return zip压缩包数据 byte [ ]
 	 */
 	public byte[] generatorCode(String tableNames) {
+	    log.info("generatorCode tableNames:{}", tableNames);
 		if (StringUtils.isBlank(tableNames)) {
 			throw new BaseException("请选择要生成代码的数据表");
 		}

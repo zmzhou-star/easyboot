@@ -1,3 +1,7 @@
+/*
+ * Copyright © 2020-present zmzhou-star. All Rights Reserved.
+ */
+
 package ${packageName}.vo;
 
 import org.springframework.beans.BeanUtils;
@@ -13,7 +17,7 @@ import lombok.Data;
  *
  * @author ${author}
  * @version 1.0
- * date ${datetime}
+ * @since ${datetime}
  */
 @Data
 @ApiModel(description = "${functionName}vo类")

@@ -1,3 +1,7 @@
+/*
+ * Copyright © 2020-present zmzhou-star. All Rights Reserved.
+ */
+
 package ${packageName}.controller;
 
 import javax.annotation.Resource;
@@ -30,9 +34,10 @@ import io.swagger.annotations.ApiParam;
 
 /**
  * ${functionName}Controller
+ *
  * @author ${author}
  * @version 1.0
- * date ${datetime}
+ * @since ${datetime}
  */
 @Api(tags = {"${functionName}"})
 @RestController
@@ -114,7 +119,7 @@ public class ${ClassName}Controller extends BaseController {
 		${className}Service.deleteByIds(ids);
 		return new ApiResult<>();
 	}
-	
+
 	/**
 	 * 导出excel
 	 * @param params 查询参数

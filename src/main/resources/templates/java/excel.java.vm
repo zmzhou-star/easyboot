@@ -1,3 +1,7 @@
+/*
+ * Copyright © 2020-present zmzhou-star. All Rights Reserved.
+ */
+
 package ${packageName}.excel;
 
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -10,10 +14,10 @@ import lombok.Data;
 
 /**
  * ${functionName}导出excel类 ${tableName}
- * 
+ *
  * @author ${author}
  * @version 1.0
- * date ${datetime}
+ * @since ${datetime}
  */
 @Data
 @ContentRowHeight(20)

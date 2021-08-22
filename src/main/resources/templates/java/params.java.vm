@@ -1,3 +1,7 @@
+/*
+ * Copyright © 2020-present zmzhou-star. All Rights Reserved.
+ */
+
 package ${packageName}.vo;
 
 import com.github.zmzhou.easyboot.framework.vo.PageParams;
@@ -11,7 +15,7 @@ import lombok.Data;
  *
  * @author ${author}
  * @version 1.0
- * date ${datetime}
+ * @since ${datetime}
  */
 @Data
 @ApiModel(description = "${functionName}请求参数vo类")
