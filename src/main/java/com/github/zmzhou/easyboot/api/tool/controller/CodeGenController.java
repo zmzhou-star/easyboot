@@ -38,7 +38,8 @@ import io.swagger.annotations.ApiParam;
 
 /**
  * 代码生成工具控制层
- * @title CodeGenController
+ *
+ * CodeGenController
  * @author zmzhou
  * @version 1.0
  * @date 2020/9/16 23:04
@@ -69,6 +70,7 @@ public class CodeGenController extends BaseController {
 
 	/**
 	 * 查询数据库表列表
+     *
 	 * @param tableName 表名称
 	 * @param tableComment 表描述
 	 * @return ApiResult<TableDataInfo>
@@ -86,6 +88,7 @@ public class CodeGenController extends BaseController {
 
 	/**
 	 * 导入生成代码的表结构保存
+     *
 	 * @param tables 表名数组
 	 * @return 导入结果
 	 * @author zmzhou
@@ -100,6 +103,7 @@ public class CodeGenController extends BaseController {
 
 	/**
 	 * 删除代码生成数据
+     *
 	 * @param ids 代码生成ID数组
 	 * @author zmzhou
 	 * @date 2020/9/16 23:08
