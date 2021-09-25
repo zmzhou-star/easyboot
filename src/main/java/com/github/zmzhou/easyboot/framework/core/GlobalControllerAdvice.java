@@ -70,7 +70,7 @@ public class GlobalControllerAdvice<T> implements ResponseBodyAdvice<T> {
             // 设置Cookie;Secure;HttpOnly
             res.setHeader("Set-Cookie", "JSESSIONID=" + session.getId() + "; Secure; HttpOnly");
             // 设置X-Frame-Options 只要包含在框架中的站点与为页面提供服务的站点相同，仍然可以在框架中使用该页面
-            res.setHeader("X-Frame-Options", "DENY");
+            res.setHeader("X-Frame-Options", "SAMEORIGIN");
             // 1; mode=block：启用XSS保护，并在检查到XSS攻击时，停止渲染页面
             res.setHeader("X-XSS-Protection", "1; mode=block");
             // 简称为HSTS。它允许一个HTTPS网站，要求浏览器总是通过HTTPS来访问它
