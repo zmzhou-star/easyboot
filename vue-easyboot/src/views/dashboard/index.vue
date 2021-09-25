@@ -3,7 +3,9 @@
     <github-corner class="github-corner" />
 
     <div v-if="roles[0] !== 'admin'">
-      <div class="dashboard-text"> {{ name }} 你好！</div>
+      <div v-loading="loading" :style="'height:'+ height">
+        <iframe :src="recruitAddress" title="华为招聘" name="华为招聘" frameborder="no" class="page-content" scrolling="auto" />
+      </div>
     </div>
     <!-- cardList -->
     <div v-hasRole="['admin']">
@@ -142,7 +144,19 @@ export default {
       mapData: [],
       // 日期范围
       dateRange: [this.parseTime(new Date(), '{y}-{m}-{d}'), this.parseTime(new Date(), '{y}-{m}-{d}')],
-      queryParams: {}
+      queryParams: {},
+      recruitAddress: 'https://zmzhou-star.gitee.io/learnotes/#/%E5%8D%8E%E4%B8%BA%E6%8B%9B%E8%81%98/README',
+      height: document.documentElement.clientHeight - 150 + 'px;',
+      loading: true
+    }
+  },
+  mounted: function() {
+    const that = this
+    setTimeout(() => {
+      that.loading = false
+    }, 200)
+    window.onresize = function temp() {
+      that.height = document.documentElement.clientHeight - 150 + 'px;'
     }
   },
   created() {
