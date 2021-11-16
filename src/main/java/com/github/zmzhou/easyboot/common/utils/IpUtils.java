@@ -1,6 +1,7 @@
 package com.github.zmzhou.easyboot.common.utils;
 
 import java.util.Collections;
+import java.util.Optional;
 import java.util.regex.Matcher;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,7 @@ public final class IpUtils {
      */
     private IpUtils() {
     }
+
     /**
      * 获取用户真实地址
      * @return 真实地址
@@ -44,11 +46,9 @@ public final class IpUtils {
      */
     public static String getRealAddress() {
         IpInfo info = getIpInfo();
-        if (null != info) {
-            return info.getAddr();
-        }
-        return UNKNOWN;
+        return Optional.ofNullable(info).map(IpInfo::getAddr).orElse(UNKNOWN);
     }
+
     /**
      * 获取用户真实IP地址
      * @return 真实IP
@@ -57,11 +57,9 @@ public final class IpUtils {
      */
     public static String getRealIp() {
         IpInfo info = getIpInfo();
-        if (null != info) {
-            return info.getIp();
-        }
-        return UNKNOWN;
+        return Optional.ofNullable(info).map(IpInfo::getIp).orElse(UNKNOWN);
     }
+
     /**
      * 获取用户ip定位信息
      * @return IpInfo
