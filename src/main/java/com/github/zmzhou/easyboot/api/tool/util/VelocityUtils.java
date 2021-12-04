@@ -3,6 +3,7 @@ package com.github.zmzhou.easyboot.api.tool.util;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -136,16 +137,16 @@ public final class VelocityUtils {
 		String vuePath = "vue";
 		// 设置所有模板代码生成路径
 		if (template.contains(Templates.VM_MENU_SQL.getVm())) {
-			fileName = String.format(Templates.VM_MENU_SQL.getGenPath(), businessName);
+			fileName = Templates.format(Templates.VM_MENU_SQL.getGenPath(), businessName);
 		} else if (template.contains(Templates.VM_API_JS.getVm())) {
-			fileName = String.format(Templates.VM_API_JS.getGenPath(), vuePath, moduleName, businessName);
+			fileName = Templates.format(Templates.VM_API_JS.getGenPath(), vuePath, moduleName, businessName);
 		} else if (template.contains(Templates.VM_VUE_INDEX.getVm())) {
-			fileName = String.format(Templates.VM_VUE_INDEX.getGenPath(), vuePath, moduleName, businessName);
+			fileName = Templates.format(Templates.VM_VUE_INDEX.getGenPath(), vuePath, moduleName, businessName);
 		} else if (template.contains(Templates.VM_VUE_INDEX_TREE.getVm())) {
-			fileName = String.format(Templates.VM_VUE_INDEX_TREE.getGenPath(), vuePath, moduleName, businessName);
+			fileName = Templates.format(Templates.VM_VUE_INDEX_TREE.getGenPath(), vuePath, moduleName, businessName);
 		} else {
 			// 剩下都是包含两个参数的
-			fileName = String.format(Templates.genPath(template), javaPath, className);
+			fileName = Templates.format(Templates.genPath(template), javaPath, className);
 		}
 		return fileName;
 	}
@@ -356,5 +357,17 @@ public final class VelocityUtils {
 			}
 			return templates;
 		}
+
+		/**
+		 * 格式化字符串
+		 *
+		 * @param genPath genPath
+		 * @param args args
+		 * @return java.lang.String
+		 * @since 2021/12/4 20:31
+		 */
+		public static String format(String genPath, Object... args) {
+		    return String.format(Locale.ENGLISH, genPath, args);
+        }
 	}
 }
