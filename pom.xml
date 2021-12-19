@@ -24,7 +24,8 @@
         <spring-cloud-alibaba.version>2.2.1.RELEASE</spring-cloud-alibaba.version>
         <knife4j.version>3.0.3</knife4j.version>
         <velocity.version>1.7</velocity.version>
-        <log4j.version>2.16.0</log4j.version>
+        <log4j.version>2.17.0</log4j.version>
+        <netty.version>4.1.72.Final</netty.version>
         <swagger.version>1.6.3</swagger.version>
         <poi.version>4.1.2</poi.version>
 		<boot-jar-output>target</boot-jar-output>
@@ -339,6 +340,13 @@
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-dependencies</artifactId>
                 <version>${knife4j.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
