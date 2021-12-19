@@ -24,7 +24,7 @@
         <spring-cloud-alibaba.version>2.2.1.RELEASE</spring-cloud-alibaba.version>
         <knife4j.version>3.0.3</knife4j.version>
         <velocity.version>1.7</velocity.version>
-        <log4j.version>2.15.0</log4j.version>
+        <log4j.version>2.16.0</log4j.version>
         <swagger.version>1.6.3</swagger.version>
         <poi.version>4.1.2</poi.version>
 		<boot-jar-output>target</boot-jar-output>
