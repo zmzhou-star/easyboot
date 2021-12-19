@@ -7,7 +7,7 @@ spring boot、spring security、jwt token、redis、jpa + vue-admin-template实�
 `src\test\java\com\github\zmzhou\easyboot\DBGenerationTool.java`    
 参考：[screw](https://gitee.com/leshalv/screw/tree/master/)
 
-[网站地址](https://zmzhou-star.cn)
+[网站地址](https://www.zmzhou-star.cn)
 
 [Java全栈开发学习笔记](https://zmzhou-star.gitee.io/learnotes/#/%E5%8D%8E%E4%B8%BA%E6%8B%9B%E8%81%98/README)
 

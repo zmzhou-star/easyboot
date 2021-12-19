@@ -7,6 +7,12 @@ spring boot、spring security、jwt token、redis、jpa + vue-admin-template A s
 `src\test\java\com\github\zmzhou\easyboot\DBGenerationTool.java`    
 reference：[screw](https://gitee.com/leshalv/screw/tree/master/)
 
+[website address](https://www.zmzhou-star.cn)
+
+[Java learnotes](https://zmzhou-star.gitee.io/learnotes/#/%E5%8D%8E%E4%B8%BA%E6%8B%9B%E8%81%98/README)
+
+[database](/docs/EasyBoot数据库设计文档.md ':include :type=markdown')
+
 #sonar scan command
 ```bash
 mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent -Dmaven.test.failure.ignore=true install sonar:sonar -X
