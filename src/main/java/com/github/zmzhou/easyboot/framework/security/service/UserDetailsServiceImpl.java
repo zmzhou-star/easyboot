@@ -34,11 +34,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Resource
 	private MenuService menuService;
+
 	@Resource
 	private RoleService roleService;
 
 	/**
 	 * 用户登录验证
+     *
 	 * @param username 用户名
 	 * @return UserDetails
 	 * @author zmzhou
@@ -51,13 +53,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		if (StringUtils.isBlank(user.getUsername())) {
 			log.info("登录用户：{} 不存在.", username);
 			// 用户不存在
-			throw new BaseException(ErrorCode.USER_NOT_EXISTS);
+			throw new BaseException(ErrorCode.LOGIN_ERROR, username);
 		} else if (UserStatus.DELETED.getCode().equals(user.getStatus())) {
 			log.info("登录用户：{} 已被删除.", username);
-			throw new BaseException(ErrorCode.USER_DELETED, username);
+			throw new BaseException(ErrorCode.LOGIN_ERROR, username);
 		} else if (UserStatus.DISABLE.getCode().equals(user.getStatus())) {
 			log.info("登录用户：{} 已被停用.", username);
-			throw new BaseException(ErrorCode.USER_DISABLE, username);
+			throw new BaseException(ErrorCode.LOGIN_ERROR, username);
 		}
 		// 用户角色列表
 		Set<String> roles = roleService.getRolePermission(user);
@@ -71,5 +73,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		}
 		return new LoginUser(user, permissions, roles);
 	}
-	
 }

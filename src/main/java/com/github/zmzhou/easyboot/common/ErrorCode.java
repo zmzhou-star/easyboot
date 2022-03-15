@@ -34,7 +34,9 @@ public enum ErrorCode {
 	/** 用户[0]无角色 */
 	USER_HAS_NO_ROLE(1011, "用户[0]无角色"),
 	/** 用户[0]无权限 */
-	USER_HAS_NO_PERMISSIONS(1012, "用户[0]无权限")
+	USER_HAS_NO_PERMISSIONS(1012, "用户[0]无权限"),
+    /** 登录失败 */
+    LOGIN_ERROR(1013, "用户名[0]或密码错误")
 	;
 	/** 错误码 */
 	private final int code;
