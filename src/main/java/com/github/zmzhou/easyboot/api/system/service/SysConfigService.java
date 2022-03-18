@@ -36,7 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 参数配置Service接口
- * 
+ *
  * @author zmzhou
  * @version 1.0
  * date 2020-11-16 21:51:23
@@ -48,11 +48,12 @@ import lombok.extern.slf4j.Slf4j;
 public class SysConfigService extends BaseService<SysConfigParams> {
     @Resource
     private SysConfigDao dao;
+
     @Resource
     private RedisUtils redisUtils;
 
 	/**
-	 * 项目启动时，加载所有初始化参数到缓存 
+	 * 项目启动时，加载所有初始化参数到缓存
 	 * @author zmzhou
 	 * @date 2020/11/17 11:50
 	 */
@@ -62,7 +63,7 @@ public class SysConfigService extends BaseService<SysConfigParams> {
 		configList.forEach(config -> redisUtils.set(getCacheKey(config.getConfigKey()), config.getConfigValue()));
 		log.info("完成加载初始化参数：{}条到缓存", configList.size());
 	}
-    
+
 	/**
      * 分页查询参数配置数据
      * @param params 查询参数
@@ -88,7 +89,7 @@ public class SysConfigService extends BaseService<SysConfigParams> {
 
     /**
      * 根据id查询参数配置
-     * 
+     *
      * @param id 参数配置id
      * @return SysConfig对象
      */
@@ -98,9 +99,9 @@ public class SysConfigService extends BaseService<SysConfigParams> {
 	    }
 	    return dao.findById(id).orElse(new SysConfig());
     }
-	
+
     /**
-	 * 根据参数键名查询参数值 
+	 * 根据参数键名查询参数值
 	 * @param configKey 参数键名
 	 * @return SysConfig
 	 * @author zmzhou
@@ -112,9 +113,9 @@ public class SysConfigService extends BaseService<SysConfigParams> {
 				.and("configKey", Operator.EQUAL, configKey).build();
 		return dao.findOne(spec).orElse(null);
 	}
-	
+
 	/**
-	 * 根据参数键名查询参数值 
+	 * 根据参数键名查询参数值
 	 * @param configKey 参数键名
 	 * @return ApiResult<SysConfig>
 	 * @author zmzhou
@@ -137,7 +138,7 @@ public class SysConfigService extends BaseService<SysConfigParams> {
 
     /**
      * 新增参数配置
-     * 
+     *
      * @param entity 参数配置
      * @return 结果
      */
@@ -152,7 +153,7 @@ public class SysConfigService extends BaseService<SysConfigParams> {
 
     /**
      * 修改参数配置
-     * 
+     *
      * @param entity 参数配置
      * @return 结果
      */
@@ -164,7 +165,7 @@ public class SysConfigService extends BaseService<SysConfigParams> {
 		redisUtils.set(getCacheKey(entity.getConfigKey()), entity.getConfigValue());
 		return entity;
     }
-    
+
     /**
 	 * 校验参数键名是否唯一
 	 * @param config 参数信息
@@ -181,7 +182,7 @@ public class SysConfigService extends BaseService<SysConfigParams> {
 
     /**
      * 批量删除参数配置
-     * 
+     *
      * @param ids 需要删除的参数配置ID
      */
     public void deleteByIds(Long[] ids) {
@@ -219,7 +220,7 @@ public class SysConfigService extends BaseService<SysConfigParams> {
 		dataConversion(list, excelList, SysConfigExcel.class);
 		return excelUtils.download(excelList, SysConfigExcel.class, params.getExcelName());
 	}
-	
+
 	/**
 	 * 设置cache key
 	 * @param configKey 参数键

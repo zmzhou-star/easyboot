@@ -28,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ApplicationEventListener implements ApplicationListener<ApplicationEvent> {
-
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
 		// 在这里可以监听到Spring Boot的生命周期
