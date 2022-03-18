@@ -16,6 +16,7 @@ import com.github.zmzhou.easyboot.common.Constants;
 public final class VelocityInitializer {
 	/**
 	 * 私有构造器
+     *
 	 * @author zmzhou
 	 * date 2020/9/20 17:36
 	 */
@@ -25,6 +26,7 @@ public final class VelocityInitializer {
 
 	/**
 	 * 初始化代码生成使用模板vm
+     *
 	 * Init velocity.
 	 */
 	public static void initVelocity() {
