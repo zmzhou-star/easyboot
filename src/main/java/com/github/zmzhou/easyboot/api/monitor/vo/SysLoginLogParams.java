@@ -22,6 +22,7 @@ public class SysLoginLogParams extends PageParams {
 	/** 每页显示记录数 */
 	@ApiModelProperty(value = "登录IP")
 	private String ipAddr;
+
 	/** 每页显示记录数 */
 	@ApiModelProperty(value = "用户名称")
 	private String userName;
