@@ -23,7 +23,7 @@ import lombok.Data;
 public class RedisCacheVo {
     /** 基本信息 */
     @ApiModelProperty(value = "基本信息")
-    private Properties baseInfo;
+    private Properties info;
 
     /** Key数量 */
     @ApiModelProperty(value = "Key数量")
@@ -47,7 +47,7 @@ public class RedisCacheVo {
 
         /** 调用次数 */
         @ApiModelProperty(value = "调用次数")
-        private String calls;
+        private String value;
 
         /** 调用总耗时 */
         @ApiModelProperty(value = "调用总耗时")

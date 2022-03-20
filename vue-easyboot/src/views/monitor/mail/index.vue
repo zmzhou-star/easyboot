@@ -156,7 +156,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="邮件内容："><div v-html="form.text"></div></el-form-item>
+            <el-form-item label="邮件内容："><div v-html="form.text" /></el-form-item>
           </el-col>
           <el-col :span="24">
             <el-form-item label="发送时间：">{{ parseTime(form.sendDate) }}</el-form-item>

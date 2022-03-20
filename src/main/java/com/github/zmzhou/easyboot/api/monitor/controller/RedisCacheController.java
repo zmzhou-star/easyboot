@@ -57,7 +57,7 @@ public class RedisCacheController extends BaseController {
         Long dbSize = (Long) redisTemplate.execute((RedisCallback<Object>) RedisServerCommands::dbSize);
 
         RedisCacheVo cacheVo = new RedisCacheVo();
-        cacheVo.setBaseInfo(info);
+        cacheVo.setInfo(info);
         cacheVo.setDbSize(dbSize);
         List<RedisCacheVo.CommandStatVo> statVos = new ArrayList<>();
         Optional.ofNullable(commandStats).map(command -> commandStats.stringPropertyNames())
@@ -65,7 +65,7 @@ public class RedisCacheController extends BaseController {
                 RedisCacheVo.CommandStatVo commandStatVo = new RedisCacheVo.CommandStatVo();
                 String value = commandStats.getProperty(key);
                 commandStatVo.setName(StringUtils.removeStart(key, "cmdstat_"));
-                commandStatVo.setCalls(StringUtils.substringBetween(value, "calls=", ",usec"));
+                commandStatVo.setValue(StringUtils.substringBetween(value, "calls=", ",usec"));
                 commandStatVo.setUsec(StringUtils.substringBetween(value, "usec=", ",usec_per_call"));
                 commandStatVo.setUsecPerCall(StringUtils.substringAfter(value, "usec_per_call="));
                 statVos.add(commandStatVo);
