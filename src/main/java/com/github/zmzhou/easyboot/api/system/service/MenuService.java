@@ -44,12 +44,12 @@ import com.github.zmzhou.easyboot.framework.vo.TreeSelect;
 @CacheConfig(cacheNames = {"system:menu"})
 @Transactional(rollbackFor = Exception.class)
 public class MenuService {
-	
+
 	@Resource
 	private MenuDao menuDao;
 	@Resource
 	private RoleMenuDao roleMenuDao;
-	
+
 	/**
 	 * 获取用户菜单权限
 	 *
@@ -58,7 +58,7 @@ public class MenuService {
 	 * @author zmzhou
 	 * @date 2020/07/21 10:33
 	 */
-	@Cacheable
+	@Cacheable(key = "#user.username")
 	public Set<String> getMenuPermission(SysUser user) {
 		Set<String> permsSet = new HashSet<>();
 		// 管理员拥有所有权限
@@ -74,7 +74,7 @@ public class MenuService {
 		}
 		return permsSet;
 	}
-	
+
 	/**
 	 * 获取菜单列表
 	 *
@@ -91,7 +91,7 @@ public class MenuService {
 		Collections.sort(list);
 		return list;
 	}
-	
+
 	/**
 	 * 构造菜单查询条件
 	 * @param params 查询参数
@@ -126,7 +126,7 @@ public class MenuService {
 		}
 		return getChildPerms(menus);
 	}
-	
+
 	/**
 	 * 根据父节点的ID获取所有子节点
 	 *
@@ -147,7 +147,7 @@ public class MenuService {
 		}
 		return returnList;
 	}
-	
+
 	/**
 	 * 递归列表得到子节点列表
 	 *
@@ -168,7 +168,7 @@ public class MenuService {
 			}
 		}
 	}
-	
+
 	/**
 	 * 得到子节点列表
 	 *
@@ -189,7 +189,7 @@ public class MenuService {
 		menu.setChildren(childList);
 		return childList;
 	}
-	
+
 	/**
 	 * 判断是否有子节点
 	 *
@@ -202,7 +202,7 @@ public class MenuService {
 	private boolean hasChild(List<SysMenu> list, SysMenu menu) {
 		return !getChildList(list, menu).isEmpty();
 	}
-	
+
 	/**
 	 * 构建前端路由所需要的菜单
 	 *
@@ -231,7 +231,7 @@ public class MenuService {
 		}
 		return routers;
 	}
-	
+
 	/**
 	 * 获取路由地址
 	 *
@@ -248,7 +248,7 @@ public class MenuService {
 		}
 		return routerPath;
 	}
-	
+
 	/**
 	 * 根据用户查询系统菜单列表
 	 *
@@ -286,7 +286,7 @@ public class MenuService {
 		}
 		return menuList;
 	}
-	
+
 	/**
 	 * 根据角色ID查询已选中的菜单树id列表
 	 * @param roleId 角色ID
@@ -297,7 +297,7 @@ public class MenuService {
 	public List<Integer> selectMenuListByRoleId(Long roleId) {
 		return menuDao.selectMenuListByRoleId(roleId);
 	}
-	
+
 	/**
 	 * 构建前端所需要下拉树结构
 	 * @param menus 菜单列表
@@ -309,7 +309,7 @@ public class MenuService {
 		List<SysMenu> menuTrees = buildMenuTree(menus);
 		return menuTrees.stream().map(TreeSelect::new).collect(Collectors.toList());
 	}
-	
+
 	/**
 	 * 构建前端所需要树结构
 	 * @param menus 菜单列表
@@ -436,7 +436,6 @@ public class MenuService {
 	 * 根据菜单id删除菜单
 	 *
 	 * @param menuId 菜单id
-	 * @return 删除结果
 	 * @author zmzhou
 	 * @date 2020/9/9 22:29
 	 */

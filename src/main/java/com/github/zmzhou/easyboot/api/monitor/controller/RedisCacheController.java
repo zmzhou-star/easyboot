@@ -5,7 +5,10 @@
 package com.github.zmzhou.easyboot.api.monitor.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -20,7 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.zmzhou.easyboot.api.monitor.vo.RedisCacheVo;
+import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
+import com.github.zmzhou.easyboot.framework.redis.RedisUtils;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
 import io.swagger.annotations.Api;
@@ -40,15 +45,18 @@ public class RedisCacheController extends BaseController {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
+    @Autowired
+    private RedisUtils redisUtils;
+
     /**
-     * 获取redis缓存信息
+     * 获取redis缓存统计信息
      *
      * @return com.github.zmzhou.easyboot.framework.page.ApiResult<com.github.zmzhou.easyboot.api.monitor.vo.RedisCacheVo>
      * @author zmzhou
      * @since 2022/3/20 13:51
      */
     @PreAuthorize("@ebpe.hasPermission('monitor:cache:list')")
-    @ApiOperation(value = "获取redis缓存信息")
+    @ApiOperation(value = "获取redis缓存统计信息")
     @GetMapping()
     public ApiResult<RedisCacheVo> getCacheInfo() {
         Properties info = (Properties) redisTemplate.execute((RedisCallback<Object>) RedisServerCommands::info);
@@ -72,5 +80,38 @@ public class RedisCacheController extends BaseController {
             }));
         cacheVo.setCommandStats(statVos);
         return ok(cacheVo);
+    }
+
+    /**
+     * 获取redis缓存信息列表
+     *
+     * @param cacheKey 缓存key
+     * @return com.github.zmzhou.easyboot.framework.page.ApiResult<java.util.Map<java.lang.String,java.lang.Object>>
+     * @author zmzhou
+     * @since 2022/3/20 14:56
+     */
+    @PreAuthorize("@ebpe.hasPermission('monitor:cache:list')")
+    @ApiOperation(value = "获取redis缓存信息列表")
+    @GetMapping("/getCacheList")
+    public ApiResult<Map<String, Object>> getCacheList(String cacheKey) {
+        Collection<String> keys = redisUtils.keys(StringUtils.trimToEmpty(cacheKey));
+        Map<String, Object> result = new HashMap<>();
+        Optional.ofNullable(keys).ifPresent(keySet -> keySet.stream()
+            .filter(key -> !StringUtils.startsWith(key, "spring:session"))
+            .forEach(key -> {
+                if (StringUtils.contains(key, Constants.DOUBLE_COLON)) {
+                    String str = StringUtils.substringBefore(key, Constants.DOUBLE_COLON);
+                    String value = StringUtils.substringAfter(key, Constants.DOUBLE_COLON);
+                    List<String> list = new ArrayList<>();
+                    if (result.containsKey(str)) {
+                        list.addAll((List<String>) result.get(str));
+                    }
+                    list.add(value);
+                    result.put(str, list);
+                } else {
+                    result.put(key, redisUtils.get(key));
+                }
+            }));
+        return ok(result);
     }
 }
