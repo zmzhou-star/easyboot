@@ -30,6 +30,7 @@ import com.github.zmzhou.easyboot.framework.web.BaseController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 /**
  * redis缓存监控
@@ -92,8 +93,8 @@ public class RedisCacheController extends BaseController {
      */
     @PreAuthorize("@ebpe.hasPermission('monitor:cache:list')")
     @ApiOperation(value = "获取redis缓存信息列表")
-    @GetMapping("/getCacheList")
-    public ApiResult<Map<String, Object>> getCacheList(String cacheKey) {
+    @GetMapping("/getCacheData")
+    public ApiResult<Map<String, Object>> getCacheData(@ApiParam(name = "cacheKey", value = "缓存名") String cacheKey) {
         Collection<String> keys = redisUtils.keys(StringUtils.trimToEmpty(cacheKey));
         Map<String, Object> result = new HashMap<>();
         Optional.ofNullable(keys).ifPresent(keySet -> keySet.stream()
@@ -109,7 +110,7 @@ public class RedisCacheController extends BaseController {
                     list.add(value);
                     result.put(str, list);
                 } else {
-                    result.put(key, redisUtils.get(key));
+                    result.put(key, redisUtils.get(key).toString());
                 }
             }));
         return ok(result);

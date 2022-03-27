@@ -33,11 +33,13 @@ public class SysUser extends BaseEntity {
 	@Size(min = 4, max = 30, message = "用户账号长度不符")
 	@Column(name = "USER_NAME")
 	private String username;
+
 	/**
 	 * The Password.
 	 */
 	@Column(name = "PASSWORD")
-	private String password;
+	private transient String password;
+
 	/**
 	 * The Avatar.
 	 */
@@ -96,7 +98,7 @@ public class SysUser extends BaseEntity {
 	public String getPassword() {
 		return this.password;
 	}
-	
+
 	/**
 	 * Gets login date.
 	 *
@@ -108,7 +110,7 @@ public class SysUser extends BaseEntity {
 		}
 		return (Date) (this.loginDate).clone();
 	}
-	
+
 	/**
 	 * Sets login date.
 	 *
@@ -121,7 +123,7 @@ public class SysUser extends BaseEntity {
 			this.loginDate = (Date) (loginDate).clone();
 		}
 	}
-	
+
 	/**
 	 * Is admin boolean.
 	 *
@@ -130,7 +132,7 @@ public class SysUser extends BaseEntity {
 	public boolean isAdmin() {
 		return isAdmin(super.getId());
 	}
-	
+
 	/**
 	 * Is admin boolean.
 	 *
