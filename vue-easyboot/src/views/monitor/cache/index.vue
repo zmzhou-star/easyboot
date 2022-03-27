@@ -138,7 +138,7 @@ export default {
   },
   created() {
     this.getCacheInfo()
-    this.getCacheList()
+    this.getCacheData()
     this.openLoading()
   },
   methods: {
@@ -193,9 +193,9 @@ export default {
       })
     },
     /** 获取redis缓存信息列表 */
-    getCacheList() {
+    getCacheData() {
       this.tableLoading = true
-      getCacheList(this.queryParams).then((response) => {
+      getCacheData(this.queryParams).then((response) => {
         const cacheArr = []
         for (const item in response) {
           let value = response[item];
@@ -213,7 +213,7 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.pageNum = 1
-      this.getCacheList()
+      this.getCacheData()
     },
     /** 重置按钮操作 */
     resetQuery() {

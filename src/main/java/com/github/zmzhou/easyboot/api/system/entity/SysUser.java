@@ -38,7 +38,7 @@ public class SysUser extends BaseEntity {
 	 * The Password.
 	 */
 	@Column(name = "PASSWORD")
-	private transient String password;
+	private String password;
 
 	/**
 	 * The Avatar.
