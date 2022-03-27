@@ -91,7 +91,7 @@ public class RedisCacheController extends BaseController {
      * @author zmzhou
      * @since 2022/3/20 14:56
      */
-    @PreAuthorize("@ebpe.hasPermission('monitor:cache:list')")
+    @PreAuthorize("@ebpe.hasPermission('monitor:cache:data')")
     @ApiOperation(value = "获取redis缓存信息列表")
     @GetMapping("/getCacheData")
     public ApiResult<Map<String, Object>> getCacheData(@ApiParam(name = "cacheKey", value = "缓存名") String cacheKey) {

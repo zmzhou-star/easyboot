@@ -64,52 +64,55 @@
       </el-col>
     </el-row>
 
-    <el-form ref="queryForm" :model="queryParams" :inline="true">
-      <el-form-item label="缓存键" prop="cacheKey">
-        <el-input
-          v-model="queryParams.cacheKey"
-          placeholder="请输入缓存键"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button
-          v-hasPermi="['monitor:cache:list']"
-          type="primary"
-          icon="el-icon-search"
-          size="mini"
-          @click="handleQuery"
-        >搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="card-box" v-hasPermi="['monitor:cache:data']">
+      <el-form ref="queryForm" :model="queryParams" :inline="true">
+        <el-form-item label="缓存键" prop="cacheKey">
+          <el-input
+            v-model="queryParams.cacheKey"
+            placeholder="请输入缓存键"
+            clearable
+            size="small"
+            @keyup.enter.native="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            v-hasPermi="['monitor:cache:data']"
+            type="primary"
+            icon="el-icon-search"
+            size="mini"
+            @click="handleQuery"
+          >搜索</el-button>
+          <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        </el-form-item>
+      </el-form>
 
-    <el-table
-      v-loading="tableLoading"
-      stripe
-      height="485"
-      fit
-      highlight-current-row
-      :data="cacheList.slice((pageNum-1)*pageSize, pageNum*pageSize)"
-      style="width: 100%;"
-    >
-      <el-table-column label="序号" type="index" align="center">
-        <template slot-scope="scope">
-          <span>{{ (pageNum - 1) * pageSize + scope.$index + 1 }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="缓存名" align="center" prop="key" :show-overflow-tooltip="true" width="300" />
-      <el-table-column label="缓存值" align="center" prop="value" :show-overflow-tooltip="true" />
-    </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="pageNum" :limit.sync="pageSize" />
+      <el-table
+        v-loading="tableLoading"
+        stripe
+        height="485"
+        fit
+        highlight-current-row
+        :data="cacheList.slice((pageNum-1)*pageSize, pageNum*pageSize)"
+        style="width: 100%;"
+      >
+        <el-table-column label="序号" type="index" align="center">
+          <template slot-scope="scope">
+            <span>{{ (pageNum - 1) * pageSize + scope.$index + 1 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="缓存名" align="center" prop="key" :show-overflow-tooltip="true" width="300" />
+        <el-table-column label="缓存值" align="center" prop="value" :show-overflow-tooltip="true" />
+      </el-table>
+      <pagination v-show="total>0" :total="total" :page.sync="pageNum" :limit.sync="pageSize" />
+    </div>
   </div>
 </template>
 
 <script>
 import { getCacheInfo, getCacheData } from '@/api/monitor/cache'
 import echarts from 'echarts'
+import store from "@/store";
 
 export default {
   name: 'Server',
@@ -138,7 +141,9 @@ export default {
   },
   created() {
     this.getCacheInfo()
-    this.getCacheData()
+    if (store.getters.name === 'admin') {
+      this.getCacheData()
+    }
     this.openLoading()
   },
   methods: {
@@ -198,7 +203,7 @@ export default {
       getCacheData(this.queryParams).then((response) => {
         const cacheArr = []
         for (const item in response) {
-          let value = response[item];
+          const value = response[item];
           if (value instanceof Array) {
             cacheArr.push({ 'key': item, 'value': value.join(', ') })
           } else {
