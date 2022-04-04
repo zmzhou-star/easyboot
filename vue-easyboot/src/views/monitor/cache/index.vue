@@ -112,7 +112,7 @@
 <script>
 import { getCacheInfo, getCacheData } from '@/api/monitor/cache'
 import echarts from 'echarts'
-import store from "@/store";
+import { checkPermi, checkRole } from "@/utils/permission";
 
 export default {
   name: 'Server',
@@ -141,7 +141,7 @@ export default {
   },
   created() {
     this.getCacheInfo()
-    if (store.getters.name === 'admin') {
+    if (checkRole(['admin']) || checkPermi(['monitor:cache:data'])) {
       this.getCacheData()
     }
     this.openLoading()
@@ -203,7 +203,7 @@ export default {
       getCacheData(this.queryParams).then((response) => {
         const cacheArr = []
         for (const item in response) {
-          const value = response[item];
+          const value = response[item]
           if (value instanceof Array) {
             cacheArr.push({ 'key': item, 'value': value.join(', ') })
           } else {
