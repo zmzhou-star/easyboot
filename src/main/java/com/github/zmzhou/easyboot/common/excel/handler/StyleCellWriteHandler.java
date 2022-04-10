@@ -17,8 +17,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.Head;
+import com.alibaba.excel.metadata.data.WriteCellData;
 import com.alibaba.excel.write.handler.CellWriteHandler;
 import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.holder.WriteTableHolder;
@@ -27,12 +27,11 @@ import com.github.zmzhou.easyboot.common.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * 自定义拦截器 。Excel样式个性化设置
  * The type Style cell write handler.
  *
  * @author zmzhou
  * @version 1.0
- * @title StyleCellWriteHandler
- * @description 自定义拦截器 。Excel样式个性化设置
  * @date 2020 /8/30 21:57
  */
 @Slf4j
@@ -64,14 +63,8 @@ public class StyleCellWriteHandler implements CellWriteHandler {
     }
 
     @Override
-    public void afterCellDataConverted(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder,
-                               CellData cellData, Cell cell, Head head, Integer integer, Boolean aBoolean) {
-        log.debug("afterCellDataConverted");
-    }
-
-    @Override
     public void afterCellDispose(WriteSheetHolder writeSheetHolder, WriteTableHolder writeTableHolder,
-                 List<CellData> list, Cell cell, Head head, Integer integer, Boolean isHead) {
+            List<WriteCellData<?>> list, Cell cell, Head head, Integer integer, Boolean isHead) {
         // 这里可以对cell进行任何操作
         Workbook workbook = writeSheetHolder.getSheet().getWorkbook();
         CellStyle cellStyle = workbook.createCellStyle();

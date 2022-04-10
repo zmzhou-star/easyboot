@@ -2,8 +2,9 @@ package com.github.zmzhou.easyboot.common.excel.converters;
 
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.enums.CellDataTypeEnum;
-import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.GlobalConfiguration;
+import com.alibaba.excel.metadata.data.ReadCellData;
+import com.alibaba.excel.metadata.data.WriteCellData;
 import com.alibaba.excel.metadata.property.ExcelContentProperty;
 import com.github.zmzhou.easyboot.common.enums.SuccessStatus;
 
@@ -53,8 +54,8 @@ public class SuccessConverter implements Converter<String> {
      * @return the string
      */
     @Override
-    public String convertToJavaData(CellData cellData, ExcelContentProperty contentProperty,
-                GlobalConfiguration globalConfiguration) {
+    public String convertToJavaData(ReadCellData<?> cellData, ExcelContentProperty contentProperty,
+                                    GlobalConfiguration globalConfiguration) {
         return SuccessStatus.getCode(cellData.getStringValue());
     }
 
@@ -67,8 +68,8 @@ public class SuccessConverter implements Converter<String> {
      * @return the cell data
      */
     @Override
-    public CellData<String> convertToExcelData(String value, ExcelContentProperty contentProperty,
-               GlobalConfiguration globalConfiguration) {
-        return new CellData<>(SuccessStatus.getDesc(value));
+    public WriteCellData<String> convertToExcelData(String value, ExcelContentProperty contentProperty,
+                                                    GlobalConfiguration globalConfiguration) {
+        return new WriteCellData<>(SuccessStatus.getDesc(value));
     }
 }

@@ -2,18 +2,18 @@ package com.github.zmzhou.easyboot.common.excel.converters;
 
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.enums.CellDataTypeEnum;
-import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.GlobalConfiguration;
+import com.alibaba.excel.metadata.data.ReadCellData;
+import com.alibaba.excel.metadata.data.WriteCellData;
 import com.alibaba.excel.metadata.property.ExcelContentProperty;
 import com.github.zmzhou.easyboot.common.enums.Gender;
 
 /**
+ * 性别转换器
  * The type Gender converter.
  *
  * @author zmzhou
  * @version 1.0
- * @title GenderConverter
- * @description 性别转换器
  * @date 2020 /9/3 22:39
  */
 public class GenderConverter implements Converter<String> {
@@ -55,7 +55,7 @@ public class GenderConverter implements Converter<String> {
      * @return the string
      */
     @Override
-    public String convertToJavaData(CellData cellData, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
+    public String convertToJavaData(ReadCellData<?> cellData, ExcelContentProperty contentProperty, GlobalConfiguration globalConfiguration) {
         return Gender.getCode(cellData.getStringValue());
     }
 
@@ -68,8 +68,8 @@ public class GenderConverter implements Converter<String> {
      * @return the cell data
      */
     @Override
-    public CellData<String> convertToExcelData(String value, ExcelContentProperty contentProperty,
-                                        GlobalConfiguration globalConfiguration) {
-        return new CellData<>(Gender.getZh(value));
+    public WriteCellData<String> convertToExcelData(String value, ExcelContentProperty contentProperty,
+                                                    GlobalConfiguration globalConfiguration) {
+        return new WriteCellData<>(Gender.getZh(value));
     }
 }
