@@ -3,17 +3,22 @@ package com.github.zmzhou.easyboot.framework.config;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.CacheErrorHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
@@ -47,6 +52,23 @@ public class RedisConfig extends CachingConfigurerSupport {
         return RedisCacheConfiguration.defaultCacheConfig()
             .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(fastJsonRedisSerializer))
             .entryTtl(Duration.ofHours(6));
+    }
+
+    /**
+     * 自定义缓存管理器
+     *
+     * @param redisTemplate RedisTemplate
+     * @return org.springframework.cache.CacheManager
+     * @author zmzhou
+     * @since 2022/4/19 21:59
+     */
+    @Bean(name = "customizerCacheManager")
+    public CacheManager customizerCacheManager(RedisTemplate<String, Object> redisTemplate) {
+        return new RedisCacheManager(
+            RedisCacheWriter.nonLockingRedisCacheWriter(Objects.requireNonNull(redisTemplate.getConnectionFactory())),
+            RedisCacheConfiguration.defaultCacheConfig().serializeValuesWith(
+                    RedisSerializationContext.fromSerializer(new Jackson2JsonRedisSerializer<>(Object.class))
+                        .getValueSerializationPair()).entryTtl(Duration.ofHours(1)));
     }
 
     /**
