@@ -37,18 +37,16 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @EnableRedisHttpSession
 public class RedisConfig extends CachingConfigurerSupport {
-
     /**
      *  设置 redis 数据默认过期时间，默认6小时
      *  设置@cacheable 序列化方式
      */
     @Bean
-    public RedisCacheConfiguration redisCacheConfiguration(){
+    public RedisCacheConfiguration redisCacheConfiguration() {
         FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
-        RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig();
-        configuration = configuration.serializeValuesWith(RedisSerializationContext.SerializationPair
-                .fromSerializer(fastJsonRedisSerializer)).entryTtl(Duration.ofHours(6));
-        return configuration;
+        return RedisCacheConfiguration.defaultCacheConfig()
+            .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(fastJsonRedisSerializer))
+            .entryTtl(Duration.ofHours(6));
     }
 
     /**
