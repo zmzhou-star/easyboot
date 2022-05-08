@@ -12,7 +12,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * @description 返回值对象
+ * 返回值对象
+ *
  * @author zmzhou
  * @date 2020/07/02 17:11
  */
@@ -29,7 +30,8 @@ public class ApiResult<T> implements Serializable {
     private String msg = HttpStatus.OK.getReasonPhrase();
     /** 列表数据 */
     @ApiModelProperty(value = "请求返回的数据")
-    private transient T data;
+    private T data;
+
     /**
      * 构造器
      * @author zmzhou
@@ -38,9 +40,10 @@ public class ApiResult<T> implements Serializable {
     public ApiResult() {
     	// 构造器
     }
-    
+
     /**
-     * @description 错误请求
+     * 错误请求
+     *
      * @author zmzhou
      * @date 2020/07/03 14:12
      */
@@ -53,7 +56,7 @@ public class ApiResult<T> implements Serializable {
     public static <T> ApiResult<T> builder() {
         return new ApiResult<>();
     }
-    
+
     /**
      * 请求失败设置失败信息
      * @param errorCode 错误码

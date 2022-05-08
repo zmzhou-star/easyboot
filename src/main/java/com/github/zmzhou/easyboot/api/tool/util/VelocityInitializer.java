@@ -3,9 +3,7 @@ package com.github.zmzhou.easyboot.api.tool.util;
 import java.util.Properties;
 
 import org.apache.velocity.app.Velocity;
-import org.apache.velocity.runtime.RuntimeConstants;
-
-import com.github.zmzhou.easyboot.common.Constants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 
 /**
  * VelocityEngine工厂初始化
@@ -32,11 +30,7 @@ public final class VelocityInitializer {
 	public static void initVelocity() {
 		Properties p = new Properties();
 		// 加载classpath目录下的vm文件
-		p.setProperty("file.resource.loader.class",
-				"org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-		// 定义字符集
-		p.setProperty(RuntimeConstants.ENCODING_DEFAULT, Constants.CHARSETS.displayName());
-		p.setProperty(RuntimeConstants.OUTPUT_ENCODING, Constants.CHARSETS.displayName());
+		p.setProperty("file.resource.loader.class", ClasspathResourceLoader.class.getName());
 		// 初始化Velocity引擎，指定配置Properties
 		Velocity.init(p);
 	}

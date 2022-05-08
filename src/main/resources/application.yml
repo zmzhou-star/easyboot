@@ -47,6 +47,8 @@ spring:
       # 热部署重启开关，不重启实现快速热部署
       enabled: false
   mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
     static-path-pattern: /static/**
     view:
       # 给返回的页面添加后缀名
