@@ -179,6 +179,17 @@
                 <artifactId>guava</artifactId>
                 <version>31.1-jre</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/io.swagger/swagger-annotations -->
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xmlbeans</groupId>
+                <artifactId>xmlbeans</artifactId>
+                <version>5.0.3</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -382,20 +393,10 @@
             <artifactId>knife4j-spring-boot-starter</artifactId>
             <exclusions>
                 <exclusion>
-                    <artifactId>swagger-annotations</artifactId>
-                    <groupId>io.swagger</groupId>
-                </exclusion>
-                <exclusion>
                     <artifactId>javassist</artifactId>
                     <groupId>org.javassist</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/io.swagger/swagger-annotations -->
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-annotations</artifactId>
-            <version>${swagger.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
