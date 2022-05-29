@@ -166,7 +166,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.80</version>
+                <version>1.2.83</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -207,10 +207,6 @@
                 <exclusion>
                     <groupId>com.alibaba.fastjson2</groupId>
                     <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.alibaba</groupId>
-                    <artifactId>fastjson</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>commons-lang</groupId>
