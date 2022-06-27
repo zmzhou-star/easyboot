@@ -145,7 +145,7 @@ export default {
       // 日期范围
       dateRange: [this.parseTime(new Date(), '{y}-{m}-{d}'), this.parseTime(new Date(), '{y}-{m}-{d}')],
       queryParams: {},
-      recruitAddress: 'https://zmzhou-star.gitee.io/learnotes/#/%E5%8D%8E%E4%B8%BA%E6%8B%9B%E8%81%98/README',
+      recruitAddress: 'https://zmzhou-star.gitee.io/learnotes/#/README',
       height: document.documentElement.clientHeight - 150 + 'px;',
       loading: true
     }

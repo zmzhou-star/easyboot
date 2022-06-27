@@ -1,6 +1,5 @@
 package com.github.zmzhou.easyboot.framework.core;
 
-import org.springframework.boot.autoconfigure.jdbc.DataSourceSchemaCreatedEvent;
 import org.springframework.boot.availability.AvailabilityChangeEvent;
 import org.springframework.boot.context.event.ApplicationContextInitializedEvent;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
@@ -51,8 +50,6 @@ public class ApplicationEventListener implements ApplicationListener<Application
 			log.info("应用已处于活动状态");
 		} else if (event instanceof ApplicationFailedEvent) {
 			log.info("应用启动失败");
-		} else if (event instanceof DataSourceSchemaCreatedEvent) {
-			log.info("数据源架构创建的事件");
 		} else if (event instanceof ContextStoppedEvent) {
 			log.info("应用停止");
 		} else if (event instanceof ContextClosedEvent) {
