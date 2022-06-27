@@ -116,6 +116,9 @@ public final class Constants {
     /** 定时任务暂停 */
     public static final String PAUSE = "0";
 
+    /** json数据类型 */
+    public static final String JSON_TYPE = "@type";
+
 	/**
      * 私有构造器
      * @author zmzhou

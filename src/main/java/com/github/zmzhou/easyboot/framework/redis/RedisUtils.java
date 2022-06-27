@@ -1,5 +1,6 @@
 package com.github.zmzhou.easyboot.framework.redis;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
@@ -7,6 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.github.zmzhou.easyboot.common.Constants;
+
+import lombok.SneakyThrows;
 
 /**
  * @author zmzhou
@@ -18,7 +25,7 @@ import org.springframework.stereotype.Component;
 public final class RedisUtils {
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
-	
+
 	/**
 	 * 缓存基本的对象，Integer、String、实体类等
 	 * @param key   缓存的键值
@@ -30,7 +37,7 @@ public final class RedisUtils {
 		operation.set(key, value);
 		return operation;
 	}
-	
+
 	/**
 	 * 缓存基本的对象，Integer、String、实体类等
 	 * @param key      缓存的键值
@@ -44,18 +51,30 @@ public final class RedisUtils {
 		operation.set(key, value, timeout, timeUnit);
 		return operation;
 	}
-	
+
 	/**
 	 * 获得缓存的基本对象。
 	 *
 	 * @param key 缓存键值
 	 * @return 缓存键值对应的数据
 	 */
+	@SneakyThrows
 	public <T> T get(String key) {
-		ValueOperations<String, T> operation = opsForValue();
-		return operation.get(key);
-	}
-	
+        ValueOperations<String, T> operation = opsForValue();
+        T value = operation.get(key);
+        if (value instanceof JSONArray) {
+            JSONArray array = (JSONArray) value;
+            for (int i = 0; i < array.size(); i++) {
+                JSONObject obj = (JSONObject) array.get(i);
+                array.set(i, obj.toJavaObject(Class.forName(obj.getString(Constants.JSON_TYPE))));
+            }
+        } else if (value instanceof JSONObject) {
+            JSONObject obj = (JSONObject) value;
+            value = obj.toJavaObject((Type) Class.forName(obj.getString(Constants.JSON_TYPE)));
+        }
+        return value;
+    }
+
 	/**
 	 * 删除单个对象
 	 * @param key 缓存键
@@ -65,9 +84,9 @@ public final class RedisUtils {
 	public void delete(String key) {
 		redisTemplate.delete(key);
 	}
-	
+
 	/**
-	 * 根据缓存键集合删除缓存集合 
+	 * 根据缓存键集合删除缓存集合
 	 * @param keys 缓存键集合
 	 * @author zmzhou
 	 * @date 2020/11/17 11:43
@@ -75,7 +94,7 @@ public final class RedisUtils {
 	public void delete(Collection<String> keys) {
 		redisTemplate.delete(keys);
 	}
-	
+
 	/**
 	 * 获得缓存的缓存键集合列表
 	 *

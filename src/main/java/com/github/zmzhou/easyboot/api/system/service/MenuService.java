@@ -58,7 +58,6 @@ public class MenuService {
 	 * @author zmzhou
 	 * @date 2020/07/21 10:33
 	 */
-	@Cacheable(key = "#user.username")
 	public Set<String> getMenuPermission(SysUser user) {
 		Set<String> permsSet = new HashSet<>();
 		// 管理员拥有所有权限
