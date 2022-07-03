@@ -75,6 +75,9 @@ public final class Constants {
     /** 双冒号 :: */
     public static final String DOUBLE_COLON = "::";
 
+    /** 减号 - */
+    public static final String MINUS = "-";
+
     /** 下划线 _ */
     public static final String UNDERLINE = "_";
     /** 文件分隔符 / */

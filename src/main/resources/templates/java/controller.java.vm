@@ -1,5 +1,5 @@
 /*
- * Copyright © 2020-present zmzhou-star. All Rights Reserved.
+ * Copyright © 2022-2022 zmzhou-star. All Rights Reserved.
  */
 
 package ${packageName}.controller;
@@ -48,6 +48,7 @@ public class ${ClassName}Controller extends BaseController {
 
 	/**
 	 * 查询${functionName}列表
+     *
 	 * @param params 查询参数
 	 * @return ApiResult<TableDataInfo>
 	 * @author ${author}
@@ -64,6 +65,7 @@ public class ${ClassName}Controller extends BaseController {
 
 	/**
 	 * 根据id获取${functionName}详细信息
+     *
 	 * @param id ${functionName}id
 	 * @return ApiResult<${ClassName}>
 	 * @author ${author}
@@ -78,6 +80,7 @@ public class ${ClassName}Controller extends BaseController {
 
 	/**
 	 * 新增${functionName}
+     *
 	 * @param vo ${functionName}信息
 	 * @return ApiResult<${ClassName}>
 	 * @author ${author}
@@ -92,6 +95,7 @@ public class ${ClassName}Controller extends BaseController {
 
 	/**
 	 * 修改${functionName}
+     *
 	 * @param vo ${functionName}信息
 	 * @return ApiResult<${ClassName}>
 	 * @author ${author}
@@ -106,6 +110,7 @@ public class ${ClassName}Controller extends BaseController {
 
 	/**
 	 * 删除${functionName}
+     *
 	 * @param ids ${functionName}id集合
 	 * @return 删除结果
 	 * @author ${author}
@@ -122,6 +127,7 @@ public class ${ClassName}Controller extends BaseController {
 
 	/**
 	 * 导出excel
+     *
 	 * @param params 查询参数
 	 * @return ApiResult<String> excel文件名
 	 * @author ${author}

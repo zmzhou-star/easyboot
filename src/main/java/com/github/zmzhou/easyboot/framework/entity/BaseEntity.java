@@ -24,6 +24,7 @@ public class BaseEntity extends BaseIdEntity {
      * serialVersionUID
      */
     private static final long serialVersionUID = -519908860784980193L;
+
     /**
      * 创建者
      */

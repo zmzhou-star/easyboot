@@ -7,12 +7,15 @@ import java.util.Date;
 
 import org.apache.commons.lang3.time.DateFormatUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 时间工具类
  *
  * @author zmzhou
  * @date 2020/07/02 16:52
  */
+@Slf4j
 public final class DateUtils {
 	/**
 	 * yyyy-MM-dd
@@ -80,6 +83,7 @@ public final class DateUtils {
 		try {
 			return org.apache.commons.lang3.time.DateUtils.parseDate(str.toString(), PARSE_PATTERNS);
 		} catch (ParseException e) {
+		    log.error("parse date:{} error", str, e);
 			return null;
 		}
 	}
