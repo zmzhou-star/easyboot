@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.zmzhou.easyboot.api.miniapp.lottery.entity.LotteryHistory;
 import com.github.zmzhou.easyboot.api.miniapp.lottery.service.LotteryService;
 import com.github.zmzhou.easyboot.api.miniapp.lottery.vo.LotteryHistoryParams;
+import com.github.zmzhou.easyboot.api.system.entity.SysMenu;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.page.TableDataInfo;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
@@ -33,22 +35,24 @@ import io.swagger.annotations.ApiOperation;
  */
 @Api(tags = {"彩票管理"})
 @RestController
-@RequestMapping("/lottery")
+@RequestMapping("/lottery/history")
 public class LotteryController extends BaseController {
     @Autowired
     private LotteryService lotteryService;
 
     /**
-     * 采集彩票大乐透历史开奖数据
+     * 根据id查询彩票历史数据
      *
-     * @return com.github.zmzhou.easyboot.framework.page.ApiResult<java.lang.Boolean>
+     * @param id ID
+     * @return com.github.zmzhou.easyboot.framework.page.ApiResult<com.github.zmzhou.easyboot.api.system.entity.SysMenu>
      * @author zmzhou
-     * @since 2022/7/2 18:08
+     * @since 2022/7/17 18:55
      */
-    @GetMapping(path = "collectDltHistoryData")
-    @ApiOperation(value = "采集彩票大乐透历史开奖数据")
-    public ApiResult<Boolean> collectDltHistoryData(){
-        return ok(lotteryService.collectDltHistoryData());
+    @PreAuthorize("@ebpe.hasPermission('miniapp.lottery:history:query')")
+    @GetMapping(value = {"{id}"})
+    @ApiOperation(value = "根据id查询彩票历史数据")
+    public ApiResult<SysMenu> getOne(@PathVariable(value = "id", required = false) Long id) {
+        return ok(lotteryService.findById(id));
     }
 
     /**
@@ -61,7 +65,7 @@ public class LotteryController extends BaseController {
      */
     @PreAuthorize("@ebpe.hasPermission('miniapp.lottery:history:list')")
     @ApiOperation(value = "查询彩票历史数据列表")
-    @PostMapping(path = "list")
+    @PostMapping(path = "/list")
     public ApiResult<TableDataInfo> list(@RequestBody(required = false) LotteryHistoryParams params) {
         Pageable pageable = getPageable(params);
         Page<LotteryHistory> list = lotteryService.findAll(params, pageable);

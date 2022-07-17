@@ -41,7 +41,7 @@ public class SysMenu extends BaseEntity implements Comparable<SysMenu> {
 	 * The Parent id.
 	 */
 	@Column(name = "PARENT_ID")
-	private Long parentId;
+	private long parentId;
 	/**
 	 * The Sort by.
 	 */
@@ -87,7 +87,7 @@ public class SysMenu extends BaseEntity implements Comparable<SysMenu> {
 	 * The Icon.
 	 */
 	private String icon;
-	
+
 	/** 子菜单 */
 	@Transient
 	private List<SysMenu> children = new ArrayList<>();

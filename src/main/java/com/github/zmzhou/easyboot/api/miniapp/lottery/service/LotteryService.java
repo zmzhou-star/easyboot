@@ -114,12 +114,14 @@ public class LotteryService extends BaseService<LotteryHistoryParams> {
         // 构造分页排序条件
         Pageable page = pageable;
         if (pageable.getSort().equals(Sort.unsorted())) {
-            Sort sort = Sort.by(Sort.Order.desc(Constants.STATUS));
+            Sort sort = Sort.by(Sort.Order.desc("lotteryId"));
             page = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
         }
         // 构造查询条件
         Specification<LotteryHistory> spec = new SimpleSpecificationBuilder<LotteryHistory>()
-            .and(Constants.STATUS, Operator.EQUAL, params.getStatus())
+            .and("lotteryId", Operator.EQUAL, params.getLotteryId())
+            .and("lotteryType", Operator.EQUAL, params.getLotteryType())
+            .between("and", Constants.CREATE_TIME, params.getBeginTime(), params.getEndTime())
             .build();
         return dao.findAll(spec, page);
     }

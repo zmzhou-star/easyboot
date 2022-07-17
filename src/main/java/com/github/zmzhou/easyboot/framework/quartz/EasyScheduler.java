@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 
+import com.github.zmzhou.easyboot.api.miniapp.lottery.service.LotteryService;
 import com.github.zmzhou.easyboot.api.system.service.UserService;
 import com.github.zmzhou.easyboot.common.Constants;
 import com.github.zmzhou.easyboot.common.utils.FileUtil;
@@ -31,8 +32,13 @@ import lombok.extern.slf4j.Slf4j;
 public class EasyScheduler {
 	@Autowired
 	private RedisUtils redisUtils;
+
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private LotteryService lotteryService;
+
 	/**
 	 * 文件下载保存路径
 	 */
@@ -82,9 +88,20 @@ public class EasyScheduler {
 		log.info("删除目录：[{}]下的临时文件开始...", downloadPath);
 		FileUtil.deleteFile(downloadPath, false);
 	}
-	
+
 	/**
-	 * 执行有参定时任务 
+	 * 采集彩票数据
+	 *
+	 * @author zmzhou
+	 * @since 2022/7/17 16:44
+	 */
+	public void collectLotteryData() {
+        log.info("定时采集彩票数据开始...");
+        lotteryService.collectDltHistoryData();
+    }
+
+	/**
+	 * 执行有参定时任务
 	 * @param params params
 	 * @author zmzhou
 	 * @date 2020/12/18 18:57

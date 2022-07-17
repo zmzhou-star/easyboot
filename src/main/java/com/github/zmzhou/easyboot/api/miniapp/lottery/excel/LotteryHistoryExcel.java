@@ -77,25 +77,25 @@ public class LotteryHistoryExcel extends BaseExcel3 {
 
     /** 一等奖数量 */
     @ExcelProperty(value = {EXCEL_NAME, "", "一等奖数量"})
-    private String prize1Num;
+    private String prizeNum1;
 
     /** 一等奖奖金 */
     @ExcelProperty(value = {EXCEL_NAME, "", "一等奖奖金"})
-    private String prize1Bonus;
+    private String prizeBonus1;
 
     /** 二等奖数量 */
     @ExcelProperty(value = {EXCEL_NAME, "", "二等奖数量"})
-    private String prize2Num;
+    private String prizeNum2;
 
     /** 二等奖奖金 */
     @ExcelProperty(value = {EXCEL_NAME, "", "二等奖奖金"})
-    private String prize2Bonus;
+    private String prizeBonus2;
 
     /** 三等奖数量 */
     @ExcelProperty(value = {EXCEL_NAME, "", "三等奖数量"})
-    private String prize3Num;
+    private String prizeNum3;
 
     /** 三等奖奖金 */
     @ExcelProperty(value = {EXCEL_NAME, "", "三等奖奖金"})
-    private String prize3Bonus;
+    private String prizeBonus3;
 }

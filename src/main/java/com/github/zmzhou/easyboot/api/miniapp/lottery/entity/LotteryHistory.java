@@ -8,6 +8,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.github.zmzhou.easyboot.framework.entity.BaseEntity;
 
 import lombok.Data;
@@ -36,6 +37,7 @@ public class LotteryHistory extends BaseEntity {
     private String salesAmount;
 
     /** 开奖日期 */
+    @JSONField(format = "yyyy-MM-dd")
     private Date lotteryDate;
 
     /** 红球1 */

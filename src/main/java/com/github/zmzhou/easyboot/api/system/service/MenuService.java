@@ -14,7 +14,6 @@ import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -180,7 +179,7 @@ public class MenuService {
 	private List<SysMenu> getChildList(List<SysMenu> list, SysMenu menu) {
 		List<SysMenu> childList = new ArrayList<>();
 		for (SysMenu sysMenu : list) {
-			if (sysMenu.getParentId().longValue() == menu.getId().longValue()) {
+			if (sysMenu.getParentId() == menu.getId()) {
 				childList.add(sysMenu);
 			}
 		}
