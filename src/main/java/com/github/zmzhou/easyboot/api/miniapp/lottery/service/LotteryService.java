@@ -74,9 +74,10 @@ public class LotteryService extends BaseService<LotteryHistoryParams> {
             Document document = Jsoup.connect(UriEncoder.encode(dltUrlConfig.getConfigValue()))
                 .data("action", "years")
                 .data("year", String.valueOf(year)).post();
-            Elements elements = document.getElementsByClass("tr-blue");
+            Elements elements = document.getElementsByTag("tr");
             log.info("采集{}年的数据共{}条", year, elements.size());
-            for (Element element : elements) {
+            for (int i = 2; i < elements.size(); i++) {
+                Element element = elements.get(i);
                 Elements tds = element.getElementsByTag("td");
                 LotteryHistory history = new LotteryHistory();
                 history.setLotteryType("dlt");
