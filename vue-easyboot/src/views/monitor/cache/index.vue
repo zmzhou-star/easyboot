@@ -64,7 +64,7 @@
       </el-col>
     </el-row>
 
-    <div class="card-box" v-hasPermi="['monitor:cache:data']">
+    <div v-hasPermi="['monitor:cache:data']" class="card-box">
       <el-form ref="queryForm" :model="queryParams" :inline="true">
         <el-form-item label="缓存键" prop="cacheKey">
           <el-input
@@ -112,7 +112,7 @@
 <script>
 import { getCacheInfo, getCacheData } from '@/api/monitor/cache'
 import echarts from 'echarts'
-import { checkPermi, checkRole } from "@/utils/permission";
+import { checkPermi, checkRole } from '@/utils/permission'
 
 export default {
   name: 'Server',

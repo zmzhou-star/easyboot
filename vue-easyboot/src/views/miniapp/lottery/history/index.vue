@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
       <el-form-item label="期号" prop="lotteryId">
         <el-input
           v-model="queryParams.lotteryId"
@@ -50,7 +50,7 @@
         >导出
         </el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
     </el-row>
 
     <el-table
@@ -63,29 +63,29 @@
       highlight-current-row
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" align="center"/>
-      <el-table-column label="期号" align="center" prop="lotteryId"/>
-      <el-table-column label="彩票类型" align="center" prop="lotteryType" :formatter="lotteryTypeFormat"/>
-      <el-table-column label="开奖日期" align="center" prop="lotteryDate" width="120"/>
+      <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="期号" align="center" prop="lotteryId" />
+      <el-table-column label="彩票类型" align="center" prop="lotteryType" :formatter="lotteryTypeFormat" />
+      <el-table-column label="开奖日期" align="center" prop="lotteryDate" width="120" />
       <el-table-column label="开奖结果" align="center" prop="blue1" width="235">
         <template slot-scope="scope">
           <div class="ball">
-            <div class="red">{{scope.row.red1}}</div>
-            <div class="red">{{scope.row.red2}}</div>
-            <div class="red">{{scope.row.red3}}</div>
-            <div class="red">{{scope.row.red4}}</div>
-            <div class="red">{{scope.row.red5}}</div>
-            <div class="blue">{{scope.row.blue1}}</div>
-            <div class="blue">{{scope.row.blue2}}</div>
+            <div class="red">{{ scope.row.red1 }}</div>
+            <div class="red">{{ scope.row.red2 }}</div>
+            <div class="red">{{ scope.row.red3 }}</div>
+            <div class="red">{{ scope.row.red4 }}</div>
+            <div class="red">{{ scope.row.red5 }}</div>
+            <div class="blue">{{ scope.row.blue1 }}</div>
+            <div class="blue">{{ scope.row.blue2 }}</div>
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="一等奖数量" align="center" prop="prizeNum1"/>
-      <el-table-column label="一等奖奖金" align="center" prop="prizeBonus1"/>
-      <el-table-column label="二等奖数量" align="center" prop="prizeNum2"/>
-      <el-table-column label="二等奖奖金" align="center" prop="prizeBonus2"/>
-      <el-table-column label="三等奖数量" align="center" prop="prizeNum3"/>
-      <el-table-column label="三等奖奖金" align="center" prop="prizeBonus3"/>
+      <el-table-column label="一等奖数量" align="center" prop="prizeNum1" />
+      <el-table-column label="一等奖奖金" align="center" prop="prizeBonus1" />
+      <el-table-column label="二等奖数量" align="center" prop="prizeNum2" />
+      <el-table-column label="二等奖奖金" align="center" prop="prizeBonus2" />
+      <el-table-column label="三等奖数量" align="center" prop="prizeNum3" />
+      <el-table-column label="三等奖奖金" align="center" prop="prizeBonus3" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -111,26 +111,26 @@
     <el-dialog :title="title" :visible.sync="open" width="780px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <div>
-          第{{form.lotteryId}}期   {{form.lotteryDate}}
+          第{{ form.lotteryId }}期   {{ form.lotteryDate }}
         </div>
         <div class="ball">
-          <div class="red">{{form.red1}}</div>
-          <div class="red">{{form.red2}}</div>
-          <div class="red">{{form.red3}}</div>
-          <div class="red">{{form.red4}}</div>
-          <div class="red">{{form.red5}}</div>
-          <div class="blue">{{form.blue1}}</div>
-          <div class="blue">{{form.blue2}}</div>
+          <div class="red">{{ form.red1 }}</div>
+          <div class="red">{{ form.red2 }}</div>
+          <div class="red">{{ form.red3 }}</div>
+          <div class="red">{{ form.red4 }}</div>
+          <div class="red">{{ form.red5 }}</div>
+          <div class="blue">{{ form.blue1 }}</div>
+          <div class="blue">{{ form.blue2 }}</div>
         </div>
 
         <div>
-          一等奖{{form.prizeNum1}}注 奖金：{{form.prizeBonus1}}
+          一等奖{{ form.prizeNum1 }}注 奖金：{{ form.prizeBonus1 }}
         </div>
         <div>
-          二等奖{{form.prizeNum2}}注 奖金：{{form.prizeBonus2}}
+          二等奖{{ form.prizeNum2 }}注 奖金：{{ form.prizeBonus2 }}
         </div>
         <div>
-          三等奖{{form.prizeNum3}}注 奖金：{{form.prizeBonus3}}
+          三等奖{{ form.prizeNum3 }}注 奖金：{{ form.prizeBonus3 }}
         </div>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -147,10 +147,10 @@ import {
   addHistory,
   updateHistory,
   exportHistory
-} from "@/api/miniapp/lottery/history";
+} from '@/api/miniapp/lottery/history'
 
 export default {
-  name: "History",
+  name: 'History',
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -180,7 +180,7 @@ export default {
       // 彩票历史数据表格数据
       historyList: [],
       // 弹出层标题
-      title: "",
+      title: '',
       // 是否显示弹出层
       open: false,
       // 彩票类型字典
@@ -190,48 +190,48 @@ export default {
         pageNum: 1,
         pageSize: 10,
         lotteryId: null,
-        lotteryType: null,
+        lotteryType: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {}
-    };
+    }
   },
   created() {
-    this.getList();
-    this.getDicts("lotteryType").then(response => {
-      this.lotteryTypeOptions = response;
-    });
+    this.getList()
+    this.getDicts('lotteryType').then(response => {
+      this.lotteryTypeOptions = response
+    })
   },
   methods: {
     /** 查询彩票历史数据列表 */
     getList() {
-      this.loading = true;
+      this.loading = true
       listHistory(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-        this.historyList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+        this.historyList = response.rows
+        this.total = response.total
+        this.loading = false
+      })
     },
     // 彩票类型字典翻译
     lotteryTypeFormat(row) {
-      return this.selectDictLabel(this.lotteryTypeOptions, row.lotteryType);
+      return this.selectDictLabel(this.lotteryTypeOptions, row.lotteryType)
     },
     // 取消按钮
     cancel() {
-      this.open = false;
+      this.open = false
     },
 
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
+      this.queryParams.pageNum = 1
+      this.getList()
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
-      this.handleQuery();
+      this.resetForm('queryForm')
+      this.handleQuery()
     },
     /** 多选框选中数据 */
     handleSelectionChange(selection) {
@@ -244,28 +244,28 @@ export default {
     getDetail(row) {
       const id = row.id || this.ids
       getHistory(id).then(response => {
-        this.form = response;
-        this.open = true;
-        this.title = "查看彩票历史详情";
-      });
+        this.form = response
+        this.open = true
+        this.title = '查看彩票历史详情'
+      })
     },
 
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
+      const queryParams = this.queryParams
       queryParams.excelName = '彩票历史数据'
-      this.$confirm('是否确认导出所有彩票历史数据数据项?', "操作警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      }).then(function () {
-        return exportHistory(queryParams);
+      this.$confirm('是否确认导出所有彩票历史数据数据项?', '操作警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function() {
+        return exportHistory(queryParams)
       }).then(response => {
-        this.download(response);
+        this.download(response)
       })
     }
   }
-};
+}
 </script>
 <style>
 .el-form > div {
