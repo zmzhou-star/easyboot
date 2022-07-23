@@ -122,7 +122,7 @@ public class LotteryService extends BaseService<LotteryHistoryParams> {
         Specification<LotteryHistory> spec = new SimpleSpecificationBuilder<LotteryHistory>()
             .and("lotteryId", Operator.EQUAL, params.getLotteryId())
             .and("lotteryType", Operator.EQUAL, params.getLotteryType())
-            .between("and", Constants.CREATE_TIME, params.getBeginTime(), params.getEndTime())
+            .between("and", "lotteryDate", params.getBeginTime(), params.getEndTime())
             .build();
         return dao.findAll(spec, page);
     }
