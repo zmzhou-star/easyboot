@@ -144,8 +144,6 @@
 import {
   listHistory,
   getHistory,
-  addHistory,
-  updateHistory,
   exportHistory
 } from '@/api/miniapp/lottery/history'
 

@@ -129,13 +129,11 @@ export const constantRoutes = [
     path: '/401',
     component: () => import('@/views/error-page/401'),
     hidden: true
-  },
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  }
 ]
 
 const createRouter = () => new Router({
-  mode: process.env.NODE_ENV === 'production' ? 'history' : 'hash', // require service support 去掉url中的#
+  mode: 'hash', // require service support 去掉url中的#
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })
