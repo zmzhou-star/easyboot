@@ -49,6 +49,16 @@
           @click="handleExport"
         >导出
         </el-button>
+        <el-col :span="1.5">
+          <el-button
+            v-hasPermi="['miniapp.lottery:history:remove']"
+            type="danger"
+            icon="el-icon-delete"
+            size="mini"
+            :disabled="multiple"
+            @click="handleDelete"
+          >删除</el-button>
+        </el-col>
       </el-col>
       <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
     </el-row>
@@ -95,6 +105,13 @@
             icon="el-icon-edit"
             @click="getDetail(scope.row)"
           >查看详情</el-button>
+          <el-button
+            v-hasPermi="['miniapp.lottery:history:remove']"
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDelete(scope.row)"
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -144,6 +161,7 @@
 import {
   listHistory,
   getHistory,
+  deleteHistory,
   exportHistory
 } from '@/api/miniapp/lottery/history'
 
@@ -248,7 +266,20 @@ export default {
         this.title = '查看彩票历史详情'
       })
     },
-
+    /** 删除按钮操作 */
+    handleDelete(row) {
+      const itemIds = row.id || this.ids
+      this.$confirm('是否确认删除编号为"' + itemIds + '"的数据项?', '操作警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function() {
+        return deleteHistory(itemIds)
+      }).then(() => {
+        this.getList()
+        this.msgSuccess('删除成功')
+      }).catch(function() {})
+    },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams

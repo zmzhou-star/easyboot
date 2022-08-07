@@ -4,10 +4,13 @@
 
 package com.github.zmzhou.easyboot.api.miniapp.lottery.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,8 +26,8 @@ import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.page.TableDataInfo;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 
 /**
  * 彩票
@@ -33,7 +36,6 @@ import io.swagger.annotations.ApiOperation;
  * @version 1.0
  * @since 2022/7/2 18:00
  */
-@Api(tags = {"彩票管理"})
 @RestController
 @RequestMapping("/lottery/history")
 public class LotteryController extends BaseController {
@@ -50,7 +52,7 @@ public class LotteryController extends BaseController {
      */
     @PreAuthorize("@ebpe.hasPermission('miniapp.lottery:history:query')")
     @GetMapping(value = {"{id}"})
-    @ApiOperation(value = "根据id查询彩票历史数据")
+    @Operation(summary = "根据id查询彩票历史数据")
     public ApiResult<SysMenu> getOne(@PathVariable(value = "id", required = false) Long id) {
         return ok(lotteryService.findById(id));
     }
@@ -64,12 +66,27 @@ public class LotteryController extends BaseController {
      * date 2022-07-03 21:09:35
      */
     @PreAuthorize("@ebpe.hasPermission('miniapp.lottery:history:list')")
-    @ApiOperation(value = "查询彩票历史数据列表")
+    @Operation(summary = "查询彩票历史数据列表")
     @PostMapping(path = "/list")
     public ApiResult<TableDataInfo> list(@RequestBody(required = false) LotteryHistoryParams params) {
         Pageable pageable = getPageable(params);
         Page<LotteryHistory> list = lotteryService.findAll(params, pageable);
         return ok(list);
+    }
+
+    /**
+     * 删除数据
+     *
+     * @param ids id集合
+     * @return com.github.zmzhou.easyboot.framework.page.ApiResult<java.lang.Integer>
+     * @since 2022/8/7 13:14
+     */
+    @PreAuthorize("@ebpe.hasPermission('miniapp.lottery:history:remove')")
+    @Operation(summary = "删除数据")
+    @DeleteMapping("/{ids}")
+    public ApiResult<Integer> remove(@PathVariable("ids") @Parameter(description = "id数组", required = true) List<Long> ids) {
+        lotteryService.deleteByIds(ids);
+        return new ApiResult<>();
     }
 
     /**
@@ -82,7 +99,7 @@ public class LotteryController extends BaseController {
      */
     @PreAuthorize("@ebpe.hasPermission('miniapp.lottery:history:export')")
     @PostMapping("/export")
-    @ApiOperation(value = "导出彩票历史数据excel")
+    @Operation(summary = "导出彩票历史数据excel")
     public ApiResult<String> export(@RequestBody LotteryHistoryParams params) throws InterruptedException {
         return ok(lotteryService.export(params));
     }

@@ -108,5 +108,4 @@ public abstract class BaseService<P> {
          excelList.add(excel);
       });
    }
-
 }

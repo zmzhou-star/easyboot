@@ -151,10 +151,13 @@ public class LotteryService extends BaseService<LotteryHistoryParams> {
      * date 2022-07-03 21:09:35
      */
     public LotteryHistory save(LotteryHistory entity) {
-        entity.setCreateTime(new Date());
         LotteryHistory history = dao.selectByLotteryId(entity.getLotteryId());
-        if (history != null) {
-            return history;
+        if (history == null) {
+            entity.setCreateTime(new Date());
+        } else {
+            entity.setId(history.getId());
+            entity.setCreateTime(history.getCreateTime());
+            entity.setUpdateTime(new Date());
         }
         return dao.saveAndFlush(entity);
     }
@@ -182,5 +185,16 @@ public class LotteryService extends BaseService<LotteryHistoryParams> {
         // 把最后一页数据加入
         dataConversion(list, excelList, clazz);
         return excelUtils.download(excelList, clazz, params.getExcelName());
+    }
+
+    /**
+     * 删除数据
+     *
+     * @param ids id集合
+     * @author zmzhou
+     * @since 2022/8/7 14:12
+     */
+    public void deleteByIds(List<Long> ids) {
+        dao.deleteAllById(ids);
     }
 }

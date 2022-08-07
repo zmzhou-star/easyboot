@@ -26,7 +26,21 @@ export function getHistory(id) {
 }
 
 /**
+ * 删除彩票历史数据
+ *
+ * @param {Object} ids
+ * @returns {Object}
+ */
+export function deleteHistory(ids) {
+  return request({
+    url: '/lottery/history/' + ids,
+    method: 'delete'
+  })
+}
+
+/**
  * 导出彩票历史数据
+ *
  * @param {Object} params
  * @returns {Object}
  */

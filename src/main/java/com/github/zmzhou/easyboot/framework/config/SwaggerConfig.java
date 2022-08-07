@@ -25,13 +25,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.github.zmzhou.easyboot.common.Constants;
 
-import io.swagger.annotations.Api;
 import lombok.Data;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -129,7 +129,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
 				// 设置哪些接口暴露给Swagger展示
 				.select()
 				// 扫描所有有注解的api，用这种方式更灵活
-				.apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+				.apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
 				// 扫描所有 .apis(RequestHandlerSelectors.any())
 				.paths(PathSelectors.any())
 				.build()
