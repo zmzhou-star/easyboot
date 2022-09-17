@@ -1,17 +1,17 @@
 #!/bin/bash
 # 定义常量
-time = date +'%Y%m%d-%H%M%S'
-sourceCodePath = /opt/code/easyboot/
-webSourceCodePath = /opt/code/easyboot/vue-easyboot/
-deployPath = /opt/eboot
-bakPath = $deployPath/eboot_bak/$time
-webUrl = /usr/local/nginx/html
+time=date +'%Y%m%d-%H%M%S'
+sourceCodePath=/opt/code/easyboot
+webSourceCodePath=/opt/code/easyboot/vue-easyboot/
+deployPath=/opt/eboot
+bakPath=$deployPath/eboot_bak/$time
+webUrl=/usr/local/nginx/html
 # 拉取最新代码
 git pull
 
 # 打包后端
 cd $sourceCodePath
-mvn clean install -X -Dmaven.test.skip=true -f pom.xml -P prod
+mvn clean install -X -Dmaven.test.skip=true -f $sourceCodePath/pom.xml -P prod
 
 #备份旧包
 mkdir $bakPath
