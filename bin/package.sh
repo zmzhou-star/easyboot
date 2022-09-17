@@ -31,5 +31,4 @@ npm install --registry=https://registry.npm.taobao.org
 npm run build:prod
 
 # 部署前端
-rm -rf $webUrl/*
 cp -r dist/* $webUrl
