@@ -197,6 +197,11 @@
                 <artifactId>xmlbeans</artifactId>
                 <version>5.1.1</version>
             </dependency>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>1.33</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
