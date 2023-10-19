@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
       <el-form-item label="药方名" prop="prescriptName">
         <el-input
           v-model="queryParams.prescriptName"
@@ -76,7 +76,7 @@
           @click="handleExport"
         >导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
     </el-row>
 
     <el-table
@@ -133,7 +133,7 @@
           <el-input v-model="form.purpose" placeholder="请输入用途" />
         </el-form-item>
         <el-form-item label="治法方药" prop="medicines">
-          <el-input v-model="form.medicines" type="textarea" placeholder="请输入治法方药" :rows="10" :autosize="{ minRows: 10, maxRows: 20}"/>
+          <el-input v-model="form.medicines" type="textarea" placeholder="请输入治法方药" :rows="10" :autosize="{ minRows: 10, maxRows: 20}" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -145,17 +145,17 @@
 </template>
 
 <script>
-import { listPrescript, getPrescript, delPrescript, addPrescript, updatePrescript, exportPrescript } from "@/api/medicalrecord/prescript";
+import { listPrescript, getPrescript, delPrescript, addPrescript, updatePrescript, exportPrescript } from '@/api/medicalrecord/prescript'
 
 export default {
-  name: "Prescript",
+  name: 'Prescript',
   filters: {
     statusFilter(status) {
-    const statusMap = {
-      1: 'success',
-      0: 'danger'
-    }
-    return statusMap[status]
+      const statusMap = {
+        1: 'success',
+        0: 'danger'
+      }
+      return statusMap[status]
     }
   },
   components: {
@@ -178,7 +178,7 @@ export default {
       // 药方表格数据
       prescriptList: [],
       // 弹出层标题
-      title: "",
+      title: '',
       // 是否显示弹出层
       open: false,
       // 查询参数
@@ -189,7 +189,7 @@ export default {
 
         purpose: null,
 
-        medicines: null,
+        medicines: null
 
       },
       // 表单参数
@@ -197,33 +197,33 @@ export default {
       // 表单校验
       rules: {
         prescriptName: [
-          { required: true, message: "药方名不能为空", trigger: "blur" }
+          { required: true, message: '药方名不能为空', trigger: 'blur' }
         ],
 
         purpose: [
-          { required: true, message: "用途不能为空", trigger: "blur" }
-        ],
+          { required: true, message: '用途不能为空', trigger: 'blur' }
+        ]
 
       }
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     /** 查询药方列表 */
     getList() {
-      this.loading = true;
+      this.loading = true
       listPrescript(this.queryParams).then(response => {
-        this.prescriptList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+        this.prescriptList = response.rows
+        this.total = response.total
+        this.loading = false
+      })
     },
     // 取消按钮
     cancel() {
-      this.open = false;
-      this.reset();
+      this.open = false
+      this.reset()
     },
     // 表单重置
     reset() {
@@ -242,20 +242,20 @@ export default {
 
         updateBy: null,
 
-        updateTime: null,
+        updateTime: null
 
-      };
-      this.resetForm("form");
+      }
+      this.resetForm('form')
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
+      this.queryParams.pageNum = 1
+      this.getList()
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
-      this.handleQuery();
+      this.resetForm('queryForm')
+      this.handleQuery()
     },
     /** 多选框选中数据 */
     handleSelectionChange(selection) {
@@ -265,70 +265,69 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加药方";
+      this.reset()
+      this.open = true
+      this.title = '添加药方'
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.reset();
+      this.reset()
       const id = row.id || this.ids
       getPrescript(id).then(response => {
-        this.form = response;
+        this.form = response
 
-        this.open = true;
-        this.title = "修改药方";
-      });
+        this.open = true
+        this.title = '修改药方'
+      })
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate(valid => {
+      this.$refs['form'].validate(valid => {
         if (valid) {
-
           if (this.form.id != null) {
             updatePrescript(this.form).then(response => {
-                this.msgSuccess("修改成功");
-                this.open = false;
-                this.getList();
-            });
+              this.msgSuccess('修改成功')
+              this.open = false
+              this.getList()
+            })
           } else {
             addPrescript(this.form).then(response => {
-                this.msgSuccess("新增成功");
-                this.open = false;
-                this.getList();
-            });
+              this.msgSuccess('新增成功')
+              this.open = false
+              this.getList()
+            })
           }
         }
-      });
+      })
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || this.ids;
-      this.$confirm('是否确认删除药方编号为"' + ids + '"的数据项?', "操作警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return delPrescript(ids);
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
+      const ids = row.id || this.ids
+      this.$confirm('是否确认删除药方编号为"' + ids + '"的数据项?', '操作警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function() {
+        return delPrescript(ids)
+      }).then(() => {
+        this.getList()
+        this.msgSuccess('删除成功')
       })
     },
     /** 导出按钮操作 */
     handleExport() {
-      const queryParams = this.queryParams;
+      const queryParams = this.queryParams
       queryParams.excelName = '药方'
-      this.$confirm('是否确认导出所有药方数据项?', "操作警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportPrescript(queryParams);
-        }).then(response => {
-          this.download(response);
-        })
+      this.$confirm('是否确认导出所有药方数据项?', '操作警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function() {
+        return exportPrescript(queryParams)
+      }).then(response => {
+        this.download(response)
+      })
     }
   }
-};
+}
 </script>
