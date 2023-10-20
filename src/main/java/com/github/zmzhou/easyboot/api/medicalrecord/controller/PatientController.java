@@ -25,7 +25,6 @@ import com.github.zmzhou.easyboot.api.medicalrecord.vo.PatientParams;
 import com.github.zmzhou.easyboot.api.medicalrecord.vo.PatientVo;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.page.TableDataInfo;
-import com.github.zmzhou.easyboot.framework.vo.Params;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
 import io.swagger.annotations.Api;
