@@ -1,33 +1,23 @@
 <template>
   <div class="app-container">
     <el-form v-show="showSearch" ref="queryForm" :model="queryParams" :inline="true" label-width="68px">
-      <el-form-item label="药方名" prop="prescriptName">
+      <el-form-item label="姓名" prop="userName">
         <el-input
-          v-model="queryParams.prescriptName"
-          placeholder="请输入药方名"
+          v-model="queryParams.userName"
+          placeholder="请输入姓名"
+          clearable
+          size="small"
+          style="width: 250px"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="手机号码" prop="tel">
+        <el-input
+          v-model="queryParams.tel"
+          placeholder="请输入手机号码"
           clearable
           size="small"
           style="width: 200px"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="用途" prop="purpose">
-        <el-input
-          v-model="queryParams.purpose"
-          placeholder="请输入用途"
-          clearable
-          size="small"
-          style="width: 250px"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="治法方药" prop="medicines">
-        <el-input
-          v-model="queryParams.medicines"
-          placeholder="请输入治法方药"
-          clearable
-          size="small"
-          style="width: 250px"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
@@ -40,7 +30,7 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
-          v-hasPermi="['medicalrecord:prescript:add']"
+          v-hasPermi="['medicalrecord:patient:add']"
           type="primary"
           icon="el-icon-plus"
           size="mini"
@@ -49,7 +39,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          v-hasPermi="['medicalrecord:prescript:edit']"
+          v-hasPermi="['medicalrecord:patient:edit']"
           type="success"
           icon="el-icon-edit"
           size="mini"
@@ -59,7 +49,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          v-hasPermi="['medicalrecord:prescript:remove']"
+          v-hasPermi="['medicalrecord:patient:remove']"
           type="danger"
           icon="el-icon-delete"
           size="mini"
@@ -69,7 +59,7 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          v-hasPermi="['medicalrecord:prescript:export']"
+          v-hasPermi="['medicalrecord:patient:export']"
           type="warning"
           icon="el-icon-download"
           size="mini"
@@ -81,7 +71,7 @@
 
     <el-table
       v-loading="loading"
-      :data="prescriptList"
+      :data="patientList"
       element-loading-text="Loading"
       stripe
       height="465"
@@ -90,28 +80,38 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="ID" align="center" prop="id" width="80"/>
-      <el-table-column label="药方名" align="center" prop="prescriptName" width="150"/>
-      <el-table-column label="用途" align="center" prop="purpose" width="150"/>
+      <el-table-column label="病人ID" align="center" prop="id" />
+      <el-table-column label="姓名" align="center" prop="userName" />
+      <el-table-column label="手机号码" align="center" prop="tel" />
+      <el-table-column label="性别" align="center" prop="sex" :formatter="sexFormat" />
+      <el-table-column label="出生日期" align="center" prop="birthDate" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.birthDate, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="出生地" align="center" prop="birthplace" />
+      <el-table-column label="常住地址" align="center" prop="permanentAddress" />
+      <el-table-column label="职业" align="center" prop="career" />
+      <el-table-column label="婚育史" align="center" prop="marriage" />
+      <el-table-column label="主诉" align="center" prop="chiefComplaint" />
       <el-table-column label="治法方药" align="center" prop="medicines" />
-      <el-table-column label="更新者" align="center" prop="updateBy" width="100"/>
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="150"/>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="120">
+      <el-table-column label="治法方药" align="center" prop="createTime" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="150">
         <template slot-scope="scope">
           <el-button
-            v-hasPermi="['medicalrecord:prescript:edit']"
+            v-hasPermi="['medicalrecord:patient:edit']"
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
           >修改</el-button>
           <el-button
-            v-hasPermi="['medicalrecord:prescript:remove']"
+            v-hasPermi="['medicalrecord:patient:remove']"
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-          >删除</el-button>
+          >复诊</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -124,17 +124,53 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改药方对话框 -->
+    <!-- 添加或修改病人信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="780px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="药方名" prop="prescriptName">
-          <el-input v-model="form.prescriptName" placeholder="请输入药方名" />
+        <el-form-item label="姓名" prop="userName">
+          <el-input v-model="form.userName" placeholder="请输入姓名" />
         </el-form-item>
-        <el-form-item label="用途" prop="purpose">
-          <el-input v-model="form.purpose" placeholder="请输入用途" />
+        <el-form-item label="手机号码" prop="tel">
+          <el-input v-model="form.tel" placeholder="请输入手机号码" maxlength="11"/>
+        </el-form-item>
+        <el-form-item label="性别" prop="sex">
+          <el-select v-model="form.sex" placeholder="请选择性别">
+            <el-option
+              v-for="dict in sexOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="出生日期" prop="birthDate">
+          <el-date-picker
+            v-model="form.birthDate"
+            clearable
+            size="small"
+            style="width: 200px"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="选择出生日期"
+          />
+        </el-form-item>
+        <el-form-item label="出生地" prop="birthplace">
+          <el-input v-model="form.birthplace" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+        <el-form-item label="常住地址" prop="permanentAddress">
+          <el-input v-model="form.permanentAddress" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+        <el-form-item label="职业" prop="career">
+          <el-input v-model="form.career" placeholder="请输入职业" />
+        </el-form-item>
+        <el-form-item label="婚育史" prop="marriage">
+          <el-input v-model="form.marriage" placeholder="请输入婚育史" />
+        </el-form-item>
+        <el-form-item label="主诉" prop="chiefComplaint">
+          <el-input v-model="form.chiefComplaint" type="textarea" placeholder="请输入内容" rows="5" :autosize="{ minRows: 5, maxRows: 10}"/>
         </el-form-item>
         <el-form-item label="治法方药" prop="medicines">
-          <el-input v-model="form.medicines" type="textarea" placeholder="请输入治法方药" :rows="10" :autosize="{ minRows: 10, maxRows: 20}" />
+          <el-input v-model="form.medicines" type="textarea" placeholder="请输入内容" :autosize="{ minRows: 5, maxRows: 10}"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -146,10 +182,10 @@
 </template>
 
 <script>
-import { listPrescript, getPrescript, delPrescript, addPrescript, updatePrescript, exportPrescript } from '@/api/medicalrecord/prescript'
+import { listPatient, getPatient, delPatient, addPatient, updatePatient, exportPatient } from '@/api/medicalrecord/patient'
 
 export default {
-  name: 'Prescript',
+  name: 'Patient',
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -160,7 +196,6 @@ export default {
     }
   },
   components: {
-
   },
   data() {
     return {
@@ -176,50 +211,53 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 药方表格数据
-      prescriptList: [],
+      // 病人信息表格数据
+      patientList: [],
       // 弹出层标题
       title: '',
       // 是否显示弹出层
       open: false,
+      // 性别字典
+      sexOptions: [],
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        prescriptName: null,
-
-        purpose: null,
-
-        medicines: null
-
+        userName: null,
+        tel: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        prescriptName: [
-          { required: true, message: '药方名不能为空', trigger: 'blur' }
+        userName: [
+          { required: true, message: '姓名不能为空', trigger: 'blur' }
         ],
-
-        purpose: [
-          { required: true, message: '用途不能为空', trigger: 'blur' }
+        permanentAddress: [
+          { required: true, message: '常住地址不能为空', trigger: 'blur' }
         ]
-
       }
     }
   },
   created() {
     this.getList()
+    this.getDicts('sys_user_sex').then(response => {
+      this.sexOptions = response
+    })
   },
   methods: {
-    /** 查询药方列表 */
+    /** 查询病人信息列表 */
     getList() {
       this.loading = true
-      listPrescript(this.queryParams).then(response => {
-        this.prescriptList = response.rows
+      listPatient(this.queryParams).then(response => {
+        this.patientList = response.rows
         this.total = response.total
         this.loading = false
       })
+    },
+    // 性别字典翻译
+    sexFormat(row, column) {
+      return this.selectDictLabel(this.sexOptions, row.sex)
     },
     // 取消按钮
     cancel() {
@@ -230,21 +268,20 @@ export default {
     reset() {
       this.form = {
         id: null,
-
-        prescriptName: null,
-
-        purpose: null,
-
+        userName: null,
+        tel: null,
+        sex: null,
+        birthDate: null,
+        birthplace: null,
+        permanentAddress: null,
+        career: null,
+        marriage: null,
+        chiefComplaint: null,
         medicines: null,
-
         createBy: null,
-
         createTime: null,
-
         updateBy: null,
-
         updateTime: null
-
       }
       this.resetForm('form')
     },
@@ -268,17 +305,16 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = '添加药方'
+      this.title = '添加病人信息'
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset()
       const id = row.id || this.ids
-      getPrescript(id).then(response => {
+      getPatient(id).then(response => {
         this.form = response
-
         this.open = true
-        this.title = '修改药方'
+        this.title = '修改病人信息'
       })
     },
     /** 提交按钮 */
@@ -286,13 +322,13 @@ export default {
       this.$refs['form'].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
-            updatePrescript(this.form).then(response => {
+            updatePatient(this.form).then(response => {
               this.msgSuccess('修改成功')
               this.open = false
               this.getList()
             })
           } else {
-            addPrescript(this.form).then(response => {
+            addPatient(this.form).then(response => {
               this.msgSuccess('新增成功')
               this.open = false
               this.getList()
@@ -304,12 +340,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$confirm('是否确认删除药方编号为"' + ids + '"的数据项?', '操作警告', {
+      this.$confirm('是否确认删除病人信息编号为"' + ids + '"的数据项?', '操作警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function() {
-        return delPrescript(ids)
+        return delPatient(ids)
       }).then(() => {
         this.getList()
         this.msgSuccess('删除成功')
@@ -318,13 +354,13 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams
-      queryParams.excelName = '药方'
-      this.$confirm('是否确认导出所有药方数据项?', '操作警告', {
+      queryParams.excelName = '病人信息'
+      this.$confirm('是否确认导出所有病人信息数据项?', '操作警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(function() {
-        return exportPrescript(queryParams)
+        return exportPatient(queryParams)
       }).then(response => {
         this.download(response)
       })

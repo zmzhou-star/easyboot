@@ -3,7 +3,7 @@ INSERT INTO sys_menu (id, menu_name, parent_id, sort_by, path, component, is_fra
 VALUES (5, '病历管理', 0, 1, 'medicalrecord', '', '0', 'M', '1', '1', null, 'peoples', 'admin', '2023-10-19 21:31:11', null, null, null);
 
 insert into sys_menu (menu_name, parent_id, sort_by, path, component, is_frame, menu_type, visible, status, perms, icon, create_by, update_by, remark)
-values('药方', 5, 1, 'prescript', 'medicalrecord/prescript/index', 0, 'C', '1', '1', 'medicalrecord:prescript:list', '#', 'admin', 'admin', '药方菜单');
+values('药方', 5, 3, 'prescript', 'medicalrecord/prescript/index', 0, 'C', '1', '1', 'medicalrecord:prescript:list', '#', 'admin', 'admin', '药方菜单');
 
 -- 按钮父菜单ID
 SELECT @parentId := LAST_INSERT_ID();

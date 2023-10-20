@@ -34,7 +34,7 @@ public class BaseEntity extends BaseIdEntity {
     /**
      * 创建时间
      */
-    @JSONField(format = "yyyy-MM-dd HH:mm")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "CREATE_TIME")
     private Date createTime;
 
@@ -47,9 +47,10 @@ public class BaseEntity extends BaseIdEntity {
     /**
      * 更新时间
      */
-    @JSONField(format = "yyyy-MM-dd HH:mm")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "UPDATE_TIME")
     private Date updateTime;
+
     /**
      * The Remark.
      */

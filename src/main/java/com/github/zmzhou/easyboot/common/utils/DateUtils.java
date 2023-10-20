@@ -25,10 +25,11 @@ public final class DateUtils {
 	 * yyyy-MM-dd HH:mm:ss
 	 */
 	public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
+
 	/**
 	 * 文件下载的文件名称
 	 */
-	public static final String FILE_NAME_PATTERN = "yyyyMMddHHmmssSSS";
+	public static final String FILE_NAME_PATTERN = "yyyyMMddHHmmss";
 
 	private static final String[] PARSE_PATTERNS = {
 			YYYY_MM_DD, YYYY_MM_DD_HH_MM_SS, "yyyy-MM-dd HH:mm", "yyyy-MM",

@@ -15,7 +15,7 @@ CREATE TABLE patient
   create_by         varchar(64)  NULL DEFAULT '' COMMENT '创建者',
   create_time       datetime(0)  NULL DEFAULT CURRENT_TIMESTAMP COMMENT '初诊时间',
   update_by         varchar(64)  NULL DEFAULT '' COMMENT '更新者',
-  update_time       datetime(0)  NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  update_time       datetime(0)  NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (id) USING BTREE,
   UNIQUE INDEX UNI_IDX_USER_NAME_TEL (user_name, tel) USING BTREE
 ) CHARACTER SET = utf8mb4
@@ -31,7 +31,7 @@ CREATE TABLE prescript
   create_by      varchar(64)  NULL DEFAULT '' COMMENT '创建者',
   create_time    datetime(0)  NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   update_by      varchar(64)  NULL DEFAULT '' COMMENT '更新者',
-  update_time    datetime(0)  NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  update_time    datetime(0)  NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (id) USING BTREE,
   UNIQUE INDEX UNI_IDX_USER_NAME_TEL (prescript_name) USING BTREE
 ) CHARACTER SET = utf8mb4
@@ -47,7 +47,7 @@ CREATE TABLE purpose_record
   create_by       varchar(64)  NULL DEFAULT '' COMMENT '创建者',
   create_time     datetime(0)  NULL DEFAULT CURRENT_TIMESTAMP COMMENT '复诊时间',
   update_by       varchar(64)  NULL DEFAULT '' COMMENT '更新者',
-  update_time     datetime(0)  NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
+  update_time     datetime(0)  NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (id) USING BTREE
 ) CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci COMMENT = '看诊记录';
