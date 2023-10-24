@@ -93,9 +93,7 @@
       <el-table-column label="常住地址" align="center" prop="permanentAddress" />
       <el-table-column label="职业" align="center" prop="career" />
       <el-table-column label="婚育史" align="center" prop="marriage" />
-      <el-table-column label="主诉" align="center" prop="chiefComplaint" />
-      <el-table-column label="治法方药" align="center" prop="medicines" />
-      <el-table-column label="治法方药" align="center" prop="createTime" />
+      <el-table-column label="初诊时间" align="center" prop="createTime" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="150">
         <template slot-scope="scope">
           <el-button
@@ -131,7 +129,7 @@
           <el-input v-model="form.userName" placeholder="请输入姓名" />
         </el-form-item>
         <el-form-item label="手机号码" prop="tel">
-          <el-input v-model="form.tel" placeholder="请输入手机号码" maxlength="11"/>
+          <el-input v-model="form.tel" placeholder="请输入手机号码" maxlength="11" />
         </el-form-item>
         <el-form-item label="性别" prop="sex">
           <el-select v-model="form.sex" placeholder="请选择性别">
@@ -165,12 +163,6 @@
         </el-form-item>
         <el-form-item label="婚育史" prop="marriage">
           <el-input v-model="form.marriage" placeholder="请输入婚育史" />
-        </el-form-item>
-        <el-form-item label="主诉" prop="chiefComplaint">
-          <el-input v-model="form.chiefComplaint" type="textarea" placeholder="请输入内容" rows="5" :autosize="{ minRows: 5, maxRows: 10}"/>
-        </el-form-item>
-        <el-form-item label="治法方药" prop="medicines">
-          <el-input v-model="form.medicines" type="textarea" placeholder="请输入内容" :autosize="{ minRows: 5, maxRows: 10}"/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -276,8 +268,6 @@ export default {
         permanentAddress: null,
         career: null,
         marriage: null,
-        chiefComplaint: null,
-        medicines: null,
         createBy: null,
         createTime: null,
         updateBy: null,

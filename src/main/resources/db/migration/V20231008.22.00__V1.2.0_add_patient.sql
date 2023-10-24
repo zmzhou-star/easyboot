@@ -10,8 +10,6 @@ CREATE TABLE patient
   permanent_address varchar(255) NOT NULL COMMENT '常住地址',
   career            varchar(50)  NULL DEFAULT '' COMMENT '职业',
   marriage          varchar(50)  NULL DEFAULT '' COMMENT '婚育史',
-  chief_complaint   varchar(500) NULL DEFAULT NULL COMMENT '主诉',
-  medicines         text         NULL DEFAULT NULL COMMENT '治法方药',
   create_by         varchar(64)  NULL DEFAULT '' COMMENT '创建者',
   create_time       datetime(0)  NULL DEFAULT CURRENT_TIMESTAMP COMMENT '初诊时间',
   update_by         varchar(64)  NULL DEFAULT '' COMMENT '更新者',
