@@ -107,9 +107,11 @@
             v-hasPermi="['medicalrecord:patient:remove']"
             size="mini"
             type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-          >复诊</el-button>
+            icon="el-icon-view">
+            <router-link :to="'/medicalrecord/record?id=' + scope.row.id + '&name=' + scope.row.userName" class="link-type">
+              <span>复诊</span>
+            </router-link>
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -329,6 +331,20 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
+      const ids = row.id || this.ids
+      this.$confirm('是否确认删除病人信息编号为"' + ids + '"的数据项?', '操作警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function() {
+        return delPatient(ids)
+      }).then(() => {
+        this.getList()
+        this.msgSuccess('删除成功')
+      })
+    },
+    /** 复诊按钮操作 */
+    handleFollowUp(row) {
       const ids = row.id || this.ids
       this.$confirm('是否确认删除病人信息编号为"' + ids + '"的数据项?', '操作警告', {
         confirmButtonText: '确定',

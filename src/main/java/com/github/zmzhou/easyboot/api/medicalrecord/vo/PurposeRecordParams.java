@@ -25,7 +25,7 @@ public class PurposeRecordParams extends PageParams {
 
     /** 病人ID */
     @ApiModelProperty(value = "病人ID")
-    private String patientName;
+    private Long patientId;
 
     /** 主诉 */
     @ApiModelProperty(value = "主诉")

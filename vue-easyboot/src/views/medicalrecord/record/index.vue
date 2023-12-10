@@ -5,7 +5,7 @@
         <el-input
           v-model="queryParams.patientName"
           placeholder="请输入病人姓名"
-          clearable
+          readonly
           size="small"
           style="width: 200px"
           @keyup.enter.native="handleQuery"
@@ -91,9 +91,10 @@
     >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="ID" align="center" prop="id" />
-      <el-table-column label="病人姓名" align="center" prop="patientName" />
       <el-table-column label="主诉" align="center" prop="chiefComplaint" />
       <el-table-column label="治法方药" align="center" prop="medicines" />
+      <el-table-column label="更新人" align="center" prop="updateBy" />
+      <el-table-column label="更新时间" align="center" prop="updateTime" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -125,14 +126,17 @@
     <!-- 添加或修改看诊记录对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="780px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="病人ID" prop="patientName">
-          <el-input v-model="form.patientName" placeholder="请输入病人ID" />
+        <el-form-item label="病人ID" prop="patientId">
+          <el-input v-model="form.patientId" placeholder="请输入病人ID" readonly />
+        </el-form-item>
+        <el-form-item label="病人姓名" prop="patientName">
+          <el-input v-model="form.patientName" placeholder="请输入病人姓名" readonly />
         </el-form-item>
         <el-form-item label="主诉" prop="chiefComplaint">
-          <el-input v-model="form.chiefComplaint" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.chiefComplaint" type="textarea" placeholder="请输入内容" :rows="10" :autosize="{ minRows: 10, maxRows: 20}" />
         </el-form-item>
         <el-form-item label="治法方药" prop="medicines">
-          <el-input v-model="form.medicines" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.medicines" type="textarea" placeholder="请输入内容" :rows="10" :autosize="{ minRows: 10, maxRows: 20}" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -180,10 +184,13 @@ export default {
       title: '',
       // 是否显示弹出层
       open: false,
+      // 最新的一条数据id
+      lastId: 0,
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        patientId: null,
         patientName: null,
         chiefComplaint: null,
         medicines: null
@@ -207,12 +214,20 @@ export default {
   created() {
     this.getList()
   },
+  activated() {
+    this.getList()
+  },
   methods: {
     /** 查询看诊记录列表 */
     getList() {
       this.loading = true
+      this.queryParams.patientId = this.$route.query && this.$route.query.id
+      this.queryParams.patientName = this.$route.query && this.$route.query.name
       listRecord(this.queryParams).then(response => {
         this.recordList = response.rows
+        if (this.recordList.length > 0) {
+          this.lastId = this.recordList && this.recordList[0].id
+        }
         this.total = response.total
         this.loading = false
       })
@@ -224,9 +239,11 @@ export default {
     },
     // 表单重置
     reset() {
+      this.resetForm('queryForm')
       this.form = {
         id: null,
-        patientId: null,
+        patientId: this.$route.query && this.$route.query.id,
+        patientName: this.$route.query && this.$route.query.name,
         chiefComplaint: null,
         medicines: null,
         createBy: null,
@@ -235,6 +252,8 @@ export default {
         updateTime: null
       }
       this.resetForm('form')
+      this.queryParams.patientId = this.$route.query && this.$route.query.id
+      this.queryParams.patientName = this.$route.query && this.$route.query.name
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -255,6 +274,13 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset()
+      if (this.lastId > 0) {
+        getRecord(this.lastId).then(response => {
+          this.form = response
+          this.form.patientName = this.$route.query && this.$route.query.name
+          this.form.id = null
+        })
+      }
       this.open = true
       this.title = '添加看诊记录'
     },
@@ -264,6 +290,7 @@ export default {
       const id = row.id || this.ids
       getRecord(id).then(response => {
         this.form = response
+        this.form.patientName = this.$route.query && this.$route.query.name
         this.open = true
         this.title = '修改看诊记录'
       })
@@ -305,8 +332,8 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams
-      queryParams.excelName = '看诊记录'
-      this.$confirm('是否确认导出所有看诊记录数据项?', '操作警告', {
+      queryParams.excelName = queryParams.patientName + '的看诊记录'
+      this.$confirm('是否确认导出' + queryParams.excelName + '?', '操作警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

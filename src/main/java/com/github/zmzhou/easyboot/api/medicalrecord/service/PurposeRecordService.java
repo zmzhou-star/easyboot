@@ -60,6 +60,7 @@ public class PurposeRecordService extends BaseService<PurposeRecordParams> {
 	    }
 	    // 构造查询条件
 	    Specification<PurposeRecord> spec = new SimpleSpecificationBuilder<PurposeRecord>()
+			    .and("patientId", Operator.EQUAL, params.getPatientId())
 			    .and("chiefComplaint", Operator.LIKE, params.getChiefComplaint())
 			    .and("medicines", Operator.LIKE, params.getMedicines())
 			    .build();
