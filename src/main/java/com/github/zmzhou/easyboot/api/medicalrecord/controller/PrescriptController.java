@@ -4,6 +4,8 @@
 
 package com.github.zmzhou.easyboot.api.medicalrecord.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.data.domain.Page;
@@ -25,7 +27,6 @@ import com.github.zmzhou.easyboot.api.medicalrecord.vo.PrescriptParams;
 import com.github.zmzhou.easyboot.api.medicalrecord.vo.PrescriptVo;
 import com.github.zmzhou.easyboot.framework.page.ApiResult;
 import com.github.zmzhou.easyboot.framework.page.TableDataInfo;
-import com.github.zmzhou.easyboot.framework.vo.Params;
 import com.github.zmzhou.easyboot.framework.web.BaseController;
 
 import io.swagger.annotations.Api;
@@ -76,6 +77,19 @@ public class PrescriptController extends BaseController {
 	@GetMapping(value = "/{id}")
 	public ApiResult<Prescript> findById(@PathVariable(value = "id" , required = false) Long id) {
 		return ok(prescriptService.findById(id));
+	}
+
+    /**
+     * 查询所有药方
+     *
+     * @return com.github.zmzhou.easyboot.framework.page.ApiResult<java.util.List<com.github.zmzhou.easyboot.api.medicalrecord.entity.Prescript>>
+     * @since 2023/12/17 13:32
+     */
+	@PreAuthorize("@ebpe.hasPermission('medicalrecord:prescript:query')")
+	@ApiOperation(value = "查询所有药方")
+	@GetMapping(value = "findAllPrescript")
+	public ApiResult<List<Prescript>> findAllPrescript() {
+		return ok(prescriptService.findAllPrescript());
 	}
 
 	/**

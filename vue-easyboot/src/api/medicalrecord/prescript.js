@@ -70,3 +70,13 @@ export function exportPrescript(params) {
     data: params
   })
 }
+/**
+ * 查询所有药方
+ * @returns {Object}
+ */
+export function findAllPrescript() {
+  return request({
+    url: '/medicalrecord/prescript/findAllPrescript',
+    method: 'get'
+  })
+}

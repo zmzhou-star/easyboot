@@ -82,6 +82,16 @@ public class PrescriptService extends BaseService<PrescriptParams> {
     }
 
     /**
+     * 查询所有药方.
+     *
+     * @return the list
+     */
+    public List<Prescript> findAllPrescript() {
+        Specification<Prescript> spec = new SimpleSpecificationBuilder<Prescript>().build();
+        return dao.findAll(spec);
+    }
+
+    /**
      * 新增药方
      *
      * @param entity 药方

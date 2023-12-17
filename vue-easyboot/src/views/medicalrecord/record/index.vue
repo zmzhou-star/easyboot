@@ -135,6 +135,16 @@
         <el-form-item label="主诉" prop="chiefComplaint">
           <el-input v-model="form.chiefComplaint" type="textarea" placeholder="请输入内容" :rows="10" :autosize="{ minRows: 10, maxRows: 20}" />
         </el-form-item>
+        <el-form-item label="治法方药" prop="">
+          <el-select v-model="form.medicines2" placeholder="请选择治法方药" style="width: 100%" @change="selectPrescript">
+            <el-option
+              v-for="dict in prescriptList"
+              :key="dict.prescriptName"
+              :label="dict.prescriptName"
+              :value="dict.medicines"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="治法方药" prop="medicines">
           <el-input v-model="form.medicines" type="textarea" placeholder="请输入内容" :rows="10" :autosize="{ minRows: 10, maxRows: 20}" />
         </el-form-item>
@@ -149,6 +159,7 @@
 
 <script>
 import { listRecord, getRecord, delRecord, addRecord, updateRecord, exportRecord } from '@/api/medicalrecord/record'
+import { findAllPrescript } from '@/api/medicalrecord/prescript'
 
 export default {
   name: 'Record',
@@ -180,6 +191,8 @@ export default {
       total: 0,
       // 看诊记录表格数据
       recordList: [],
+      // 药方数据
+      prescriptList: [],
       // 弹出层标题
       title: '',
       // 是否显示弹出层
@@ -213,9 +226,11 @@ export default {
   },
   created() {
     this.getList()
+    this.getPrescriptList()
   },
   activated() {
     this.getList()
+    this.getPrescriptList()
   },
   methods: {
     /** 查询看诊记录列表 */
@@ -231,6 +246,15 @@ export default {
         this.total = response.total
         this.loading = false
       })
+    },
+    /** 查询所有药方 */
+    getPrescriptList() {
+      findAllPrescript().then(response => {
+        this.prescriptList = response
+      })
+    },
+    selectPrescript(val) {
+      this.form.medicines = val
     },
     // 取消按钮
     cancel() {
